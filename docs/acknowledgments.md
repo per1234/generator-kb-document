@@ -41,6 +41,7 @@ This project is based on many amazing open source software projects:
 - [**Git**](https://git-scm.com/) - Version control system.
 - [**GitHub Label Sync**](https://github.com/Financial-Times/github-label-sync) - GitHub repository label manager
 - [**gvm**](https://github.com/moovweb/gvm) - Go version manager
+- [**Jest**](https://jestjs.io/) - JavaScript testing framework
 - [**Licensee**](https://github.com/licensee/licensee) - License file parser
 - [**markdown-link-check**](https://github.com/tcort/markdown-link-check) - Link checker for Markdown
 - [**markdownlint-cli**](https://github.com/igorshubovych/markdownlint-cli) - Markdown linter
@@ -58,6 +59,7 @@ This project is based on many amazing open source software projects:
 ### Misc
 
 - [**arduino/tooling-project-assets**](https://github.com/arduino/tooling-project-assets) - Collection of reusable project infrastructure assets
+- [**Codecov**](https://about.codecov.io/) - Code coverage reports
 - [**Dependabot**](https://docs.github.com/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates) - Dependency update service
 - [**JSON Schema Store**](https://www.schemastore.org/json/) - Collection of JSON schemas
 

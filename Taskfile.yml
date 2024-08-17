@@ -19,6 +19,7 @@ tasks:
       - task: general:check-spelling
       - task: general:check-symlinks
       - task: js:lint
+      - task: js:test
       - task: json:lint
       - task: markdown:check-links
       - task: markdown:lint
@@ -234,6 +235,25 @@ tasks:
       - task: npm:install-deps
     cmds:
       - npx eslint --ext .js,.jsx .
+
+  # Source: https://github.com/per1234/.github/blob/main/workflow-templates/assets/test-javascript-jest-task/Taskfile.yml
+  js:test:
+    desc: |
+      Test the project's JavaScript/TypeScript code.
+      Environment variable parameters:
+      PROJECT_PATH: Path of the npm-managed project (default: {{.DEFAULT_NPM_PROJECT_PATH}}).
+    deps:
+      - task: npm:install-deps
+    dir: |
+      "{{default .DEFAULT_NPM_PROJECT_PATH .PROJECT_PATH}}"
+    cmds:
+      # See: https://jestjs.io/docs/ecmascript-modules#:~:text=Execute%20node%20with%20%2D%2Dexperimental%2Dvm%2Dmodules
+      - |
+        export NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" \
+        && \
+        npx \
+          jest \
+            --coverage
 
   json:fix:
     desc: Fix JSON code linting violations
