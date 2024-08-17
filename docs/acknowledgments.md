@@ -16,6 +16,7 @@ This project is based on many amazing open source software projects:
 - [**actions/setup-go**](https://github.com/actions/setup-go)
 - [**actions/setup-node**](https://github.com/actions/setup-node)
 - [**ruby/setup-ruby**](https://github.com/ruby/setup-ruby)
+- [**xt0rted/markdownlint-problem-matcher**](https://github.com/xt0rted/markdownlint-problem-matcher)
 
 ### Programming/Markup Languages
 
@@ -30,6 +31,8 @@ This project is based on many amazing open source software projects:
 - [**Git**](https://git-scm.com/) - Version control system.
 - [**gvm**](https://github.com/moovweb/gvm) - Go version manager
 - [**Licensee**](https://github.com/licensee/licensee) - License file parser
+- [**markdown-link-check**](https://github.com/tcort/markdown-link-check) - Link checker for Markdown
+- [**markdownlint-cli**](https://github.com/igorshubovych/markdownlint-cli) - Markdown linter
 - [**Node.js**](https://nodejs.org//) - JavaScript runtime environment
 - [**npm**](https://docs.npmjs.com/cli/) - JavaScript package manager
 - [**nvm**](https://github.com/nvm-sh/nvm) - Node.js version manager
