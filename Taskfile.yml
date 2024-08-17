@@ -16,6 +16,7 @@ tasks:
       - task: ci:validate
       - task: general:check-filenames
       - task: general:check-formatting
+      - task: general:check-spelling
       - task: general:check-symlinks
       - task: markdown:check-links
       - task: markdown:lint
@@ -26,6 +27,7 @@ tasks:
   fix:
     desc: Make automated corrections to the project's files
     deps:
+      - task: general:correct-spelling
       - task: general:format-prettier
       - task: go:tidy
       - task: markdown:fix
@@ -145,6 +147,15 @@ tasks:
       - editorconfig-checker
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/spell-check-task/Taskfile.yml
+  general:check-spelling:
+    desc: Check for commonly misspelled words
+    deps:
+      - task: poetry:install-deps
+        vars:
+          POETRY_GROUPS: dev
+    cmds:
+      - poetry run codespell
+
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-files-task/Taskfile.yml
   general:check-symlinks:
     desc: Check for bad symlinks
@@ -171,6 +182,16 @@ tasks:
           echo 'Broken or circular symlink found'
           false
         }
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/spell-check-task/Taskfile.yml
+  general:correct-spelling:
+    desc: Correct commonly misspelled words where possible
+    deps:
+      - task: poetry:install-deps
+        vars:
+          POETRY_GROUPS: dev
+    cmds:
+      - poetry run codespell --write-changes
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-prettier-formatting-task/Taskfile.yml
   general:format-prettier:
