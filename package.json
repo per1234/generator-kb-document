@@ -1,0 +1,11 @@
+{
+  "name": "@per1234/generator-kb-document",
+  "version": "0.1.0-beta",
+  "engines": {
+    "node": "20.x"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "type": "module"
+}
