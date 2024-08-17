@@ -32,3 +32,12 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: daily
+  - package-ecosystem: pip
+    directory: /
+    assignees:
+      - per1234
+    labels:
+      - "topic: infrastructure"
+    open-pull-requests-limit: 100
+    schedule:
+      interval: daily
