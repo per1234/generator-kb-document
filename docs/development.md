@@ -28,6 +28,16 @@ You can run the full suite of checks by running the following command from a ter
 task check
 ```
 
+### Automatic Corrections
+
+Tools are provided to automatically bring the project into compliance with some of the required checks.
+
+You can make these automatic fixes by running the following command from a terminal in a path under the repository:
+
+```text
+task fix
+```
+
 ### Other Operations
 
 Individual tasks are provided for each specific common validation and automated correction operation. The convenience `check` and `fix` tasks run all of the relevant individual tasks, so it is not necessary for the contributor to use the individual tasks. However, in some cases it may be more efficient to run the single specific task of interest.

@@ -18,6 +18,11 @@ tasks:
       - task: general:check-symlinks
       - task: npm:validate
 
+  fix:
+    desc: Make automated corrections to the project's files
+    deps:
+      - task: go:tidy
+
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-files-task/Taskfile.yml
   general:check-filenames:
     desc: Check for non-portable filenames
@@ -125,6 +130,20 @@ tasks:
           echo 'Broken or circular symlink found'
           false
         }
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-go-task/Taskfile.yml
+  go:tidy:
+    desc: |
+      Refresh dependency metadata.
+      Environment variable parameters:
+      GO_MODULE_PATH: Path of the Go module (default: {{.DEFAULT_GO_MODULE_PATH}}).
+    dir: "{{default .DEFAULT_GO_MODULE_PATH .GO_MODULE_PATH}}"
+    cmds:
+      - |
+        go \
+          mod \
+            tidy \
+              -compat={{.GO_VERSION}}
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/npm-task/Taskfile.yml
   npm:install-deps:
