@@ -18,6 +18,7 @@ tasks:
       - task: general:check-formatting
       - task: general:check-spelling
       - task: general:check-symlinks
+      - task: js:lint
       - task: markdown:check-links
       - task: markdown:lint
       - task: npm:validate
@@ -30,6 +31,7 @@ tasks:
       - task: general:correct-spelling
       - task: general:format-prettier
       - task: go:tidy
+      - task: js:fix
       - task: markdown:fix
       - task: poetry:sync
 
@@ -214,6 +216,22 @@ tasks:
           mod \
             tidy \
               -compat={{.GO_VERSION}}
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-javascript-task/Taskfile.yml
+  js:fix:
+    desc: Fix JavaScript code linting violations
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - npx eslint --ext .js,.jsx --fix .
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-javascript-task/Taskfile.yml
+  js:lint:
+    desc: Lint JavaScript code
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - npx eslint --ext .js,.jsx .
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-markdown-task/Taskfile.yml
   markdown:check-links:
