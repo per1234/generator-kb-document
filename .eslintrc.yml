@@ -6,8 +6,14 @@
 extends:
   - airbnb-base
   - prettier
+  - plugin:jsonc/recommended-with-json
+  - plugin:jsonc/prettier
+ignorePatterns:
+  - "**/package-lock.json"
 parserOptions:
   ecmaVersion: latest
+plugins:
+  - jsonc
 rules:
   import/no-extraneous-dependencies:
     - error
@@ -18,6 +24,9 @@ rules:
     - ignore:
         # Workaround for https://github.com/import-js/eslint-plugin-import/issues/1810
         - yeoman-test
+  jsonc/key-name-casing:
+    - warn
+    - camelCase: true
   max-len:
     - error
     - code: 180

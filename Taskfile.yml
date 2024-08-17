@@ -19,6 +19,7 @@ tasks:
       - task: general:check-spelling
       - task: general:check-symlinks
       - task: js:lint
+      - task: json:lint
       - task: markdown:check-links
       - task: markdown:lint
       - task: npm:validate
@@ -32,6 +33,7 @@ tasks:
       - task: general:format-prettier
       - task: go:tidy
       - task: js:fix
+      - task: json:fix
       - task: markdown:fix
       - task: poetry:sync
 
@@ -232,6 +234,31 @@ tasks:
       - task: npm:install-deps
     cmds:
       - npx eslint --ext .js,.jsx .
+
+  json:fix:
+    desc: Fix JSON code linting violations
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - |
+        npx \
+          eslint \
+            --ext \
+              .json,.jsonc,.json5 \
+            --fix \
+            .
+
+  json:lint:
+    desc: Lint JSON code
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - |
+        npx \
+          eslint \
+            --ext \
+              .json,.jsonc,.json5 \
+            .
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-markdown-task/Taskfile.yml
   markdown:check-links:
