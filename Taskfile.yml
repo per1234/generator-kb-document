@@ -14,6 +14,7 @@ tasks:
     desc: Check for problems with the project
     deps:
       - task: ci:validate
+      - task: ejs:lint
       - task: general:check-filenames
       - task: general:check-formatting
       - task: general:check-spelling
@@ -70,6 +71,39 @@ tasks:
     desc: Create all generated documentation content
     # This is an "umbrella" task used to call any documentation generation processes the project has.
     # It can be left empty if there are none.
+
+  ejs:lint:
+    desc: Lint EJS code
+    vars:
+      # The command is defined in a Taskfile variable to allow it to be broken into multiple lines for readability.
+      # This can't be done in the `cmd` object of the Taskfile because `npx --call` uses the native shell, which causes
+      # standard newline escaping syntax to not work when the task is run on Windows.
+      #
+      # Using -regex instead of -name to avoid Task's behavior of globbing even when quoted on Windows
+      # The odd method for escaping . in the regex is required for windows compatibility because mvdan.cc/sh gives
+      # \ characters special treatment on Windows in an attempt to support them as path separators.
+      #
+      # prettier-ignore
+      EJS_LINT_COMMAND:
+        "
+          find . \
+            -type d -name \".git\" -prune -o \
+            -type d -name \".licenses\" -prune -o \
+            -type d -name \"__pycache__\" -prune -o \
+            -type d -name \"node_modules\" -prune -o \
+            -regex \".*[.]ejs\" \
+            -exec \
+              ejslint \
+                \\{\\} \
+                +
+        "
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - |
+        npx \
+          --package=ejs-lint \
+          --call='{{.EJS_LINT_COMMAND}}'
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-files-task/Taskfile.yml
   general:check-filenames:

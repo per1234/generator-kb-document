@@ -34,6 +34,7 @@ This project is based on many amazing open source software projects:
 - [**ajv-cli**](https://ajv.js.org/packages/ajv-cli.html) - JSON schema validator
 - [**codespell**](https://github.com/codespell-project/codespell) - Spell checker.
 - [**editorconfig-checker**](https://github.com/editorconfig-checker/editorconfig-checker) - `.editorconfig` compliance checker
+- [**EJS-Lint**](https://github.com/ryanzim/ejs-lint) - Linter for EJS template code
 - [**ESLint**](https://eslint.org/) - Linter for JavaScript code
 - [**eslint-config-airbnb-base**](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base): ESLint configuration
 - [**eslint-config-prettier**](https://github.com/prettier/eslint-config-prettier) - Prevents duplications between the Prettier formatter and ESLint
