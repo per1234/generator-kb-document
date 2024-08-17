@@ -19,6 +19,7 @@ tasks:
       - task: markdown:check-links
       - task: markdown:lint
       - task: npm:validate
+      - task: poetry:validate
       - task: yaml:lint
 
   fix:
@@ -27,6 +28,7 @@ tasks:
       - task: general:format-prettier
       - task: go:tidy
       - task: markdown:fix
+      - task: poetry:sync
 
   docs:generate:
     desc: Create all generated documentation content
@@ -351,6 +353,25 @@ tasks:
       - |
         poetry install \
           {{if .POETRY_GROUPS}} --only {{.POETRY_GROUPS}} {{end}}
+
+  poetry:sync:
+    desc: Sync poetry.lock
+    deps:
+      - task: poetry:install
+    cmds:
+      - |
+        poetry lock \
+          --no-cache \
+          --no-update
+
+  poetry:validate:
+    desc: Validate pyproject.toml
+    deps:
+      - task: poetry:install
+    cmds:
+      - |
+        poetry check \
+          --lock
 
   # Make a temporary file named according to the passed TEMPLATE variable and print the path passed to stdout
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/windows-task/Taskfile.yml
