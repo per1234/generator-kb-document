@@ -25,6 +25,7 @@ This project is based on many amazing open source software projects:
 ### Misc
 
 - [**arduino/tooling-project-assets**](https://github.com/arduino/tooling-project-assets) - Collection of reusable project infrastructure assets
+- [**Dependabot**](https://docs.github.com/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates) - Dependency update service
 
 ## Resources
 
