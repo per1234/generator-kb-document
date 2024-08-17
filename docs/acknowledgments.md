@@ -15,6 +15,7 @@ This project is based on many amazing open source software projects:
 - [**actions/checkout**](https://github.com/actions/checkout)
 - [**actions/setup-go**](https://github.com/actions/setup-go)
 - [**actions/setup-node**](https://github.com/actions/setup-node)
+- [**ruby/setup-ruby**](https://github.com/ruby/setup-ruby)
 
 ### Programming/Markup Languages
 
@@ -28,6 +29,7 @@ This project is based on many amazing open source software projects:
 - [**ajv-cli**](https://ajv.js.org/packages/ajv-cli.html) - JSON schema validator
 - [**Git**](https://git-scm.com/) - Version control system.
 - [**gvm**](https://github.com/moovweb/gvm) - Go version manager
+- [**Licensee**](https://github.com/licensee/licensee) - License file parser
 - [**Node.js**](https://nodejs.org/en/download/package-manager) - JavaScript runtime environment
 - [**npm**](https://docs.npmjs.com/cli/) - JavaScript package manager
 - [**nvm**](https://github.com/nvm-sh/nvm) - Node.js version manager
