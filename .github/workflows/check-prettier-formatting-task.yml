@@ -94,6 +94,14 @@ on:
       - "**.mkdn?"
       - "**.ronn"
       - "**.workbook"
+      # TOML
+      - "**/Cargo.lock"
+      - "**/Cargo.toml.orig"
+      - "**/Gopkg.lock"
+      - "**/Pipfile"
+      - "**/pdm.lock"
+      - "**/poetry.lock"
+      - "**.toml"
       # YAML
       - "**/.clang-format"
       - "**/.clang-tidy"
@@ -194,6 +202,14 @@ on:
       - "**.mkdn?"
       - "**.ronn"
       - "**.workbook"
+      # TOML
+      - "**/Cargo.lock"
+      - "**/Cargo.toml.orig"
+      - "**/Gopkg.lock"
+      - "**/Pipfile"
+      - "**/pdm.lock"
+      - "**/poetry.lock"
+      - "**.toml"
       # YAML
       - "**/.clang-format"
       - "**/.clang-tidy"
