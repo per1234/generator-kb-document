@@ -1,0 +1,11 @@
+{
+  "Exclude": [
+    "^\\.git[/\\\\]",
+    "^\\.licenses[/\\\\]",
+    "__pycache__[/\\\\]",
+    "node_modules[/\\\\]",
+    "\\.ctd$",
+    "^LICENSE\\.txt$",
+    "^poetry\\.lock$"
+  ]
+}

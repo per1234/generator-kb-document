@@ -14,6 +14,7 @@ tasks:
     desc: Check for problems with the project
     deps:
       - task: general:check-filenames
+      - task: general:check-formatting
       - task: general:check-symlinks
       - task: npm:validate
 
@@ -87,6 +88,17 @@ tasks:
           false
         }
 
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-general-formatting-task/Taskfile.yml
+  general:check-formatting:
+    desc: Check basic formatting style of all files
+    cmds:
+      - |
+        go \
+          install \
+            github.com/editorconfig-checker/editorconfig-checker/v3/cmd/editorconfig-checker
+      - editorconfig-checker
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/spell-check-task/Taskfile.yml
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-files-task/Taskfile.yml
   general:check-symlinks:
     desc: Check for bad symlinks
