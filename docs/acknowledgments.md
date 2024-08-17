@@ -18,6 +18,9 @@ This project is based on many amazing open source software projects:
 ### Tools
 
 - [**Git**](https://git-scm.com/) - Version control system.
+- [**Node.js**](https://nodejs.org//) - JavaScript runtime environment
+- [**npm**](https://docs.npmjs.com/cli/) - JavaScript package manager
+- [**nvm**](https://github.com/nvm-sh/nvm) - Node.js version manager
 
 ### Misc
 
