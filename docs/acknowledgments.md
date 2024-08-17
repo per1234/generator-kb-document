@@ -13,10 +13,13 @@ This project is based on many amazing open source software projects:
 ### GitHub Actions
 
 - [**actions/checkout**](https://github.com/actions/checkout)
+- [**actions/download-artifact**](https://github.com/actions/download-artifact)
 - [**actions/setup-go**](https://github.com/actions/setup-go)
 - [**actions/setup-node**](https://github.com/actions/setup-node)
 - [**actions/setup-python**](https://github.com/actions/setup-python)
+- [**actions/upload-artifact**](https://github.com/actions/upload-artifact)
 - [**carlosperate/download-file-action**](https://github.com/carlosperate/download-file-action)
+- [**geekyeggo/delete-artifact**](https://github.com/geekyeggo/delete-artifact)
 - [**ruby/setup-ruby**](https://github.com/ruby/setup-ruby)
 - [**xt0rted/markdownlint-problem-matcher**](https://github.com/xt0rted/markdownlint-problem-matcher)
 
@@ -33,6 +36,7 @@ This project is based on many amazing open source software projects:
 - [**codespell**](https://github.com/codespell-project/codespell) - Spell checker.
 - [**editorconfig-checker**](https://github.com/editorconfig-checker/editorconfig-checker) - `.editorconfig` compliance checker
 - [**Git**](https://git-scm.com/) - Version control system.
+- [**GitHub Label Sync**](https://github.com/Financial-Times/github-label-sync) - GitHub repository label manager
 - [**gvm**](https://github.com/moovweb/gvm) - Go version manager
 - [**Licensee**](https://github.com/licensee/licensee) - License file parser
 - [**markdown-link-check**](https://github.com/tcort/markdown-link-check) - Link checker for Markdown
