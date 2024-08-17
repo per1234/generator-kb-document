@@ -1,6 +1,10 @@
 {
   "name": "@per1234/generator-kb-document",
   "version": "0.1.0-beta",
+  "devDependencies": {
+    "ajv-cli": "5.0.0",
+    "ajv-formats": "3.0.1"
+  },
   "engines": {
     "node": "20.x"
   },
