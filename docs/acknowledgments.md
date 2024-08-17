@@ -16,6 +16,7 @@ This project is based on many amazing open source software projects:
 - [**actions/setup-go**](https://github.com/actions/setup-go)
 - [**actions/setup-node**](https://github.com/actions/setup-node)
 - [**actions/setup-python**](https://github.com/actions/setup-python)
+- [**carlosperate/download-file-action**](https://github.com/carlosperate/download-file-action)
 - [**ruby/setup-ruby**](https://github.com/ruby/setup-ruby)
 - [**xt0rted/markdownlint-problem-matcher**](https://github.com/xt0rted/markdownlint-problem-matcher)
 
