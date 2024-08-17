@@ -15,6 +15,7 @@ This project is based on many amazing open source software projects:
 - [**actions/checkout**](https://github.com/actions/checkout)
 - [**actions/setup-go**](https://github.com/actions/setup-go)
 - [**actions/setup-node**](https://github.com/actions/setup-node)
+- [**actions/setup-python**](https://github.com/actions/setup-python)
 - [**ruby/setup-ruby**](https://github.com/ruby/setup-ruby)
 - [**xt0rted/markdownlint-problem-matcher**](https://github.com/xt0rted/markdownlint-problem-matcher)
 
@@ -36,9 +37,12 @@ This project is based on many amazing open source software projects:
 - [**Node.js**](https://nodejs.org//) - JavaScript runtime environment
 - [**npm**](https://docs.npmjs.com/cli/) - JavaScript package manager
 - [**nvm**](https://github.com/nvm-sh/nvm) - Node.js version manager
+- [**pipx**](https://pypa.github.io/pipx/) - Python application manager
+- [**Poetry**](https://python-poetry.org/) - Python package manager
 - [**Prettier**](https://prettier.io/) - Code formatter
 - [**Task**](https://taskfile.dev/) - Task runner
 - [**Wget**](https://www.gnu.org/software/wget/) - File downloader
+- [**yamllint**](https://yamllint.readthedocs.io/) - YAML linter
 
 ### Misc
 

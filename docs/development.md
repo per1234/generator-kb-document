@@ -10,6 +10,8 @@ The following development tools must be available in your local environment:
 - [**Node.js** / **npm**](https://nodejs.org/en/download/) - Node.js dependencies management tool
   - The **Node.js** version in use is defined in the `engines.node` field of [`package.json`](../package.json).
   - [**nvm**](https://github.com/nvm-sh/nvm#installing-and-updating) is recommended if you want to manage multiple installations of **Node.js** on your system.
+- [**Python**](https://wiki.python.org/moin/BeginnersGuide/Download)
+  - The **Python** version in use is defined in the `tool.poetry.dependencies` field of [`pyproject.toml`](../pyproject.toml).
 - [**Task**](https://taskfile.dev/installation/) - task runner tool
   - Install **Task** by the following command from a terminal in a path under the repository:
     ```text
@@ -57,5 +59,6 @@ This is an overview of the distinct components of the project:
 - **Dependencies manifests**: Specify the project's code and tool dependencies.
   - [**Go** modules](../tools.go)
   - [**npm** packages](../package.json)
+  - [**Python** packages](../pyproject.toml)
 - [**Taskfile**](../Taskfile.yml): Definitions of the [**Task** tool](https://taskfile.dev/) tasks for common development operations.
 - **Development tool configuration files**: configuration files for the project's various development tools are stored in the [root of the repository](..). See the comments in the individual files for more information.
