@@ -13,6 +13,7 @@ This project is based on many amazing open source software projects:
 ### Programming/Markup Languages
 
 - [**Markdown**](https://daringfireball.net/projects/markdown/syntax)
+- [**YAML**](https://yaml.org/)
 
 ### Tools
 
