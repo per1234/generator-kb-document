@@ -55,6 +55,7 @@ task --list
 This is an overview of the distinct components of the project:
 
 - [**Project documentation**](../docs): Information about the project.
+- [**Generator**](../app): The **Yeoman** generator.
 - [**GitHub Actions workflows**](../.github/workflows): Provide automated validation and project management.
 - **Dependencies manifests**: Specify the project's code and tool dependencies.
   - [**Go** modules](../tools.go)

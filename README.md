@@ -23,7 +23,197 @@ This is a [**Yeoman**](https://yeoman.io/) generator that creates a new document
 
 The generator can be configured to prompt the user for arbitrary information, which can be referenced in the document template in order to populate the created document with basic content.
 
-Although it is configurable enough to make it a general purpose tool for developing knowledge bases on any subject matter, the generator is opinionated on the structure of the knowledge base.
+Although it is configurable enough to make it a general purpose tool for developing knowledge bases on any subject matter, the generator is opinionated on the [structure of the knowledge base](#knowledge-base-structure).
+
+## Installation
+
+Install the **npm** packages for [**Yeoman**](https://yeoman.io/) and the generator as development dependencies of your project:
+
+```text
+npm install --save-dev yo @per1234/generator-kb-document
+```
+
+## Configuration
+
+### Generator Configuration File
+
+**Yeoman** generators are configured by a [JSON](https://www.json.org/) file named [`.yo-rc.json`](https://yeoman.io/authoring/storage.html#yo-rcjson-structure).
+
+Create a file named `.yo-rc.json` in the root of your knowledge base project and open it in any text editor.
+
+This generator is configured via the keys under the `@per1234/generator-kb-document` object in the `.yo-rc.json` file:
+
+```text
+{
+  "@per1234/generator-kb-document": {
+    [<generator configuration elements>]
+  }
+}
+```
+
+For a better understanding of the configuration file format and functionality, see the [**Example** section](#example).
+
+#### `kbPath`
+
+The path of the [knowledge base folder](#knowledge-base-structure).
+
+#### `promptDataPath`
+
+The path of the generator [prompt data file](#prompt-data-file).
+
+#### `templatePath`
+
+The path of the knowledge base [document file template](#document-file-template).
+
+### Prompt Data File
+
+The prompt data file defines the additional prompts that will be presented when the generator is run. The prompt names can be referenced in the [document file template](#document-file-template), which will cause the generator user's answer to the prompt to be filled in the generated knowledge base document. This allows the basic content of the knowledge base document to be efficiently populated in a standardized format at the time of document creation.
+
+The prompt data file is written in the [**JavaScript** programming language](https://wikipedia.org/wiki/JavaScript) programming language.
+
+The code must [export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export) an [array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) of prompt configuration objects as the [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export):
+
+```text
+const prompts = [<prompt configuration objects>];
+
+export default prompts;
+```
+
+The array contains [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) prompt configuration objects. The **Inquirer** prompt configuration objects are documented here:
+
+https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
+
+For a better understanding of the prompt data file format and functionality, see the [**Example** section](#example).
+
+### Document File Template
+
+This file is the template for the knowledge base document files that will be created by the generator.
+
+It is written in the **EJS** template language:
+
+https://ejs.co/
+
+For a better understanding of the document file template format and functionality, see the [**Example** section](#example).
+
+#### Built-in Prompts
+
+- `kbDocumentTitle`: The answer to the "**Knowledge base document title**" prompt.
+
+#### Prompts from Prompt Data File
+
+You can use the answers to any of the prompts defined in the [prompt data file](#prompt-data-file) in the template by referencing the `name` field value from the prompt configuration object.
+
+## Usage
+
+1. Run the following command from a terminal in a path under the knowledge base project:
+   ```text
+   npx yo @per1234/kb-document
+   ```
+1. The "**Knowledge base document title**" prompt will be displayed in the terminal. Type the title you want to use for the new knowledge base document and press the <kbd>**Enter**</kbd> key.
+1. If you defined additional prompts in the [prompt data file](#prompt-data-file), they will be presented in turn. Answer these prompts.
+1. At the end of the process you will see an "**A new document has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
+   You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
+1. Manually fill in the document content.
+
+## Example
+
+It might be helpful to take a look at a full example of a configuration and usage of the generator.
+
+Let's say you have a knowledge base project with this file structure:
+
+```text
+<project folder>/
+├── .yo-rc.json
+├── generator-kb-document/
+│   ├── prompts.js
+│   └── template.ejs
+├── my-kb/
+│   │
+│   ...
+...
+```
+
+**`.yo-rc.json`:**
+
+```json
+{
+  "@per1234/generator-kb-document": {
+    "kbPath": "my-kb",
+    "promptDataPath": "generator-kb-document/prompts.js",
+    "templatePath": "generator-kb-document/template.ejs"
+  }
+}
+```
+
+**`prompts.js`:**
+
+```javascript
+const prompts = [
+  {
+    type: "input",
+    name: "homePageUrl",
+    message: "Home page URL",
+  },
+];
+
+export default prompts;
+```
+
+For example, if you want to prompt the user to provide a home page URL, you would add the following content to the file:
+
+```javascript
+const prompts = [
+  {
+    type: "input",
+    name: "homePageUrl",
+    message: "Home page URL",
+  },
+];
+
+export default prompts;
+```
+
+**`template.ejs`:**
+
+```ejs
+# <%- kbDocumentTitle %>
+
+Home Page: <%- homePageUrl %>
+```
+
+The following generator run:
+
+```text
+$ npx yo @per1234/kb-document
+? Knowledge base document title: My Document
+? Home page URL: https://example.com
+
+A new knowledge base document has been created at C:\my-kb-project\my-kb\my-document\doc.md
+```
+
+will result in the following file structure:
+
+```text
+<project folder>/
+├── .yo-rc.json
+├── generator-kb-document/
+│   ├── prompts.js
+│   └── template.ejs
+├── my-kb/
+│   ├── my-document/
+│   │   └── doc.md
+│   │
+│   ...
+...
+```
+
+And the generated `<project folder>/my-kb/my-document/doc.md` having the following content:
+
+```markdown
+# My Document
+
+Home Page: https://example.com
+```
 
 ## Knowledge Base Structure
 

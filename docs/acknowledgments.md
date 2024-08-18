@@ -10,6 +10,13 @@ https://github.com/per1234/generator-kb-document/graphs/contributors
 
 This project is based on many amazing open source software projects:
 
+### Code Dependencies
+
+- [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) - Interactive command line user interface
+- [**slug**](https://github.com/Trott/slug) - String slugifier
+- [**yeoman-generator**](https://github.com/yeoman/generator) - Yeoman generator framework
+- [**yeoman-test**](https://github.com/yeoman/yeoman-test) - Utilities for testing Yeoman generators
+
 ### GitHub Actions
 
 - [**actions/checkout**](https://github.com/actions/checkout)
@@ -25,6 +32,7 @@ This project is based on many amazing open source software projects:
 
 ### Programming/Markup Languages
 
+- [**EJS**](https://ejs.co/)
 - [**Go**](https://go.dev/)
 - [**Markdown**](https://daringfireball.net/projects/markdown/syntax)
 - [**YAML**](https://yaml.org/)
@@ -56,6 +64,7 @@ This project is based on many amazing open source software projects:
 - [**Task**](https://taskfile.dev/) - Task runner
 - [**Wget**](https://www.gnu.org/software/wget/) - File downloader
 - [**yamllint**](https://yamllint.readthedocs.io/) - YAML linter
+- [**Yeoman**](https://yeoman.io/) - Scaffolding tool
 
 ### Misc
 
