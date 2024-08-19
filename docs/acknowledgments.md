@@ -30,6 +30,7 @@ This project is based on many amazing open source software projects:
 ### Tools
 
 - [**ajv-cli**](https://ajv.js.org/packages/ajv-cli.html) - JSON schema validator
+- [**codespell**](https://github.com/codespell-project/codespell) - Spell checker.
 - [**editorconfig-checker**](https://github.com/editorconfig-checker/editorconfig-checker) - `.editorconfig` compliance checker
 - [**Git**](https://git-scm.com/) - Version control system.
 - [**gvm**](https://github.com/moovweb/gvm) - Go version manager
