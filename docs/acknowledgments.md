@@ -52,6 +52,7 @@ This project is based on many amazing open source software projects:
 - [**pipx**](https://pipx.pypa.io/) - Python application manager
 - [**Poetry**](https://python-poetry.org/) - Python package manager
 - [**Prettier**](https://prettier.io/) - Code formatter
+- [**Prettier Toml Plugin**](https://www.npmjs.com/package/prettier-plugin-toml) - Prettier plugin for TOML files
 - [**Task**](https://taskfile.dev/) - Task runner
 - [**Wget**](https://www.gnu.org/software/wget/) - File downloader
 - [**yamllint**](https://yamllint.readthedocs.io/) - YAML linter
