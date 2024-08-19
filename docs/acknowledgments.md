@@ -37,6 +37,7 @@ This project is based on many amazing open source software projects:
 - [**Node.js**](https://nodejs.org/en/download/package-manager) - JavaScript runtime environment
 - [**npm**](https://docs.npmjs.com/cli/) - JavaScript package manager
 - [**nvm**](https://github.com/nvm-sh/nvm) - Node.js version manager
+- [**Prettier**](https://prettier.io/) - Code formatter
 - [**Task**](https://taskfile.dev/) - Task runner
 - [**Wget**](https://www.gnu.org/software/wget/) - File downloader
 
