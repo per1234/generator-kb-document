@@ -27,6 +27,8 @@ The generator can be configured to prompt the user for arbitrary information, wh
 
 Although it is configurable enough to make it a general purpose tool for developing knowledge bases on any subject matter, the generator is opinionated on the [structure of the knowledge base](#knowledge-base-structure).
 
+Project website: https://github.com/per1234/generator-kb-document
+
 ## Installation
 
 Install the **npm** packages for [**Yeoman**](https://yeoman.io/) and the generator as development dependencies of your project:
