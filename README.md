@@ -21,3 +21,7 @@ The knowledge base is composed of a collection of files, which have the followin
 - **\<knowledge base folder\>/**: This folder is the container for all the knowledge base content files.
 - **\<document title slug\>/**: This folder is the container for all the document content files. The folder name is a [normalized](https://github.com/Trott/slug#example) version of the document title.
 - **doc.md**: The primary document file, written in the [**Markdown** markup language](https://www.markdownguide.org/).
+
+## Contributing
+
+See [the **Contributor Guide**](docs/CONTRIBUTING.md).
