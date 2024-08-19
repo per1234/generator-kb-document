@@ -33,7 +33,7 @@
   "keywords": [
     "yeoman-generator"
   ],
-  "main": "index.js",
+  "main": "app/index.js",
   "repository": "github:per1234/generator-kb-document",
   "type": "module"
 }
