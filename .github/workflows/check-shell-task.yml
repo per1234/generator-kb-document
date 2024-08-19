@@ -1,0 +1,222 @@
+# Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/check-shell-task.md
+name: Check Shell Scripts
+
+# See: https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
+on:
+  create:
+  push:
+    paths:
+      - ".github/workflows/check-shell-task.ya?ml"
+      - "go.mod"
+      - "go.sum"
+      - "Taskfile.ya?ml"
+      - "tools.go"
+      - "**/.editorconfig"
+      - "**.bash"
+      - "**.sh"
+  pull_request:
+    paths:
+      - ".github/workflows/check-shell-task.ya?ml"
+      - "go.mod"
+      - "go.sum"
+      - "Taskfile.ya?ml"
+      - "tools.go"
+      - "**/.editorconfig"
+      - "**.bash"
+      - "**.sh"
+  schedule:
+    # Run every Tuesday at 8 AM UTC to catch breakage caused by tool changes.
+    - cron: "0 8 * * TUE"
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  run-determination:
+    runs-on: ubuntu-latest
+    permissions: {}
+    outputs:
+      result: ${{ steps.determination.outputs.result }}
+    steps:
+      - name: Determine if the rest of the workflow should run
+        id: determination
+        run: |
+          RELEASE_BRANCH_REGEX="refs/heads/[0-9]+.[0-9]+.x"
+          # The `create` event trigger doesn't support `branches` filters, so it's necessary to use Bash instead.
+          if [[
+            "${{ github.event_name }}" != "create" ||
+            "${{ github.ref }}" =~ $RELEASE_BRANCH_REGEX
+          ]]; then
+            # Run the other jobs.
+            RESULT="true"
+          else
+            # There is no need to run the other jobs.
+            RESULT="false"
+          fi
+
+          echo "result=$RESULT" >> $GITHUB_OUTPUT
+
+  lint:
+    name: ${{ matrix.configuration.name }} (${{ matrix.script }})
+    needs: run-determination
+    if: needs.run-determination.outputs.result == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      # See: https://github.com/koalaman/shellcheck/releases/latest
+      SHELLCHECK_RELEASE_ASSET_SUFFIX: .linux.x86_64.tar.xz
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        configuration:
+          - name: Generate problem matcher output
+            # ShellCheck's "gcc" output format is required for annotated diffs, but inferior for humans reading the log.
+            format: gcc
+            # The other matrix job is used to set the result, so this job is configured to always pass.
+            continue-on-error: true
+          - name: ShellCheck
+            # ShellCheck's "tty" output format is most suitable for humans reading the log.
+            format: tty
+            continue-on-error: false
+        script:
+          - assets/bump-package.sh
+
+    steps:
+      - name: Set environment variables
+        run: |
+          # See: https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+          echo "INSTALL_PATH=${{ runner.temp }}/shellcheck" >> "$GITHUB_ENV"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Install Task
+        run: |
+          go \
+            install \
+              github.com/go-task/task/v3/cmd/task
+
+      - name: Download latest ShellCheck release binary package
+        id: download
+        uses: MrOctopus/download-asset-action@1.1
+        with:
+          repository: koalaman/shellcheck
+          excludes: prerelease, draft
+          asset: ${{ env.SHELLCHECK_RELEASE_ASSET_SUFFIX }}
+          target: ${{ env.INSTALL_PATH }}
+
+      - name: Install ShellCheck
+        run: |
+          cd "${{ env.INSTALL_PATH }}"
+          tar \
+            --extract \
+            --file="${{ steps.download.outputs.name }}"
+          EXTRACTION_FOLDER="$(
+            basename \
+              "${{ steps.download.outputs.name }}" \
+              "${{ env.SHELLCHECK_RELEASE_ASSET_SUFFIX }}"
+          )"
+          # Add installation to PATH:
+          # See: https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-system-path
+          echo "${{ env.INSTALL_PATH }}/$EXTRACTION_FOLDER" >> "$GITHUB_PATH"
+
+      - name: Run ShellCheck
+        uses: liskin/gh-problem-matcher-wrap@v3
+        continue-on-error: ${{ matrix.configuration.continue-on-error }}
+        with:
+          linters: gcc
+          run: |
+            task --silent shell:check SCRIPT_PATH="${{ matrix.script }}" SHELLCHECK_FORMAT="${{ matrix.configuration.format }}"
+  formatting:
+    name: formatting (${{ matrix.script }})
+    needs: run-determination
+    if: needs.run-determination.outputs.result == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        script:
+          - assets/bump-package.sh
+
+    steps:
+      - name: Set environment variables
+        run: |
+          # See: https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+          echo "SHFMT_INSTALL_PATH=${{ runner.temp }}/shfmt" >> "$GITHUB_ENV"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Install Task
+        run: |
+          go \
+            install \
+              github.com/go-task/task/v3/cmd/task
+
+      - name: Format shell scripts
+        run: |
+          task \
+            --silent \
+            shell:format \
+            SCRIPT_PATH="${{ matrix.script }}"
+
+      - name: Check formatting
+        run: |
+          git \
+            diff \
+              --color \
+              --exit-code
+
+  executable:
+    name: executable (${{ matrix.script }})
+    needs: run-determination
+    if: needs.run-determination.outputs.result == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        script:
+          - assets/bump-package.sh
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Install Task
+        run: |
+          go \
+            install \
+              github.com/go-task/task/v3/cmd/task
+
+      - name: Check for non-executable scripts
+        run: |
+          task \
+            --silent \
+            shell:check-mode \
+            SCRIPT_PATH="${{ matrix.script }}"
