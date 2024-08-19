@@ -1,0 +1,80 @@
+name: Release npm Package
+
+on:
+  push:
+    tags:
+      - "v?[0-9]+.[0-9]+.[0-9]+*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # See: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
+      id-token: write
+
+    env:
+      # See: https://github.com/fsaintjacques/semver-tool/releases
+      SEMVER_TOOL_VERSION: 3.4.0
+
+    steps:
+      - name: Set environment variables
+        run: |
+          # See: https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+          echo "SEMVER_TOOL_PATH=${{ runner.temp }}/semver" >> "$GITHUB_ENV"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          registry-url: https://registry.npmjs.org
+
+      - name: Download semver tool
+        id: download-semver-tool
+        uses: carlosperate/download-file-action@v2
+        with:
+          file-url: https://github.com/fsaintjacques/semver-tool/archive/${{ env.SEMVER_TOOL_VERSION }}.zip
+          location: ${{ runner.temp }}/semver-tool
+
+      - name: Install semver tool
+        run: |
+          unzip \
+            -p \
+            "${{ steps.download-semver-tool.outputs.file-path }}" \
+            semver-tool-${{ env.SEMVER_TOOL_VERSION }}/src/semver > \
+              "${{ env.SEMVER_TOOL_PATH }}"
+          chmod +x "${{ env.SEMVER_TOOL_PATH }}"
+
+      - name: Detect release type
+        id: release-type
+        run: |
+          if [[ \
+            "$(
+              "${{ env.SEMVER_TOOL_PATH }}" get prerel \
+                "${GITHUB_REF/refs\/tags\//}"
+            )" != \
+            "" \
+          ]]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Github release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: ${{ steps.release-type.outputs.prerelease }}
+
+      # See: https://docs.github.com/actions/use-cases-and-examples/publishing-packages/publishing-nodejs-packages#publishing-packages-to-the-npm-registry
+      - name: Publish to npm registry
+        if: steps.release-type.outputs.prerelease != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm \
+            publish \
+              --access public \
+              --provenance
