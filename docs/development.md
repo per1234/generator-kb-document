@@ -1,5 +1,15 @@
 # Development Guide
 
+This is the documentation for subjects related to project development.
+
+---
+
+For information about contributing to the project, see the [**Contributor Guide**](CONTRIBUTING.md).
+
+For information about project maintenance, see the [**Maintainer Guide**](maintainer-guide/maintainer-guide.md).
+
+---
+
 ## Prerequisites
 
 The following development tools must be available in your local environment:

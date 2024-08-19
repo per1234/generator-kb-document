@@ -27,6 +27,8 @@ This project is based on many amazing open source software projects:
 - [**actions/upload-artifact**](https://github.com/actions/upload-artifact)
 - [**carlosperate/download-file-action**](https://github.com/carlosperate/download-file-action)
 - [**geekyeggo/delete-artifact**](https://github.com/geekyeggo/delete-artifact)
+- [**liskin/gh-problem-matcher-wrap**](https://github.com/liskin/gh-problem-matcher-wrap)
+- [**ncipollo/release-action**](https://github.com/ncipollo/release-action)
 - [**ruby/setup-ruby**](https://github.com/ruby/setup-ruby)
 - [**xt0rted/markdownlint-problem-matcher**](https://github.com/xt0rted/markdownlint-problem-matcher)
 
@@ -63,6 +65,7 @@ This project is based on many amazing open source software projects:
 - [**Poetry**](https://python-poetry.org/) - Python package manager
 - [**Prettier**](https://prettier.io/) - Code formatter
 - [**Prettier Toml Plugin**](https://www.npmjs.com/package/prettier-plugin-toml) - Prettier plugin for TOML files
+- [**semver**](https://github.com/fsaintjacques/semver-tool) - Version number parsing
 - [**Task**](https://taskfile.dev/) - Task runner
 - [**Wget**](https://www.gnu.org/software/wget/) - File downloader
 - [**yamllint**](https://yamllint.readthedocs.io/) - YAML linter
