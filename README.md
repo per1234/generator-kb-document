@@ -1,5 +1,7 @@
 # @per1234/generator-kb-document
 
+[![Check npm status](https://github.com/per1234/generator-kb-document/actions/workflows/check-npm-task.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/check-npm-task.yml)
+
 This is a [**Yeoman**](https://yeoman.io/) generator that creates a new document in a [**Markdown**](https://daringfireball.net/projects/markdown/) file-based knowledge base.
 
 The generator can be configured to prompt the user for arbitrary information, which can be referenced in the document template in order to populate the created document with basic content.
