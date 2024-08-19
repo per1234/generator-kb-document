@@ -39,6 +39,7 @@ This project is based on many amazing open source software projects:
 - [**eslint-config-airbnb-base**](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base) - ESLint configuration
 - [**eslint-config-prettier**](https://github.com/prettier/eslint-config-prettier) - Prevents duplications between the Prettier formatter and ESLint
 - [**eslint-plugin-import**](https://github.com/import-js/eslint-plugin-import) - JavaScript import linting
+- [**eslint-plugin-jsonc**](https://ota-meshi.github.io/eslint-plugin-jsonc/) - ESLint plugin for linting of JSON/JSONC code
 - [**Git**](https://git-scm.com/) - Version control system.
 - [**GitHub Label Sync**](https://github.com/Financial-Times/github-label-sync) - GitHub repository label manager
 - [**gvm**](https://github.com/moovweb/gvm) - Go version manager
