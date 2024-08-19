@@ -103,7 +103,7 @@ describe("running the generator", () => {
           .run(Generator, generatorOptions)
           .withAnswers(answers)
           .withLocalConfig(localConfig),
-      ).rejects.toThrow("not an array"));
+      ).rejects.toThrow("must be array"));
   });
 
   describe.each([

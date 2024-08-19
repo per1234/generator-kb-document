@@ -89,6 +89,12 @@ https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
 
 For a better understanding of the prompts data file format and functionality, see the [**Example** section](#example).
 
+---
+
+**ⓘ** A [JSON schema](https://json-schema.org/) for validation of the prompts data is provided [**here**](etc/generator-kb-document-prompts-data-schema.json).
+
+---
+
 ### Document File Template
 
 This file is the template for the knowledge base document files that will be created by the generator.
