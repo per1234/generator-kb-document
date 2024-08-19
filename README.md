@@ -25,3 +25,9 @@ The knowledge base is composed of a collection of files, which have the followin
 ## Contributing
 
 See [the **Contributor Guide**](docs/CONTRIBUTING.md).
+
+### Acknowledgments
+
+Thanks to the open source community who contribute to this project and the software and resources it uses!
+
+See the [**Acknowledgments page**](docs/acknowledgments.md) for details.
