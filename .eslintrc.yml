@@ -1,0 +1,25 @@
+# Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-javascript/.eslintrc.yml
+# See: https://eslint.org/docs/user-guide/configuring/
+# The code style defined in this file is the official standardized style to be used in all Arduino projects and should
+# not be modified.
+
+extends:
+  - airbnb-base
+  - prettier
+parserOptions:
+  ecmaVersion: latest
+rules:
+  import/no-extraneous-dependencies:
+    - error
+    - devDependencies:
+        - "**/tests/*.js"
+  import/no-unresolved:
+    - error
+    - ignore:
+        # Workaround for https://github.com/import-js/eslint-plugin-import/issues/1810
+        - yeoman-test
+  max-len:
+    - error
+    - code: 180
+  no-console: "off"
+  no-underscore-dangle: "off"
