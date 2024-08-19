@@ -5,6 +5,7 @@ go 1.22.6
 require (
 	github.com/editorconfig-checker/editorconfig-checker/v3 v3.0.3
 	github.com/go-task/task/v3 v3.38.0
+	mvdan.cc/sh/v3 v3.8.0
 )
 
 require (
@@ -20,12 +21,14 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.4 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/go-task/template v0.0.0-20240602015157-960e6f576656 // indirect
+	github.com/google/renameio/v2 v2.0.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-zglob v0.0.4 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
+	github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e // indirect
 	github.com/radovskyb/watcher v1.0.7 // indirect
 	github.com/sajari/fuzzy v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
@@ -38,5 +41,5 @@ require (
 	golang.org/x/text v0.16.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	mvdan.cc/sh/v3 v3.8.0 // indirect
+	mvdan.cc/editorconfig v0.2.1-0.20231228180347-1925077f8eb2 // indirect
 )

@@ -66,6 +66,8 @@ This project is based on many amazing open source software projects:
 - [**Prettier**](https://prettier.io/) - Code formatter
 - [**Prettier Toml Plugin**](https://www.npmjs.com/package/prettier-plugin-toml) - Prettier plugin for TOML files
 - [**semver**](https://github.com/fsaintjacques/semver-tool) - Version number parsing
+- [**ShellCheck**](https://www.shellcheck.net/) - Shell script linter
+- [**shfmt**](https://github.com/mvdan/sh#shfmt) - Shell script formatter
 - [**Task**](https://taskfile.dev/) - Task runner
 - [**Wget**](https://www.gnu.org/software/wget/) - File downloader
 - [**yamllint**](https://yamllint.readthedocs.io/) - YAML linter

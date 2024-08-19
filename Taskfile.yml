@@ -26,6 +26,12 @@ tasks:
       - task: markdown:lint
       - task: npm:validate
       - task: poetry:validate
+      - task: shell:check
+        vars:
+          SCRIPT_PATH: assets/bump-package.sh
+      - task: shell:check-mode
+        vars:
+          SCRIPT_PATH: assets/bump-package.sh
       - task: yaml:lint
 
   fix:
@@ -38,6 +44,9 @@ tasks:
       - task: json:fix
       - task: markdown:fix
       - task: poetry:sync
+      - task: shell:format
+        vars:
+          SCRIPT_PATH: assets/bump-package.sh
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-workflows-task/Taskfile.yml
   ci:validate:
@@ -521,6 +530,70 @@ tasks:
       - |
         poetry check \
           --lock
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-shell-task/Taskfile.yml
+  shell:check:
+    desc: |
+      Check for problems with shell scripts.
+      Environment variable parameters:
+      SCRIPT_PATH: Path of the script to be checked.
+    cmds:
+      - |
+        if [[ "{{.SCRIPT_PATH}}" == "" ]]; then
+          echo "Path to script file must be passed to this task via the SCRIPT_PATH taskfile variable."
+          echo "See: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/check-shell-task.md#usage"
+          exit 1
+        fi
+      - |
+        if ! which shellcheck &>/dev/null; then
+          echo "shellcheck not installed or not in PATH."
+          echo "Please install: https://github.com/koalaman/shellcheck#installing"
+          exit 1
+        fi
+      - |
+        shellcheck \
+          --format={{default "tty" .SHELLCHECK_FORMAT}} \
+          "{{.SCRIPT_PATH}}"
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-shell-task/Taskfile.yml
+  shell:check-mode:
+    desc: |
+      Check for non-executable shell scripts.
+      Environment variable parameters:
+      SCRIPT_PATH: Path of the script to be checked.
+    cmds:
+      - |
+        if [[ "{{.SCRIPT_PATH}}" == "" ]]; then
+          echo "Path to script file must be passed to this task via the SCRIPT_PATH taskfile variable."
+          echo "See: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/check-shell-task.md#usage"
+          exit 1
+        fi
+      - |
+        test \
+          -x \
+          "{{.SCRIPT_PATH}}"
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-shell-task/Taskfile.yml
+  shell:format:
+    desc: |
+      Format shell script files.
+      Environment variable parameters:
+      SCRIPT_PATH: Path of the script to be formatted.
+    cmds:
+      - |
+        if [[ "{{.SCRIPT_PATH}}" == "" ]]; then
+          echo "Path to script file must be passed to this task via the SCRIPT_PATH taskfile variable."
+          echo "See: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/check-shell-task.md#usage"
+          exit 1
+        fi
+      - |
+        go \
+          install \
+            mvdan.cc/sh/v3/cmd/shfmt
+      - |
+        shfmt \
+          -w \
+          "{{.SCRIPT_PATH}}"
 
   # Make a temporary file named according to the passed TEMPLATE variable and print the path passed to stdout
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/windows-task/Taskfile.yml
