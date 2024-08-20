@@ -156,7 +156,7 @@ const prompts = [
   {
     type: "input",
     name: "homePageUrl",
-    message: "Home page URL",
+    message: "Home page URL:",
   },
 ];
 
