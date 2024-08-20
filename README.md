@@ -83,11 +83,110 @@ const prompts = [<prompt configuration objects>];
 export default prompts;
 ```
 
-The array contains [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) prompt configuration objects. The **Inquirer** prompt configuration objects are documented here:
+The prompt configuration object contains the following properties:
+
+#### `inquirer`
+
+The `inquirer` property is an [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) prompt configuration object. The **Inquirer** prompt configuration objects are documented here:
 
 https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
 
-For a better understanding of the prompts data file format and functionality, see the [**Example** section](#example).
+```text
+{
+  inquirer: {<Inquirer prompt configuration object>},
+  ...
+},
+```
+
+<a name="prompt-data-usage-property"></a>
+
+#### `usage`
+
+The `usage` property is an array of strings which specify how the generator should make the prompt answer available for use in the [document file template](#document-file-template):
+
+```text
+{
+  inquirer: {<Inquirer prompt configuration object>},
+  usage: [
+    "content",
+    "front matter",
+  ],
+  ...
+}
+```
+
+##### `content`
+
+The answer can be referenced by the value from the [**Inquirer** prompt configuration](#inquirer) object's `name` property anywhere in the [document file template](#document-file-template).
+
+##### `front matter`
+
+The answer will be included in the generated front matter document, which can be referenced as `kbDocumentFrontMatter` in the [document file template](#document-file-template). The answers to all prompts with `usage` property that contains `"front matter"` will be merged into the [front matter document](#document-file-template-front-matter).
+
+---
+
+❗ If you include `"front matter"` in the `usage` property, you must also set the [`frontMatterPath` property](#frontmatterpath).
+
+---
+
+#### `frontMatterPath`
+
+The `frontMatterPath` property is a string that specifies the data path in the front matter document under which the answer should be added.
+
+The JSON pointer notation is used:
+
+https://datatracker.ietf.org/doc/html/rfc6901
+
+---
+
+**ⓘ** The `frontMatterPath` property is only relevant when the [`usage`](#prompt-data-usage-property) property contains `"front matter"`.
+
+---
+
+##### Example
+
+With the following prompt configuration object:
+
+```javascript
+{
+  frontMatterPath: "/tags/-",
+  inquirer: {
+    type: "rawlist",
+    name: "someTag",
+    message: "Some tag:",
+    choices: [
+      {
+        name: "Foo",
+        value: "foo",
+      },
+      {
+        name: "Bar",
+        value: "bar",
+      },
+    ],
+  },
+  usage: ["front matter"],
+}
+```
+
+And the following [document file template](#document-file-template):
+
+```ejs
+<%- kbDocumentFrontMatter %>
+```
+
+If the user answers "**Foo**" to the "**Some tag:**" prompt, the generated document will contain:
+
+```markdown
+---
+tags:
+  - foo
+---
+```
+
+---
+
+For a better understanding of the prompts data file format and functionality, see the [**Example** section](#generator-example).
 
 ---
 
@@ -111,7 +210,25 @@ For a better understanding of the document file template format and functionalit
 
 #### Prompts from Prompts Data File
 
-You can use the answers to any of the prompts defined in the [prompts data file](#prompts-data-file) in the template by referencing the `name` field value from the prompt configuration object.
+##### `"content"` Prompts
+
+If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usage`](#prompt-data-usage-property) property, you can use the answer by referencing the value of the `name` property of the [**Inquirer** prompt configuration object](#inquirer) in the template:
+
+```ejs
+<%- <prompt name> %>
+```
+
+<a name="document-file-template-front-matter"></a>
+
+##### `"front matter"` Prompts
+
+If a prompt defined in the [prompts data file](#prompts-data-file) which has `"front matter"` in its [`usage`](#prompt-data-usage-property) property, its answer will be included in a single generated front matter document. That front matter document is available for use in the template via the `kbDocumentFrontMatter` variable:
+
+```ejs
+<%- kbDocumentFrontMatter %>
+```
+
+For information on front matter, see [the **Informational Structure** section](#informational-structure).
 
 ## Usage
 
@@ -124,6 +241,8 @@ You can use the answers to any of the prompts defined in the [prompts data file]
 1. At the end of the process you will see an "**A new document has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
    You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
 1. Manually fill in the document content.
+
+<a name="generator-example"></a>
 
 ## Example
 
@@ -160,9 +279,31 @@ Let's say you have a knowledge base project with this file structure:
 ```javascript
 const prompts = [
   {
-    type: "input",
-    name: "homePageUrl",
-    message: "Home page URL:",
+    frontMatterPath: "/tags/-",
+    inquirer: {
+      type: "rawlist",
+      name: "topic",
+      message: "Topic:",
+      choices: [
+        {
+          name: "Cooking",
+          value: "cooking",
+        },
+        {
+          name: "Games",
+          value: "games",
+        },
+      ],
+    },
+    usage: ["front matter"],
+  },
+  {
+    inquirer: {
+      type: "input",
+      name: "homePageUrl",
+      message: "Home page URL:",
+    },
+    usage: ["content"],
   },
 ];
 
@@ -172,6 +313,8 @@ export default prompts;
 **`template.ejs`:**
 
 ```ejs
+<%- kbDocumentFrontMatter %>
+
 # <%- kbDocumentTitle %>
 
 Home Page: <%- homePageUrl %>
@@ -182,6 +325,7 @@ The following generator run:
 ```text
 $ npx yo @per1234/kb-document
 ? Knowledge base document title: My Document
+? Topic: Games
 ? Home page URL: https://example.com
 
 A new knowledge base document has been created at C:\my-kb-project\my-kb\my-document\doc.md
@@ -206,12 +350,19 @@ will result in the following file structure:
 And the generated `<project folder>/my-kb/my-document/doc.md` having the following content:
 
 ```markdown
+---
+tags:
+  - games
+---
+
 # My Document
 
 Home Page: https://example.com
 ```
 
 ## Knowledge Base Structure
+
+### File Structure
 
 The knowledge base is composed of a collection of files, which have the following structure:
 
@@ -226,6 +377,23 @@ The knowledge base is composed of a collection of files, which have the followin
 - **\<knowledge base folder\>/**: This folder is the container for all the knowledge base content files.
 - **\<document title slug\>/**: This folder is the container for all the document content files. The folder name is a [normalized](https://github.com/Trott/slug#example) version of the document title.
 - **doc.md**: The primary document file, written in the [**Markdown** markup language](https://www.markdownguide.org/).
+
+### Informational Structure
+
+Although not part of the official **Markdown** specifications, it is common for **Markdown** tooling to recognize metadata defined in a [**YAML**](https://www.yaml.info/learn/index.html) document at the start of a **MarkDown** file. The term for this is "front matter".
+
+The metadata defined in front matter can be used for various purposes, including
+
+- Assigning categorical tags to a document.
+  - The standardized way to do this is a [sequence](https://www.yaml.info/learn/index.html#:~:text=Sequence,-A%20sequence%20is) (i.e., array) under the `tags` key.
+- Configuration of tools that consume Markdown files and recognize special front matter keys.
+  - Some tools (e.g., [**Material for MkDocs**](https://squidfunk.github.io/mkdocs-material/setup/setting-up-tags/), [**Obsidian**](https://help.obsidian.md/Editing+and+formatting/Tags)) use the data from the `tags` key.
+
+The [file structure](#file-structure) produced by the generator is flat at the document scope, with all documents stored under the root of the knowledge base folder rather than attempting to support the definition of an informational structure via folder hierarchies.
+
+The information structure of the knowledge base should instead be defined by tags. It is through these tags that the user navigates and searches the knowledge base.
+
+The generator can be configured to populate the front matter of the new document according to the user's answers to prompts. See the documentation for the [prompts data file](#prompts-data-file) and [document file template](#document-file-template) for details.
 
 ## Contributing
 
