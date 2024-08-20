@@ -5,7 +5,7 @@ go 1.22.6
 require (
 	github.com/editorconfig-checker/editorconfig-checker/v3 v3.0.3
 	github.com/go-task/task/v3 v3.38.0
-	mvdan.cc/sh/v3 v3.8.0
+	mvdan.cc/sh/v3 v3.9.0
 )
 
 require (
@@ -28,18 +28,19 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-zglob v0.0.4 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
-	github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e // indirect
+	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/radovskyb/watcher v1.0.7 // indirect
+	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/sajari/fuzzy v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/term v0.21.0 // indirect
+	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/term v0.23.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	mvdan.cc/editorconfig v0.2.1-0.20231228180347-1925077f8eb2 // indirect
+	mvdan.cc/editorconfig v0.3.0 // indirect
 )
