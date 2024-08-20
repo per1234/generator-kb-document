@@ -163,20 +163,6 @@ const prompts = [
 export default prompts;
 ```
 
-For example, if you want to prompt the user to provide a home page URL, you would add the following content to the file:
-
-```javascript
-const prompts = [
-  {
-    type: "input",
-    name: "homePageUrl",
-    message: "Home page URL",
-  },
-];
-
-export default prompts;
-```
-
 **`template.ejs`:**
 
 ```ejs
