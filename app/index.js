@@ -1,6 +1,9 @@
-import { existsSync } from "node:fs";
+import Ajv from "ajv";
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { pathToFileURL } from "node:url";
 import slug from "slug";
+import { fileURLToPath } from "url";
 import Generator from "yeoman-generator";
 
 export default class extends Generator {
@@ -41,9 +44,31 @@ export default class extends Generator {
         );
       }
 
-      if (!Array.isArray(promptsData.default)) {
+      // Validate prompts data format.
+      const moduleFilePath = fileURLToPath(import.meta.url);
+      const moduleFolderPath = path.dirname(moduleFilePath);
+      const schemaPath = path.join(
+        moduleFolderPath,
+        "../etc/generator-kb-document-prompts-data-schema.json",
+      );
+      const rawSchema = readFileSync(schemaPath, {
+        encoding: "utf8",
+      });
+      const schema = JSON.parse(rawSchema);
+      const ajv = new Ajv();
+      const schemaValidator = ajv.compile(schema);
+
+      const valid = schemaValidator(promptsData.default);
+      if (!valid) {
+        const validationErrors = JSON.stringify(
+          schemaValidator.errors,
+          null,
+          2,
+        );
         return Promise.reject(
-          new Error("Prompts data default export is not an array."),
+          new Error(
+            `Prompts data has an invalid data format:\n${validationErrors}`,
+          ),
         );
       }
 

@@ -12,6 +12,7 @@ This project is based on many amazing open source software projects:
 
 ### Code Dependencies
 
+- [**Ajv**](https://ajv.js.org/packages/ajv-cli.html) - JSON schema validator
 - [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) - Interactive command line user interface
 - [**slug**](https://github.com/Trott/slug) - String slugifier
 - [**yeoman-generator**](https://github.com/yeoman/generator) - Yeoman generator framework
