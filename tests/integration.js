@@ -20,14 +20,17 @@ afterAll(async () => {
 });
 
 describe("running the generator", () => {
-  describe("with nonexistent prompt data path", () => {
-    const thisTestDataPath = path.join(testDataPath, "nonexistent-prompt-data");
+  describe("with nonexistent prompts data path", () => {
+    const thisTestDataPath = path.join(
+      testDataPath,
+      "nonexistent-prompts-data",
+    );
     const answers = {
       title: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
-      promptDataPath: path.join(thisTestDataPath, "prompts.js"),
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
       templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
     };
 
@@ -37,7 +40,7 @@ describe("running the generator", () => {
           .run(Generator, generatorOptions)
           .withAnswers(answers)
           .withLocalConfig(localConfig),
-      ).rejects.toThrow(localConfig.promptDataPath));
+      ).rejects.toThrow(localConfig.promptsDataPath));
   });
 
   describe("with nonexistent template path", () => {
@@ -47,7 +50,7 @@ describe("running the generator", () => {
     };
     const localConfig = {
       kbPath: "kb",
-      promptDataPath: path.join(thisTestDataPath, "prompts.js"),
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
       templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
     };
 
@@ -63,14 +66,14 @@ describe("running the generator", () => {
   describe("with data file that doesn't provide a default export", () => {
     const thisTestDataPath = path.join(
       testDataPath,
-      "no-prompt-data-default-export",
+      "no-prompts-data-default-export",
     );
     const answers = {
       title: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
-      promptDataPath: path.join(thisTestDataPath, "prompts.js"),
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
       templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
     };
 
@@ -83,14 +86,14 @@ describe("running the generator", () => {
       ).rejects.toThrow("does not provide a default export"));
   });
 
-  describe("with prompt data that is not an array", () => {
-    const thisTestDataPath = path.join(testDataPath, "prompt-data-not-array");
+  describe("with prompts data that is not an array", () => {
+    const thisTestDataPath = path.join(testDataPath, "prompts-data-not-array");
     const answers = {
       title: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
-      promptDataPath: path.join(thisTestDataPath, "prompts.js"),
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
       templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
     };
 
@@ -106,14 +109,14 @@ describe("running the generator", () => {
   describe.each([
     {
       description: "no user prompts",
-      testdataFolderName: "no-prompt-data",
+      testdataFolderName: "no-prompts-data",
       answers: {
         kbDocumentTitle: documentTitle,
       },
     },
     {
       description: "has user prompts",
-      testdataFolderName: "with-prompt-data",
+      testdataFolderName: "with-prompts-data",
       answers: {
         kbDocumentTitle: documentTitle,
         fooPromptName: "foo prompt answer",
@@ -125,7 +128,7 @@ describe("running the generator", () => {
       const thisTestDataPath = path.join(testDataPath, testdataFolderName);
       const localConfig = {
         kbPath: "kb",
-        promptDataPath: path.join(thisTestDataPath, "prompts.js"),
+        promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
         templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
       };
       const documentFilePath = path.join(
