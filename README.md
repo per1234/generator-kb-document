@@ -59,19 +59,19 @@ For a better understanding of the configuration file format and functionality, s
 
 The path of the [knowledge base folder](#knowledge-base-structure).
 
-#### `promptDataPath`
+#### `promptsDataPath`
 
-The path of the generator [prompt data file](#prompt-data-file).
+The path of the generator [prompts data file](#prompts-data-file).
 
 #### `templatePath`
 
 The path of the knowledge base [document file template](#document-file-template).
 
-### Prompt Data File
+### Prompts Data File
 
-The prompt data file defines the additional prompts that will be presented when the generator is run. The prompt names can be referenced in the [document file template](#document-file-template), which will cause the generator user's answer to the prompt to be filled in the generated knowledge base document. This allows the basic content of the knowledge base document to be efficiently populated in a standardized format at the time of document creation.
+The prompts data file defines the additional prompts that will be presented when the generator is run. The prompt names can be referenced in the [document file template](#document-file-template), which will cause the generator user's answer to the prompt to be filled in the generated knowledge base document. This allows the basic content of the knowledge base document to be efficiently populated in a standardized format at the time of document creation.
 
-The prompt data file is written in the [**JavaScript** programming language](https://wikipedia.org/wiki/JavaScript) programming language.
+The prompts data file is written in the [**JavaScript** programming language](https://wikipedia.org/wiki/JavaScript) programming language.
 
 The code must [export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export) an [array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) of prompt configuration objects as the [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export):
 
@@ -85,7 +85,7 @@ The array contains [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) prom
 
 https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
 
-For a better understanding of the prompt data file format and functionality, see the [**Example** section](#example).
+For a better understanding of the prompts data file format and functionality, see the [**Example** section](#example).
 
 ### Document File Template
 
@@ -101,9 +101,9 @@ For a better understanding of the document file template format and functionalit
 
 - `kbDocumentTitle`: The answer to the "**Knowledge base document title**" prompt.
 
-#### Prompts from Prompt Data File
+#### Prompts from Prompts Data File
 
-You can use the answers to any of the prompts defined in the [prompt data file](#prompt-data-file) in the template by referencing the `name` field value from the prompt configuration object.
+You can use the answers to any of the prompts defined in the [prompts data file](#prompts-data-file) in the template by referencing the `name` field value from the prompt configuration object.
 
 ## Usage
 
@@ -112,7 +112,7 @@ You can use the answers to any of the prompts defined in the [prompt data file](
    npx yo @per1234/kb-document
    ```
 1. The "**Knowledge base document title**" prompt will be displayed in the terminal. Type the title you want to use for the new knowledge base document and press the <kbd>**Enter**</kbd> key.
-1. If you defined additional prompts in the [prompt data file](#prompt-data-file), they will be presented in turn. Answer these prompts.
+1. If you defined additional prompts in the [prompts data file](#prompts-data-file), they will be presented in turn. Answer these prompts.
 1. At the end of the process you will see an "**A new document has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
    You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
 1. Manually fill in the document content.
@@ -141,7 +141,7 @@ Let's say you have a knowledge base project with this file structure:
 {
   "@per1234/generator-kb-document": {
     "kbPath": "my-kb",
-    "promptDataPath": "generator-kb-document/prompts.js",
+    "promptsDataPath": "generator-kb-document/prompts.js",
     "templatePath": "generator-kb-document/template.ejs"
   }
 }

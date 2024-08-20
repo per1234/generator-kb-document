@@ -8,16 +8,16 @@ export default class extends Generator {
 
   #filePath;
 
-  #promptData;
+  #promptsData;
 
   initializing() {
     // Validate configuration.
-    const promptDataPath = this.config.get("promptDataPath");
-    const absolutePromptDataPath = this.destinationPath(promptDataPath);
-    if (!existsSync(absolutePromptDataPath)) {
+    const promptsDataPath = this.config.get("promptsDataPath");
+    const absolutePromptsDataPath = this.destinationPath(promptsDataPath);
+    if (!existsSync(absolutePromptsDataPath)) {
       return Promise.reject(
         new Error(
-          `Prompt data file was not found at the location specified in .yo-rc.json:\n${absolutePromptDataPath}`,
+          `Prompts data file was not found at the location specified in .yo-rc.json:\n${absolutePromptsDataPath}`,
         ),
       );
     }
@@ -32,22 +32,22 @@ export default class extends Generator {
       );
     }
 
-    const promptDataPathUrl = pathToFileURL(absolutePromptDataPath);
+    const promptsDataPathUrl = pathToFileURL(absolutePromptsDataPath);
 
-    return import(promptDataPathUrl).then((promptData) => {
-      if (!("default" in promptData)) {
+    return import(promptsDataPathUrl).then((promptsData) => {
+      if (!("default" in promptsData)) {
         return Promise.reject(
-          new Error("Prompt data file does not provide a default export"),
+          new Error("Prompts data file does not provide a default export"),
         );
       }
 
-      if (!Array.isArray(promptData.default)) {
+      if (!Array.isArray(promptsData.default)) {
         return Promise.reject(
-          new Error("Prompt data default export is not an array."),
+          new Error("Prompts data default export is not an array."),
         );
       }
 
-      this.#promptData = promptData.default;
+      this.#promptsData = promptsData.default;
 
       return Promise.resolve();
     });
@@ -62,7 +62,7 @@ export default class extends Generator {
       },
     ];
 
-    const prompts = builtInPrompts.concat(this.#promptData);
+    const prompts = builtInPrompts.concat(this.#promptsData);
 
     return this.prompt(prompts).then((answers) => {
       this.#answers = answers;
