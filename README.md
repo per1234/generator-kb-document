@@ -78,7 +78,9 @@ The prompts data file is written in the [**JavaScript** programming language](ht
 The code must [export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export) an [array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) of prompt configuration objects as the [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export):
 
 ```text
-const prompts = [<prompt configuration objects>];
+const prompts = [
+  <prompt configuration objects>
+];
 
 export default prompts;
 ```
@@ -97,7 +99,9 @@ https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
 
 ```text
 {
-  inquirer: {<Inquirer prompt configuration object>},
+  inquirer: {
+    <Inquirer Question object>
+  },
   ...
 },
 ```
@@ -110,7 +114,9 @@ The `usage` property is an array of strings which specify how the generator shou
 
 ```text
 {
-  inquirer: {<Inquirer prompt configuration object>},
+  inquirer: {
+    <Inquirer Question object>
+  },
   usage: [
     "content",
     "front matter",
