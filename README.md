@@ -202,6 +202,12 @@ It is written in the **EJS** template language:
 
 https://ejs.co/
 
+---
+
+❗ The **EJS** [`<%- reference %>` tag format](https://ejs.co/#:~:text=Outputs%20the%20unescaped%20value%20into%20the%20template) should be used in the template rather than the `<%= reference %>` format. The latter is [intended for use in generating HTML code](https://ejs.co/#:~:text=into%20the%20template%20%28-,HTML%20escaped,-%29) and is not appropriate for our use of generating Markdown.
+
+---
+
 For a better understanding of the document file template format and functionality, see the [**Example** section](#example).
 
 #### Built-in Prompts
