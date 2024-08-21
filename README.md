@@ -224,9 +224,21 @@ https://ejs.co/
 
 For a better understanding of the document file template format and functionality, see the [**Example** section](#example).
 
-#### Built-in Prompts
+#### Document Title
 
-- `kbDocumentTitle`: The answer to the "**Knowledge base document title**" prompt.
+In addition to the custom prompts the user defines in their [prompts data file](#prompts-data-file), the generator always displays a "**Knowledge base document title**" prompt. The reason for this "built-in" prompt is that the generator bases the [folder name](#file-structure) of the new document on the title.
+
+The answer to the "**Knowledge base document title**" prompt is available for use in the template via the `kbDocumentTitle` variable:
+
+```ejs
+<%- kbDocumentTitle %>
+```
+
+It is recommended to use this as the document's H1 [heading](https://www.markdownguide.org/basic-syntax/#headings):
+
+```ejs
+# <%- kbDocumentTitle %>
+```
 
 #### Prompts from Prompts Data File
 
