@@ -26,7 +26,7 @@ describe("running the generator", () => {
       "nonexistent-prompts-data",
     );
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
@@ -46,7 +46,7 @@ describe("running the generator", () => {
   describe("with nonexistent template path", () => {
     const thisTestDataPath = path.join(testDataPath, "nonexistent-template");
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
@@ -69,7 +69,7 @@ describe("running the generator", () => {
       "no-prompts-data-default-export",
     );
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
@@ -89,7 +89,7 @@ describe("running the generator", () => {
   describe("with prompts data that is not an array", () => {
     const thisTestDataPath = path.join(testDataPath, "prompts-data-not-array");
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
