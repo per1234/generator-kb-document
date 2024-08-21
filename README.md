@@ -85,6 +85,10 @@ const prompts = [
 export default prompts;
 ```
 
+The generator displays the prompts to the user in the order of the elements in the array.
+
+---
+
 The prompt configuration object contains the following properties:
 
 #### `inquirer`
