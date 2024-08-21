@@ -292,8 +292,7 @@ tasks:
     cmds:
       # See: https://jestjs.io/docs/ecmascript-modules#:~:text=Execute%20node%20with%20%2D%2Dexperimental%2Dvm%2Dmodules
       - |
-        export NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" \
-        && \
+        NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" \
         npx \
           jest \
             --coverage
