@@ -15,6 +15,7 @@ This project is based on many amazing open source software projects:
 - [**Ajv**](https://ajv.js.org/packages/ajv-cli.html) - JSON schema validator
 - [**JSON Pointer for Node.js**](https://github.com/janl/node-jsonpointer) - JSON pointer implementation
 - [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) - Interactive command line user interface
+- [**mem-fs-editor**](https://github.com/SBoudrias/mem-fs-editor) - File edition helpers
 - [**slug**](https://github.com/Trott/slug) - String slugifier
 - [**yaml**](https://github.com/eemeli/yaml) - YAML parser and stringifier for JavaScript
 - [**yeoman-generator**](https://github.com/yeoman/generator) - Yeoman generator framework
