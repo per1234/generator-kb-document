@@ -87,7 +87,11 @@ The prompt configuration object contains the following properties:
 
 #### `inquirer`
 
-The `inquirer` property is an [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) prompt configuration object. The **Inquirer** prompt configuration objects are documented here:
+The `inquirer` property is an [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) `Question` object. The format of the `Question` object is documented here:
+
+https://github.com/SBoudrias/Inquirer.js/tree/main/packages/inquirer#question
+
+The style of the prompt is configured by the `Question.type` property. The prompt types are explained here:
 
 https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
 
@@ -117,7 +121,7 @@ The `usage` property is an array of strings which specify how the generator shou
 
 ##### `content`
 
-The answer can be referenced by the value from the [**Inquirer** prompt configuration](#inquirer) object's `name` property anywhere in the [document file template](#document-file-template).
+The answer can be referenced by the value from the [`inquirer` object's](#inquirer) `name` property anywhere in the [document file template](#document-file-template).
 
 ##### `front matter`
 
@@ -218,7 +222,7 @@ For a better understanding of the document file template format and functionalit
 
 ##### `"content"` Prompts
 
-If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usage`](#prompt-data-usage-property) property, you can use the answer by referencing the value of the `name` property of the [**Inquirer** prompt configuration object](#inquirer) in the template:
+If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usage`](#prompt-data-usage-property) property, you can use the answer by referencing the value of the `name` property of the prompt data [`inquirer` object](#inquirer) in the template:
 
 ```ejs
 <%- <prompt name> %>
