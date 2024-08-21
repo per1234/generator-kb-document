@@ -50,7 +50,7 @@ This generator is configured via the keys under the `@per1234/generator-kb-docum
 ```text
 {
   "@per1234/generator-kb-document": {
-    [<generator configuration elements>]
+    <generator configuration>
   }
 }
 ```
