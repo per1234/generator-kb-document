@@ -26,7 +26,7 @@ describe("running the generator", () => {
       "nonexistent-prompts-data",
     );
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
@@ -46,7 +46,7 @@ describe("running the generator", () => {
   describe("with nonexistent template path", () => {
     const thisTestDataPath = path.join(testDataPath, "nonexistent-template");
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
@@ -69,7 +69,7 @@ describe("running the generator", () => {
       "no-prompts-data-default-export",
     );
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
@@ -89,7 +89,7 @@ describe("running the generator", () => {
   describe("with prompts data that is not an array", () => {
     const thisTestDataPath = path.join(testDataPath, "prompts-data-not-array");
     const answers = {
-      title: documentTitle,
+      kbDocumentTitle: documentTitle,
     };
     const localConfig = {
       kbPath: "kb",
@@ -106,6 +106,30 @@ describe("running the generator", () => {
       ).rejects.toThrow("must be array"));
   });
 
+  describe("with prompt data missing required frontMatterPath property", () => {
+    const thisTestDataPath = path.join(
+      testDataPath,
+      "prompt-data-missing-frontMatterPath",
+    );
+    const answers = {
+      kbDocumentTitle: documentTitle,
+      fooPrompt: "plutoChoice",
+    };
+    const localConfig = {
+      kbPath: "kb",
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
+      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
+    };
+
+    test("rejects", () =>
+      expect(
+        helpers
+          .run(Generator, generatorOptions)
+          .withAnswers(answers)
+          .withLocalConfig(localConfig),
+      ).rejects.toThrow("missing frontMatterPath"));
+  });
+
   describe.each([
     {
       description: "no user prompts",
@@ -115,11 +139,37 @@ describe("running the generator", () => {
       },
     },
     {
-      description: "has user prompts",
-      testdataFolderName: "with-prompts-data",
+      description: "user prompt with content usage",
+      testdataFolderName: "content-usage-prompt-data",
       answers: {
         kbDocumentTitle: documentTitle,
-        fooPromptName: "foo prompt answer",
+        fooPrompt: "foo prompt answer",
+      },
+    },
+    {
+      description: "user prompt with front matter usage, array path",
+      testdataFolderName: "array-path-front-matter-usage-prompt-data",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "plutoChoice",
+        barPrompt: "asdfChoice",
+      },
+    },
+    {
+      description: "object prompt with front matter usage, object path",
+      testdataFolderName: "object-path-front-matter-usage-prompt-data",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "plutoChoice",
+        barPrompt: "asdfChoice",
+      },
+    },
+    {
+      description: "user prompt with content+front matter usage",
+      testdataFolderName: "content-front-matter-usage-prompt-data",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "plutoChoice",
       },
     },
   ])(

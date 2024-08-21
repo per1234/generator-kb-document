@@ -13,8 +13,10 @@ This project is based on many amazing open source software projects:
 ### Code Dependencies
 
 - [**Ajv**](https://ajv.js.org/packages/ajv-cli.html) - JSON schema validator
+- [**JSON Pointer for Node.js**](https://github.com/janl/node-jsonpointer) - JSON pointer implementation
 - [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) - Interactive command line user interface
 - [**slug**](https://github.com/Trott/slug) - String slugifier
+- [**yaml**](https://github.com/eemeli/yaml) - YAML parser and stringifier for JavaScript
 - [**yeoman-generator**](https://github.com/yeoman/generator) - Yeoman generator framework
 - [**yeoman-test**](https://github.com/yeoman/yeoman-test) - Utilities for testing Yeoman generators
 

@@ -1,13 +1,17 @@
 import Ajv from "ajv";
+import JSONPointer from "jsonpointer";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import slug from "slug";
 import { fileURLToPath } from "url";
+import { stringify as yamlStringify } from "yaml";
 import Generator from "yeoman-generator";
 
 export default class extends Generator {
   #answers;
+
+  #templateContext;
 
   #filePath;
 
@@ -45,6 +49,7 @@ export default class extends Generator {
       }
 
       // Validate prompts data format.
+      // Validation using JSON schema.
       const moduleFilePath = fileURLToPath(import.meta.url);
       const moduleFolderPath = path.dirname(moduleFilePath);
       const schemaPath = path.join(
@@ -72,6 +77,27 @@ export default class extends Generator {
         );
       }
 
+      // Perform additional validations that are not possible via the JSON schema.
+      let missingFrontMatterPath = false;
+      let missingFrontMatterPathName = "";
+      promptsData.default.forEach((promptData) => {
+        if (
+          promptData.usage.includes("front matter") &&
+          !("frontMatterPath" in promptData)
+        ) {
+          missingFrontMatterPath = true;
+          missingFrontMatterPathName = promptData.inquirer.name;
+        }
+      });
+
+      if (missingFrontMatterPath) {
+        return Promise.reject(
+          new Error(
+            `Data for ${missingFrontMatterPathName} prompt has "front matter" usage configuration, but missing frontMatterPath property.`,
+          ),
+        );
+      }
+
       this.#promptsData = promptsData.default;
 
       return Promise.resolve();
@@ -81,25 +107,66 @@ export default class extends Generator {
   prompting() {
     const builtInPrompts = [
       {
-        type: "input",
-        name: "kbDocumentTitle",
-        message: "Knowledge base document title:",
+        inquirer: {
+          type: "input",
+          name: "kbDocumentTitle",
+          message: "Knowledge base document title:",
+        },
+        usage: ["content"],
       },
     ];
 
-    const prompts = builtInPrompts.concat(this.#promptsData);
+    this.#promptsData = builtInPrompts.concat(this.#promptsData);
 
-    return this.prompt(prompts).then((answers) => {
+    const inquirerPrompts = this.#promptsData.map(
+      (promptData) => promptData.inquirer,
+    );
+
+    return this.prompt(inquirerPrompts).then((answers) => {
       this.#answers = answers;
     });
   }
 
   configuring() {
     // Process answers
+    this.#templateContext = [];
+    const frontMatterObject = {};
+    Object.keys(this.#answers).forEach((answerKey) => {
+      this.#promptsData.forEach((promptData) => {
+        // Determine whether this is the prompt data for the answer.
+        if (answerKey === promptData.inquirer.name) {
+          const answerValue = this.#answers[answerKey];
+
+          if (promptData.usage.includes("content")) {
+            this.#templateContext[answerKey] = answerValue;
+          }
+
+          if (promptData.usage.includes("front matter")) {
+            JSONPointer.set(
+              frontMatterObject,
+              promptData.frontMatterPath,
+              answerValue,
+            );
+          }
+        }
+      });
+    });
+
+    // Generate front matter.
+    const frontMatterString = yamlStringify(frontMatterObject, null, {
+      collectionStyle: "block",
+      directives: false,
+    });
+    // Markdown front matter is wrapped in YAML "directives end markers". The `yaml` package doesn't provide a clean way
+    // to add one at the end of the document so the markers are added manually.
+    const frontMatterDocument = `---\n${frontMatterString}---`;
+    // Make front matter available for use in the document template.
+    this.#templateContext.kbDocumentFrontMatter = frontMatterDocument;
 
     // Trim whitespace from free text inputs.
     this.#answers.kbDocumentTitle = this.#answers.kbDocumentTitle.trim();
 
+    // Determine path for generated file.
     const documentFolderName = slug(this.#answers.kbDocumentTitle);
     const documentFolderPath = this.destinationPath(
       this.config.get("kbPath"),
@@ -114,7 +181,7 @@ export default class extends Generator {
     this.fs.copyTpl(
       this.config.get("templatePath"),
       this.#filePath,
-      this.#answers,
+      this.#templateContext,
     );
   }
 
