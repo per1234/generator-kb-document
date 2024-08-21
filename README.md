@@ -50,7 +50,7 @@ This generator is configured via the keys under the `@per1234/generator-kb-docum
 ```text
 {
   "@per1234/generator-kb-document": {
-    [<generator configuration elements>]
+    <generator configuration>
   }
 }
 ```
@@ -78,23 +78,35 @@ The prompts data file is written in the [**JavaScript** programming language](ht
 The code must [export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export) an [array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) of prompt configuration objects as the [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export):
 
 ```text
-const prompts = [<prompt configuration objects>];
+const prompts = [
+  <prompt configuration objects>
+];
 
 export default prompts;
 ```
+
+The generator displays the prompts to the user in the order of the elements in the array.
+
+---
 
 The prompt configuration object contains the following properties:
 
 #### `inquirer`
 
-The `inquirer` property is an [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) prompt configuration object. The **Inquirer** prompt configuration objects are documented here:
+The `inquirer` property is an [**Inquirer**](https://github.com/SBoudrias/Inquirer.js) `Question` object. The format of the `Question` object is documented here:
+
+https://github.com/SBoudrias/Inquirer.js/tree/main/packages/inquirer#question
+
+The style of the prompt is configured by the `Question.type` property. The prompt types are explained here:
 
 https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
 
 ```text
 {
-  inquirer: {<Inquirer prompt configuration object>},
-  ...
+  inquirer: {
+    <Inquirer Question object>
+  },
+  <...>
 },
 ```
 
@@ -106,18 +118,20 @@ The `usage` property is an array of strings which specify how the generator shou
 
 ```text
 {
-  inquirer: {<Inquirer prompt configuration object>},
+  inquirer: {
+    <Inquirer Question object>
+  },
   usage: [
     "content",
     "front matter",
   ],
-  ...
+  <...>
 }
 ```
 
 ##### `content`
 
-The answer can be referenced by the value from the [**Inquirer** prompt configuration](#inquirer) object's `name` property anywhere in the [document file template](#document-file-template).
+The answer can be referenced by the value from the [`inquirer` object's](#inquirer) `name` property anywhere in the [document file template](#document-file-template).
 
 ##### `front matter`
 
@@ -202,17 +216,35 @@ It is written in the **EJS** template language:
 
 https://ejs.co/
 
+---
+
+❗ The **EJS** [`<%- reference %>` tag format](https://ejs.co/#:~:text=Outputs%20the%20unescaped%20value%20into%20the%20template) should be used in the template rather than the `<%= reference %>` format. The latter is [intended for use in generating HTML code](https://ejs.co/#:~:text=into%20the%20template%20%28-,HTML%20escaped,-%29) and is not appropriate for our use of generating Markdown.
+
+---
+
 For a better understanding of the document file template format and functionality, see the [**Example** section](#example).
 
-#### Built-in Prompts
+#### Document Title
 
-- `kbDocumentTitle`: The answer to the "**Knowledge base document title**" prompt.
+In addition to the custom prompts the user defines in their [prompts data file](#prompts-data-file), the generator always displays a "**Knowledge base document title**" prompt. The reason for this "built-in" prompt is that the generator bases the [folder name](#file-structure) of the new document on the title.
+
+The answer to the "**Knowledge base document title**" prompt is available for use in the template via the `kbDocumentTitle` variable:
+
+```ejs
+<%- kbDocumentTitle %>
+```
+
+It is recommended to use this as the document's H1 [heading](https://www.markdownguide.org/basic-syntax/#headings):
+
+```ejs
+# <%- kbDocumentTitle %>
+```
 
 #### Prompts from Prompts Data File
 
 ##### `"content"` Prompts
 
-If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usage`](#prompt-data-usage-property) property, you can use the answer by referencing the value of the `name` property of the [**Inquirer** prompt configuration object](#inquirer) in the template:
+If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usage`](#prompt-data-usage-property) property, you can use the answer by referencing the value of the `name` property of the prompt data [`inquirer` object](#inquirer) in the template:
 
 ```ejs
 <%- <prompt name> %>
