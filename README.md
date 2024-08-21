@@ -102,7 +102,7 @@ https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
   inquirer: {
     <Inquirer Question object>
   },
-  ...
+  <...>
 },
 ```
 
@@ -121,7 +121,7 @@ The `usage` property is an array of strings which specify how the generator shou
     "content",
     "front matter",
   ],
-  ...
+  <...>
 }
 ```
 
