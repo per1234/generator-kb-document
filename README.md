@@ -349,7 +349,7 @@ This data is used to populate a single generated front matter document. That fro
 
 For information on front matter, see [the **Informational Structure** section](#informational-structure).
 
-## Usage
+## Generator Usage
 
 1. Run the following command from a terminal in a path under the knowledge base project:
    ```text
