@@ -203,15 +203,32 @@ describe("running the generator", () => {
       },
       sortFrontMatter: true,
     },
+    {
+      description: "universal front matter",
+      testdataFolderName: "universalFrontMatter",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      universalFrontMatter: {
+        foo: "bar",
+      },
+    },
   ])(
     "with valid configuration ($description)",
-    ({ testdataFolderName, answers, sortFrontMatter }) => {
+    ({
+      testdataFolderName,
+      answers,
+      sortFrontMatter,
+      universalFrontMatter,
+    }) => {
       const thisTestDataPath = path.join(testDataPath, testdataFolderName);
       const localConfig = {
         kbPath: "kb",
         promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
         sortFrontMatter,
         templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
+        universalFrontMatter,
       };
       const documentFilePath = path.join(
         localConfig.kbPath,

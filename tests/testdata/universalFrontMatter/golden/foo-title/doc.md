@@ -1,0 +1,5 @@
+---
+foo: bar
+tags:
+  - fooValue
+---
