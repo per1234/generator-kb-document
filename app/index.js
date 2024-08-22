@@ -234,7 +234,6 @@ export default class extends Generator {
 
     // Generate front matter.
     const frontMatterString = yamlStringify(frontMatterObject, null, {
-      collectionStyle: "block",
       directives: false,
     });
     // Markdown front matter is wrapped in YAML "directives end markers". The `yaml` package doesn't provide a clean way
