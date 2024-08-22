@@ -65,6 +65,10 @@ The path of the [knowledge base folder](#knowledge-base-structure).
 
 The path of the generator [prompts data file](#prompts-data-file).
 
+#### `sortFrontMatter`
+
+Boolean value to configure whether the items in the [generated front matter document](#front-matter-prompts) should be sorted in lexicographical order.
+
 #### `templatePath`
 
 The path of the knowledge base [document file template](#document-file-template).

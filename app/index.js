@@ -8,6 +8,36 @@ import { fileURLToPath } from "url";
 import { stringify as yamlStringify } from "yaml";
 import Generator from "yeoman-generator";
 
+/* eslint-disable no-use-before-define */
+function sortThing(thing) {
+  let sortedThing = thing;
+  if (Array.isArray(thing)) {
+    sortedThing = sortArrayRecursively(thing);
+  } else if (typeof thing === "object") {
+    sortedThing = sortObjectRecursively(thing);
+  }
+  return sortedThing;
+}
+/* eslint-enable no-use-before-define */
+
+function sortArrayRecursively(array) {
+  array.sort();
+  const sortedArray = array.map((element) => sortThing(element));
+  return sortedArray;
+}
+
+function sortObjectRecursively(object) {
+  const keys = Object.keys(object);
+  keys.sort();
+  const sortedObject = {};
+  for (let keysIndex = 0; keysIndex < keys.length; keysIndex += 1) {
+    let value = object[keys[keysIndex]];
+    value = sortThing(value);
+    sortedObject[keys[keysIndex]] = value;
+  }
+  return sortedObject;
+}
+
 export default class extends Generator {
   #answers;
 
@@ -18,6 +48,10 @@ export default class extends Generator {
   #promptsData;
 
   initializing() {
+    this.config.defaults({
+      sortFrontMatter: true,
+    });
+
     // Validate configuration.
     const promptsDataPath = this.config.get("promptsDataPath");
     const absolutePromptsDataPath = this.destinationPath(promptsDataPath);
@@ -130,7 +164,7 @@ export default class extends Generator {
   configuring() {
     // Process answers
     this.#templateContext = [];
-    const frontMatterObject = {};
+    let frontMatterObject = {};
     Object.keys(this.#answers).forEach((answerKey) => {
       this.#promptsData.forEach((promptData) => {
         // Determine whether this is the prompt data for the answer.
@@ -162,6 +196,11 @@ export default class extends Generator {
         }
       });
     });
+
+    const sortFrontMatter = this.config.get("sortFrontMatter");
+    if (sortFrontMatter) {
+      frontMatterObject = sortThing(frontMatterObject);
+    }
 
     // Generate front matter.
     const frontMatterString = yamlStringify(frontMatterObject, null, {
