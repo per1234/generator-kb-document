@@ -181,13 +181,36 @@ describe("running the generator", () => {
         fooPrompt: "plutoChoice",
       },
     },
+    {
+      description: "front matter sorting disabled",
+      testdataFolderName: "unsorted-front-matter",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+        barPrompt: "barValue",
+        bazPrompt: ["qwerChoice", "asdfChoice"],
+      },
+      sortFrontMatter: false,
+    },
+    {
+      description: "front matter sorting enabled",
+      testdataFolderName: "sorted-front-matter",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+        barPrompt: "barValue",
+        bazPrompt: ["qwerChoice", "asdfChoice"],
+      },
+      sortFrontMatter: true,
+    },
   ])(
     "with valid configuration ($description)",
-    ({ testdataFolderName, answers }) => {
+    ({ testdataFolderName, answers, sortFrontMatter }) => {
       const thisTestDataPath = path.join(testDataPath, testdataFolderName);
       const localConfig = {
         kbPath: "kb",
         promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
+        sortFrontMatter,
         templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
       };
       const documentFilePath = path.join(

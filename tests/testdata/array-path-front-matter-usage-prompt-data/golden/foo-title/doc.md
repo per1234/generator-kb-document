@@ -1,7 +1,7 @@
 ---
 tags:
-  - plutoChoice
   - asdfChoice
+  - plutoChoice
 ---
 
 # Foo Title

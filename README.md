@@ -65,6 +65,10 @@ The path of the [knowledge base folder](#knowledge-base-structure).
 
 The path of the generator [prompts data file](#prompts-data-file).
 
+#### `sortFrontMatter`
+
+Boolean value to configure whether the items in the [generated front matter document](#front-matter-prompts) should be sorted in lexicographical order.
+
 #### `templatePath`
 
 The path of the knowledge base [document file template](#document-file-template).
@@ -136,6 +140,8 @@ The answer can be referenced by the value from the [`inquirer` object's](#inquir
 ##### `front matter`
 
 The answer will be included in the generated front matter document, which can be referenced as `kbDocumentFrontMatter` in the [document file template](#document-file-template). The answers to all prompts with `usage` property that contains `"front matter"` will be merged into the [front matter document](#document-file-template-front-matter).
+
+For information on front matter, see [the **Informational Structure** section](#informational-structure).
 
 ---
 
