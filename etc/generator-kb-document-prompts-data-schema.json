@@ -22,6 +22,26 @@
       "frontMatterPath": {
         "type": "string",
         "minLength": 2
+      },
+      "processing": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "name": {
+                  "const": "csv"
+                },
+                "delimiter": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": ["name"]
+            }
+          ]
+        }
       }
     },
     "required": ["inquirer", "usage"]

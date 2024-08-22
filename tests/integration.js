@@ -214,6 +214,31 @@ describe("running the generator", () => {
         foo: "bar",
       },
     },
+    {
+      description: "csv processor",
+      testdataFolderName: "csv-processor",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "barValue,fooValue",
+      },
+    },
+    {
+      description: "csv processor, default delimiter",
+      testdataFolderName: "csv-processor-default-delimiter",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "barValue,fooValue",
+      },
+    },
+    {
+      description: "csv processor, empty answer",
+      testdataFolderName: "csv-processor-empty-answer",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        barPrompt: "barValue",
+        fooPrompt: "",
+      },
+    },
   ])(
     "with valid configuration ($description)",
     ({
