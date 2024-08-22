@@ -172,6 +172,11 @@ export default class extends Generator {
         if (answerKey === promptData.inquirer.name) {
           let answerValue = this.#answers[answerKey];
 
+          // Trim whitespace from string values.
+          if (typeof answerValue === "string") {
+            answerValue = answerValue.trim();
+          }
+
           if ("processors" in promptData) {
             promptData.processors.forEach((processor) => {
               switch (processor.name) {
@@ -185,6 +190,9 @@ export default class extends Generator {
                   // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/split#using_split
                   if (answerValue !== undefined && answerValue !== "") {
                     answerValue = answerValue.split(delimiter);
+
+                    // Trim whitespace from elements.
+                    answerValue = answerValue.map((element) => element.trim());
                   } else {
                     answerValue = [];
                   }
@@ -241,9 +249,6 @@ export default class extends Generator {
     const frontMatterDocument = `---\n${frontMatterString}---`;
     // Make front matter available for use in the document template.
     this.#templateContext.kbDocumentFrontMatter = frontMatterDocument;
-
-    // Trim whitespace from free text inputs.
-    this.#answers.kbDocumentTitle = this.#answers.kbDocumentTitle.trim();
 
     // Determine path for generated file.
     const documentFolderName = slug(this.#answers.kbDocumentTitle);
