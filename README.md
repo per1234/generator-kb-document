@@ -310,7 +310,7 @@ If a prompt defined in the [prompts data file](#prompts-data-file) has `"content
 
 ##### `"front matter"` Prompts
 
-If a prompt defined in the [prompts data file](#prompts-data-file) which has `"front matter"` in its [`usage`](#prompt-data-usage-property) property, its answer will be included in a single generated front matter document. That front matter document is available for use in the template via the `kbDocumentFrontMatter` variable:
+If a prompt defined in the [prompts data file](#prompts-data-file) has `"front matter"` in its [`usage`](#prompt-data-usage-property) property, its answer will be included in a single generated front matter document. That front matter document is available for use in the template via the `kbDocumentFrontMatter` variable:
 
 ```ejs
 <%- kbDocumentFrontMatter %>
