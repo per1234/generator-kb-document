@@ -50,6 +50,7 @@ export default class extends Generator {
   initializing() {
     this.config.defaults({
       sortFrontMatter: true,
+      universalFrontMatter: {},
     });
 
     // Validate configuration.
@@ -164,7 +165,7 @@ export default class extends Generator {
   configuring() {
     // Process answers
     this.#templateContext = [];
-    let frontMatterObject = {};
+    let frontMatterObject = this.config.get("universalFrontMatter");
     Object.keys(this.#answers).forEach((answerKey) => {
       this.#promptsData.forEach((promptData) => {
         // Determine whether this is the prompt data for the answer.

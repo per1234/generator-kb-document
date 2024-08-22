@@ -67,11 +67,37 @@ The path of the generator [prompts data file](#prompts-data-file).
 
 #### `sortFrontMatter`
 
-Boolean value to configure whether the items in the [generated front matter document](#front-matter-prompts) should be sorted in lexicographical order.
+Boolean value to configure whether the items in the [generated front matter document](#front-matter) should be sorted in lexicographical order.
 
 #### `templatePath`
 
 The path of the knowledge base [document file template](#document-file-template).
+
+#### `universalFrontMatter`
+
+Object defining data that should be added to the front matter of every document the generator creates.
+
+For example, if you set the `universalFrontMatter` like so:
+
+```text
+"universalFrontMatter": {
+  "foo": "bar"
+}
+```
+
+The front matter document available for use in your template via the [`kbDocumentFrontMatter` variable](#front-matter) will contain this content:
+
+```text
+---
+foo: bar
+<...>
+```
+
+This is static data. An example usage would be configuring tools that consume Markdown files and recognize special front matter keys.
+
+You can also use the [**prompts data file**](#prompts-data-file) to configure prompts so that front matter data will be set according to the answers provided during the document creation process.
+
+For information on front matter, see [the **Informational Structure** section](#informational-structure).
 
 ### Prompts Data File
 
@@ -308,9 +334,14 @@ If a prompt defined in the [prompts data file](#prompts-data-file) has `"content
 
 <a name="document-file-template-front-matter"></a>
 
-##### `"front matter"` Prompts
+##### Front Matter
 
-If a prompt defined in the [prompts data file](#prompts-data-file) which has `"front matter"` in its [`usage`](#prompt-data-usage-property) property, its answer will be included in a single generated front matter document. That front matter document is available for use in the template via the `kbDocumentFrontMatter` variable:
+Front matter data can come from two sources:
+
+- The `universalFrontMatter` key in the [**generator configuration file**](#generator-configuration-file).
+- Prompts defined in the [**prompts data file**](#prompts-data-file) that have `"front matter"` in their [`usage`](#prompt-data-usage-property) property.
+
+This data is used to populate a single generated front matter document. That front matter document is available for use in the template via the `kbDocumentFrontMatter` variable:
 
 ```ejs
 <%- kbDocumentFrontMatter %>
