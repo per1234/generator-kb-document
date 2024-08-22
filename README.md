@@ -141,6 +141,8 @@ The answer can be referenced by the value from the [`inquirer` object's](#inquir
 
 The answer will be included in the generated front matter document, which can be referenced as `kbDocumentFrontMatter` in the [document file template](#document-file-template). The answers to all prompts with `usage` property that contains `"front matter"` will be merged into the [front matter document](#document-file-template-front-matter).
 
+For information on front matter, see [the **Informational Structure** section](#informational-structure).
+
 ---
 
 ❗ If you include `"front matter"` in the `usage` property, you must also set the [`frontMatterPath` property](#frontmatterpath).
