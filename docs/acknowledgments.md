@@ -61,6 +61,7 @@ This project is based on many amazing open source software projects:
 - [**Jest**](https://jestjs.io/) - JavaScript testing framework
 - [**Licensee**](https://github.com/licensee/licensee) - License file parser
 - [**markdown-link-check**](https://github.com/tcort/markdown-link-check) - Link checker for Markdown
+- [**markdown-toc**](https://github.com/jonschlinkert/markdown-toc) - Generate table of contents from Markdown headings
 - [**markdownlint-cli**](https://github.com/igorshubovych/markdownlint-cli) - Markdown linter
 - [**Node.js**](https://nodejs.org/en/download/package-manager) - JavaScript runtime environment
 - [**npm**](https://docs.npmjs.com/cli/) - JavaScript package manager

@@ -13,6 +13,7 @@
 [![Check Prettier Formatting status](https://github.com/per1234/generator-kb-document/actions/workflows/check-prettier-formatting-task.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/check-prettier-formatting-task.yml)
 [![Check Shell Scripts status](https://github.com/per1234/generator-kb-document/actions/workflows/check-shell-task.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/check-shell-task.yml)
 [![Check Taskfiles status](https://github.com/per1234/generator-kb-document/actions/workflows/check-taskfiles.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/check-taskfiles.yml)
+[![Check ToC status](https://github.com/per1234/generator-kb-document/actions/workflows/check-toc-task.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/check-toc-task.yml)
 [![Check Workflows status](https://github.com/per1234/generator-kb-document/actions/workflows/check-workflows-task.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/check-workflows-task.yml)
 [![Check YAML status](https://github.com/per1234/generator-kb-document/actions/workflows/check-yaml-task.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/check-yaml-task.yml)
 [![Release npm Package status](https://github.com/per1234/generator-kb-document/actions/workflows/release-npm.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/release-npm.yml)
@@ -28,6 +29,35 @@ The generator can be configured to prompt the user for arbitrary information, wh
 Although it is configurable enough to make it a general purpose tool for developing knowledge bases on any subject matter, the generator is opinionated on the [structure of the knowledge base](#knowledge-base-structure).
 
 Project website: https://github.com/per1234/generator-kb-document
+
+## Table of contents
+
+<!-- toc -->
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+  - [Generator Configuration File](#generator-configuration-file)
+    - [`kbPath`](#kbpath)
+    - [`promptsDataPath`](#promptsdatapath)
+    - [`sortFrontMatter`](#sortfrontmatter)
+    - [`templatePath`](#templatepath)
+    - [`universalFrontMatter`](#universalfrontmatter)
+  - [Prompts Data File](#prompts-data-file)
+    - [`inquirer`](#inquirer)
+    - [`usage`](#usage)
+    - [`frontMatterPath`](#frontmatterpath)
+  - [Document File Template](#document-file-template)
+    - [Document Title](#document-title)
+    - [Prompts from Prompts Data File](#prompts-from-prompts-data-file)
+- [Generator Usage](#generator-usage)
+- [Example](#example)
+- [Knowledge Base Structure](#knowledge-base-structure)
+  - [File Structure](#file-structure)
+  - [Informational Structure](#informational-structure)
+- [Contributing](#contributing)
+  - [Acknowledgments](#acknowledgments)
+
+<!-- tocstop -->
 
 ## Installation
 
