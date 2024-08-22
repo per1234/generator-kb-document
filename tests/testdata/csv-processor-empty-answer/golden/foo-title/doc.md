@@ -1,0 +1,4 @@
+---
+bar: barValue
+tags: []
+---

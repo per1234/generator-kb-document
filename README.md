@@ -46,6 +46,7 @@ Project website: https://github.com/per1234/generator-kb-document
     - [`inquirer`](#inquirer)
     - [`usage`](#usage)
     - [`frontMatterPath`](#frontmatterpath)
+    - [`processors`](#processors)
   - [Document File Template](#document-file-template)
     - [Document Title](#document-title)
     - [Prompts from Prompts Data File](#prompts-from-prompts-data-file)
@@ -280,7 +281,7 @@ tags:
 
 ##### Answer Arrays
 
-The [`rawlist` **Inquirer** prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/rawlist#inquirerrawlist) allows the user to select multiple answers from the prompt. For this reason, it produces an array of answer values rather than a single value as is done by other prompt types.
+The [`rawlist` **Inquirer** prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/rawlist#inquirerrawlist) allows the user to select multiple answers from the prompt. For this reason, it produces an array of answer values rather than a single value as is done by other prompt types. Arrays of answer values are also produced by the [`csv` processor](#processor-csv
 
 In this case if we used `/tags/-` as in [the above example](#array-as-path) (which is appropriate for prompt types that produce a single answer value), we would end up appending the array of answers as an element in the `tags` array, giving an unintended front matter data structure like this:
 
@@ -319,6 +320,48 @@ For a better understanding of the prompts data file format and functionality, se
 **ⓘ** A [JSON schema](https://json-schema.org/) for validation of the prompts data is provided [**here**](etc/generator-kb-document-prompts-data-schema.json).
 
 ---
+
+#### `processors`
+
+**Default value:** `[]`
+
+The `processors` property is an array of processor configuration objects which specify optional processing operations that should be performed on the answer to the prompt before making making the value available for use in the [document file template](#document-file-template):
+
+```text
+{
+  inquirer: {
+    <Inquirer Question object>
+  },
+  usage: [
+    "content"
+  ],
+  processors: [
+    {
+      <processor configuration object>
+    },
+  ],
+  <...>
+}
+```
+
+The processing operations will be applied in sequence, following the order from the `processors` array.
+
+##### `processor: "csv"`
+
+It may be necessary for a single prompt to accept multiple answer values. When the set of possible answer values is fixed, the [`checkbox` prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/checkbox#inquirercheckbox) can be used to handle this nicely, outputting an array of answers. Unfortunately **Inquirer** doesn't provide any equivalent prompt type for accepting multiple free text answer values. In this case, the best solution will be to use the [`input` prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/input#inquirerinput) and pass the set of values in a string that has a delimiter-separated format (commonly referred to as [CSV](https://en.wikipedia.org/wiki/Comma-separated_values)).
+
+###### `delimiter`
+
+**Default value:** `","`
+
+This processor converts the string answer value to an array by splitting it on delimiters. The delimiter can be configured via the processor configuration object's `delimiter` property:
+
+```text
+{
+  processor: "csv",
+  delimiter: ",",
+}
+```
 
 ### Document File Template
 

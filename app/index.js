@@ -172,6 +172,35 @@ export default class extends Generator {
         if (answerKey === promptData.inquirer.name) {
           let answerValue = this.#answers[answerKey];
 
+          if ("processors" in promptData) {
+            promptData.processors.forEach((processor) => {
+              switch (processor.name) {
+                case "csv": {
+                  let delimiter = ",";
+                  if ("delimiter" in processor) {
+                    delimiter = processor.delimiter;
+                  }
+
+                  // `String.prototype.split()` returns a single element array if it is an empty string:
+                  // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/split#using_split
+                  if (answerValue !== undefined && answerValue !== "") {
+                    answerValue = answerValue.split(delimiter);
+                  } else {
+                    answerValue = [];
+                  }
+
+                  break;
+                }
+                // This case can never be reached under normal operation because valid processor values are enforced by
+                // the prompts data validation.
+                /* istanbul ignore next */
+                default: {
+                  throw new Error(`Unknown processor ${processor.name}`);
+                }
+              }
+            });
+          }
+
           if (promptData.usage.includes("content")) {
             this.#templateContext[answerKey] = answerValue;
           }
