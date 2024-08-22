@@ -216,6 +216,38 @@ tags:
 ---
 ```
 
+##### Answer Arrays
+
+The [`rawlist` **Inquirer** prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/rawlist#inquirerrawlist) allows the user to select multiple answers from the prompt. For this reason, it produces an array of answer values rather than a single value as is done by other prompt types.
+
+In this case if we used `/tags/-` as in [the above example](#array-as-path) (which is appropriate for prompt types that produce a single answer value), we would end up appending the array of answers as an element in the `tags` array, giving an unintended front matter data structure like this:
+
+```markdown
+---
+tags:
+  - - foo
+    - bar
+---
+```
+
+The intended data structure will be obtained by instead specifying the target key:
+
+```text
+frontMatterPath: "/tags"
+```
+
+Which will result in the front matter in the generated document having a structure like this:
+
+```markdown
+---
+tags:
+  - foo
+  - bar
+---
+```
+
+Just as with the single answer prompts, the answers from prompts that produce an array of answers will be merged into any existing data that was added to the front matter by previous prompts.
+
 ---
 
 For a better understanding of the prompts data file format and functionality, see the [**Example** section](#generator-example).

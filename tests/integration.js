@@ -165,6 +165,15 @@ describe("running the generator", () => {
       },
     },
     {
+      description: "object prompt with front matter usage, answer array",
+      testdataFolderName: "front-matter-usage-answer-array-prompt-data",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "plutoChoice",
+        barPrompt: ["qwerChoice", "zxcvChoice"],
+      },
+    },
+    {
       description: "user prompt with content+front matter usage",
       testdataFolderName: "content-front-matter-usage-prompt-data",
       answers: {

@@ -135,13 +135,24 @@ export default class extends Generator {
       this.#promptsData.forEach((promptData) => {
         // Determine whether this is the prompt data for the answer.
         if (answerKey === promptData.inquirer.name) {
-          const answerValue = this.#answers[answerKey];
+          let answerValue = this.#answers[answerKey];
 
           if (promptData.usage.includes("content")) {
             this.#templateContext[answerKey] = answerValue;
           }
 
           if (promptData.usage.includes("front matter")) {
+            // Concatenate answer arrays to existing front matter content instead of overwriting.
+            if (Array.isArray(answerValue)) {
+              const frontMatterPathContent = JSONPointer.get(
+                frontMatterObject,
+                promptData.frontMatterPath,
+              );
+              if (Array.isArray(frontMatterPathContent)) {
+                answerValue = frontMatterPathContent.concat(answerValue);
+              }
+            }
+
             JSONPointer.set(
               frontMatterObject,
               promptData.frontMatterPath,
