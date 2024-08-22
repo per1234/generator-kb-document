@@ -90,4 +90,5 @@ Information that has been invaluable in the development of this project:
 
 - [**How to Write a Git Commit Message**](https://cbea.ms/git-commit/)
 - [**EditorConfig Specification**](https://editorconfig.org/)
+- [**MDN JavaScript Reference**](https://developer.mozilla.org/docs/Web/JavaScript/Reference)
 - [**Semantic Versioning Specification**](https://semver.org/)

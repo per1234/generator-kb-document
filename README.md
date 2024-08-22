@@ -157,13 +157,13 @@ https://datatracker.ietf.org/doc/html/rfc6901
 
 ---
 
-##### Example
+##### Object as Path
 
 With the following prompt configuration object:
 
 ```javascript
 {
-  frontMatterPath: "/tags/-",
+  frontMatterPath: "/tags",
   inquirer: {
     type: "rawlist",
     name: "someTag",
@@ -189,7 +189,25 @@ And the following [document file template](#document-file-template):
 <%- kbDocumentFrontMatter %>
 ```
 
-If the user answers "**Foo**" to the "**Some tag:**" prompt, the generated document will contain:
+If the user answers "**Foo**" to the "**Some tag:**" prompt, the value of the `tags` key in the root object (AKA "[mapping](https://www.yaml.info/learn/index.html#:~:text=items%20and%20more.-,Mapping,-The%20most%20common) in YAML language terminology) will be set to the answer value `foo`. The front matter in the generated document will contain:
+
+```markdown
+---
+tags: foo
+---
+```
+
+##### Array as Path
+
+In the example above, the prompt is being used to assign a [categorical tag](#informational-structure) to the document. In this case we actually want to append the answer value as an element in an array rather than setting the value of the key to a single string.
+
+In this case we must instead set the property [to `"/tags/-"`](https://datatracker.ietf.org/doc/html/rfc6901#:~:text=exactly%20the%20single%20character%20%22%2D%22):
+
+```text
+frontMatterPath: "/tags/-"
+```
+
+If the user answers "**Foo**" to the "**Some tag:**" prompt, the front matter in the generated document will contain:
 
 ```markdown
 ---
