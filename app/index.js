@@ -3,11 +3,14 @@ import { compile as ejsCompile } from "ejs";
 import JSONPointer from "jsonpointer";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { join as pathPosixJoin } from "node:path/posix";
 import { pathToFileURL } from "node:url";
 import slug from "slug";
 import { fileURLToPath } from "url";
 import { stringify as yamlStringify } from "yaml";
 import Generator from "yeoman-generator";
+
+const primaryDocumentFilename = "doc.md";
 
 /* eslint-disable no-use-before-define */
 function sortThing(thing) {
@@ -196,6 +199,50 @@ export default class extends Generator {
                     answerValue = answerValue.map((element) => element.trim());
                   } else {
                     answerValue = [];
+                  }
+
+                  break;
+                }
+                case "kb-link": {
+                  const getLinkMarkup = function getLinkMarkup(
+                    context,
+                    targetDocumentTitle,
+                  ) {
+                    const targetDocumentFolderName = slug(targetDocumentTitle);
+                    // POSIX compliant paths must be used in the link, regardless of the host architecture.
+                    const targetPathKbRelativePosix = pathPosixJoin(
+                      targetDocumentFolderName,
+                      primaryDocumentFilename,
+                    );
+                    // Just in case Windows systems are uptight about POSIX compliant path separators, normalize it to
+                    // the native path separator for use in the filesystem operation.
+                    const targetPathKbRelativeNative = path.normalize(
+                      targetPathKbRelativePosix,
+                    );
+                    const absoluteTargetPath = context.destinationPath(
+                      context.config.get("kbPath"),
+                      targetPathKbRelativeNative,
+                    );
+                    const linkPath = pathPosixJoin(
+                      "..",
+                      targetPathKbRelativePosix,
+                    );
+
+                    if (!existsSync(absoluteTargetPath)) {
+                      context.log(
+                        `warning: Linked KB document "${targetDocumentTitle}" does not exist.`,
+                      );
+                    }
+
+                    return `[**${targetDocumentTitle}**](${linkPath})`;
+                  };
+
+                  if (Array.isArray(answerValue)) {
+                    answerValue = answerValue.map((answerValueElement) =>
+                      getLinkMarkup(this, answerValueElement),
+                    );
+                  } else {
+                    answerValue = getLinkMarkup(this, answerValue);
                   }
 
                   break;

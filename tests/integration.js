@@ -317,6 +317,22 @@ describe("running the generator", () => {
       },
     },
     {
+      description: "kb-link processor",
+      testdataFolderName: "kb-link-processor",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "Bar Title",
+      },
+    },
+    {
+      description: "kb-link processor, answer array",
+      testdataFolderName: "kb-link-processor-answer-array",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: ["Pippo Title", "Pluto Title"],
+      },
+    },
+    {
       description: "sort processor",
       testdataFolderName: "sort-processor",
       answers: {

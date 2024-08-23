@@ -366,6 +366,18 @@ This processor converts the string answer value to an array by splitting it on d
 }
 ```
 
+##### `processor: "kb-link"`
+
+The `kb-link` processor transforms an answer value into a link to the document of that name in the knowledge base.
+
+```text
+{
+  processor: "kb-link",
+}
+```
+
+When the input is an [answer array](#configuration-answer-arrays), each of the elements in the array is transformed into a link.
+
 ##### `processor: "sort"`
 
 The `sort` processor sorts an [answer array](#configuration-answer-arrays) in lexicographical order.
