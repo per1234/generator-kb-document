@@ -322,12 +322,6 @@ Just as with the single answer prompts, the answers from prompts that produce an
 
 For a better understanding of the prompts data file format and functionality, see the [**Example** section](#generator-example).
 
----
-
-**ⓘ** A [JSON schema](https://json-schema.org/) for validation of the prompts data is provided [**here**](etc/generator-kb-document-prompts-data-schema.json).
-
----
-
 #### `processors`
 
 **Default value:** `[]`
@@ -398,6 +392,10 @@ The answer value is available for referencing in the template as `answer`.
   template: "The answer value is <%- answer %>",
 }
 ```
+
+#### JSON Schema
+
+A [JSON schema](https://json-schema.org/) for validation of the prompts data is provided [**here**](etc/generator-kb-document-prompts-data-schema.json).
 
 ### Document File Template
 
