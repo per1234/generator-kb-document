@@ -393,6 +393,8 @@ The answer value is available for referencing in the template as `answer`.
 }
 ```
 
+When the input is an [answer array](#configuration-answer-arrays), the processor transforms each of the elements in the array.
+
 #### JSON Schema
 
 A [JSON schema](https://json-schema.org/) for validation of the prompts data is provided [**here**](etc/generator-kb-document-prompts-data-schema.json).

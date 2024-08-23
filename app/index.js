@@ -221,7 +221,13 @@ export default class extends Generator {
                   }
 
                   try {
-                    answerValue = compiledTemplate({ answer: answerValue });
+                    if (Array.isArray(answerValue)) {
+                      answerValue = answerValue.map((answerValueElement) =>
+                        compiledTemplate({ answer: answerValueElement }),
+                      );
+                    } else {
+                      answerValue = compiledTemplate({ answer: answerValue });
+                    }
                   } catch (error) {
                     throw new Error(
                       `Failed to expand template for "${answerKey}" prompt answer:\n${error}`,
