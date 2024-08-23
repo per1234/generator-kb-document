@@ -355,8 +355,7 @@ export default class extends Generator {
       documentFolderName,
     );
 
-    const filename = "doc.md";
-    this.#filePath = this.destinationPath(documentFolderPath, filename);
+    this.#filePath = this.destinationPath(documentFolderPath, primaryDocumentFilename);
   }
 
   writing() {
