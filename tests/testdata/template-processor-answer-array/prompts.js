@@ -21,7 +21,7 @@ const prompts = [
         template: "- The answer value is <%- answer %>",
       },
     ],
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

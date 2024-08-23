@@ -11,7 +11,7 @@ const prompts = [
         template: "The answer value is <%- nonexistent %>",
       },
     ],
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

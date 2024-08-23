@@ -16,7 +16,7 @@ const prompts = [
         },
       ],
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
   {
     frontMatterPath: "/foo/baz",
@@ -35,7 +35,7 @@ const prompts = [
         },
       ],
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
 ];
 

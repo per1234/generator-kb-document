@@ -16,7 +16,7 @@ const prompts = [
         },
       ],
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
   {
     frontMatterPath: "/tags",
@@ -39,7 +39,7 @@ const prompts = [
         },
       ],
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
 ];
 

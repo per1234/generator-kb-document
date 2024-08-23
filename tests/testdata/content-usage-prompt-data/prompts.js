@@ -5,7 +5,7 @@ const prompts = [
       name: "fooPrompt",
       message: "Foo message:",
     },
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

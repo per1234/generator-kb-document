@@ -21,7 +21,7 @@ const prompts = [
         separator: "foo separator",
       },
     ],
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

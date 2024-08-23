@@ -20,7 +20,7 @@ const prompts = [
         processor: "sort",
       },
     ],
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

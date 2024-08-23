@@ -11,7 +11,7 @@ const prompts = [
         processor: "csv",
       },
     ],
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
 ];
 

@@ -16,7 +16,7 @@ const prompts = [
         },
       ],
     },
-    usage: ["content", "front matter"],
+    usages: ["content", "front matter"],
   },
 ];
 
