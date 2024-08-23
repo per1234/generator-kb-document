@@ -373,6 +373,23 @@ The `sort` processor sorts an answer array in lexicographical order.
 }
 ```
 
+##### `processor: "template"`
+
+The `template` processor transforms an answer value according to the provided template.
+
+The template is written in the **EJS** template language:
+
+https://ejs.co/
+
+The answer value is available for referencing in the template as `answer`.
+
+```text
+{
+  processor: "template",
+  template: "The answer value is <%- answer %>",
+}
+```
+
 ### Document File Template
 
 This file is the template for the knowledge base document files that will be created by the generator.

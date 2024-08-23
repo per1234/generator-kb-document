@@ -153,6 +153,52 @@ describe("running the generator", () => {
       ).rejects.toThrow('"sort" processor used with non-array "fooPrompt"'));
   });
 
+  describe("with template processor that has invalid syntax", () => {
+    const thisTestDataPath = path.join(
+      testDataPath,
+      "template-processor-invalid",
+    );
+    const answers = {
+      kbDocumentTitle: documentTitle,
+    };
+    const localConfig = {
+      kbPath: "kb",
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
+      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
+    };
+
+    test("rejects", () =>
+      expect(
+        helpers
+          .run(Generator, generatorOptions)
+          .withAnswers(answers)
+          .withLocalConfig(localConfig),
+      ).rejects.toThrow('Invalid syntax in template for "fooPrompt"'));
+  });
+
+  describe("with template processor that fails", () => {
+    const thisTestDataPath = path.join(
+      testDataPath,
+      "template-processor-failure",
+    );
+    const answers = {
+      kbDocumentTitle: documentTitle,
+    };
+    const localConfig = {
+      kbPath: "kb",
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
+      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
+    };
+
+    test("rejects", () =>
+      expect(
+        helpers
+          .run(Generator, generatorOptions)
+          .withAnswers(answers)
+          .withLocalConfig(localConfig),
+      ).rejects.toThrow('Failed to expand template for "fooPrompt"'));
+  });
+
   describe.each([
     {
       description: "no user prompts",
@@ -276,6 +322,14 @@ describe("running the generator", () => {
       answers: {
         kbDocumentTitle: documentTitle,
         fooPrompt: ["plutoChoice", "pippoChoice"],
+      },
+    },
+    {
+      description: "template processor",
+      testdataFolderName: "template-processor",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
       },
     },
   ])(

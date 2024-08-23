@@ -1,4 +1,5 @@
 import Ajv from "ajv";
+import { compile as ejsCompile } from "ejs";
 import JSONPointer from "jsonpointer";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -205,6 +206,25 @@ export default class extends Generator {
                   } else {
                     throw new Error(
                       `"sort" processor used with non-array "${answerKey}" prompt answer`,
+                    );
+                  }
+                  break;
+                }
+                case "template": {
+                  let compiledTemplate;
+                  try {
+                    compiledTemplate = ejsCompile(processor.template);
+                  } catch (error) {
+                    throw new Error(
+                      `Invalid syntax in template for "${answerKey}" prompt answer:\n${error}`,
+                    );
+                  }
+
+                  try {
+                    answerValue = compiledTemplate({ answer: answerValue });
+                  } catch (error) {
+                    throw new Error(
+                      `Failed to expand template for "${answerKey}" prompt answer:\n${error}`,
                     );
                   }
                   break;
