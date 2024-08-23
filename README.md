@@ -281,7 +281,7 @@ tags:
 
 ##### Answer Arrays
 
-The [`rawlist` **Inquirer** prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/rawlist#inquirerrawlist) allows the user to select multiple answers from the prompt. For this reason, it produces an array of answer values rather than a single value as is done by other prompt types. Arrays of answer values are also produced by the [`csv` processor](#processor-csv
+The [`rawlist` **Inquirer** prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/rawlist#inquirerrawlist) allows the user to select multiple answers from the prompt. For this reason, it produces an array of answer values rather than a single value as is done by other prompt types. Arrays of answer values are also produced by the [`csv` processor](#processor-csv).
 
 In this case if we used `/tags/-` as in [the above example](#array-as-path) (which is appropriate for prompt types that produce a single answer value), we would end up appending the array of answers as an element in the `tags` array, giving an unintended front matter data structure like this:
 
