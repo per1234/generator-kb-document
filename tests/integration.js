@@ -161,6 +161,7 @@ describe("running the generator", () => {
     );
     const answers = {
       kbDocumentTitle: documentTitle,
+      fooPrompt: "fooValue",
     };
     const localConfig = {
       kbPath: "kb",
@@ -184,6 +185,7 @@ describe("running the generator", () => {
     );
     const answers = {
       kbDocumentTitle: documentTitle,
+      fooPrompt: "fooValue",
     };
     const localConfig = {
       kbPath: "kb",
@@ -207,6 +209,7 @@ describe("running the generator", () => {
     );
     const answers = {
       kbDocumentTitle: documentTitle,
+      fooPrompt: "fooValue",
     };
     const localConfig = {
       kbPath: "kb",
