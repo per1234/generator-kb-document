@@ -130,6 +130,30 @@ describe("running the generator", () => {
       ).rejects.toThrow("missing frontMatterPath"));
   });
 
+  describe("with join processor applied to non-array answer values", () => {
+    const thisTestDataPath = path.join(
+      testDataPath,
+      "join-processor-non-array",
+    );
+    const answers = {
+      kbDocumentTitle: documentTitle,
+      fooPrompt: "fooValue",
+    };
+    const localConfig = {
+      kbPath: "kb",
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
+      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
+    };
+
+    test("rejects", () =>
+      expect(
+        helpers
+          .run(Generator, generatorOptions)
+          .withAnswers(answers)
+          .withLocalConfig(localConfig),
+      ).rejects.toThrow('"join" processor used with non-array "fooPrompt"'));
+  });
+
   describe("with sort processor applied to non-array answer values", () => {
     const thisTestDataPath = path.join(
       testDataPath,
@@ -314,6 +338,22 @@ describe("running the generator", () => {
         kbDocumentTitle: documentTitle,
         barPrompt: "barValue",
         fooPrompt: "",
+      },
+    },
+    {
+      description: "join processor, default separator",
+      testdataFolderName: "join-processor",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: ["pippoChoice", "plutoChoice"],
+      },
+    },
+    {
+      description: "join processor, custom separator",
+      testdataFolderName: "join-processor-custom-separator",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: ["pippoChoice", "plutoChoice"],
       },
     },
     {
