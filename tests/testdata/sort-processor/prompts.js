@@ -1,7 +1,7 @@
 const prompts = [
   {
     inquirer: {
-      type: "rawlist",
+      type: "checkbox",
       name: "fooPrompt",
       message: "Foo message:",
       choices: [
