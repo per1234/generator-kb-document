@@ -43,6 +43,17 @@
             {
               "properties": {
                 "processor": {
+                  "const": "join"
+                },
+                "separator": {
+                  "type": "string"
+                }
+              },
+              "required": ["processor"]
+            },
+            {
+              "properties": {
+                "processor": {
                   "const": "sort"
                 }
               },
