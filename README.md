@@ -366,6 +366,23 @@ This processor converts the string answer value to an array by splitting it on d
 }
 ```
 
+##### `processor: "join"`
+
+The `join` processor transforms an [answer array](#configuration-answer-arrays) into a single string by concatenating all the elements.
+
+###### `separator`
+
+**Default value:** `"\n"`
+
+The string to insert between the elements can be configured via the processor configuration object's `separator` property.
+
+```text
+{
+  processor: "join",
+  separator: "\n",
+}
+```
+
 ##### `processor: "kb-link"`
 
 The `kb-link` processor transforms an answer value into a link to the document of that name in the knowledge base.

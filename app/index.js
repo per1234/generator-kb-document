@@ -203,6 +203,21 @@ export default class extends Generator {
 
                   break;
                 }
+                case "join": {
+                  let separator = "\n";
+                  if ("separator" in processor) {
+                    separator = processor.separator;
+                  }
+
+                  if (Array.isArray(answerValue)) {
+                    answerValue = answerValue.join(separator);
+                  } else {
+                    throw new Error(
+                      `"join" processor used with non-array "${answerKey}" prompt answer`,
+                    );
+                  }
+                  break;
+                }
                 case "kb-link": {
                   const getLinkMarkup = function getLinkMarkup(
                     context,
