@@ -346,6 +346,7 @@ tasks:
             -type d -name \".licenses\" -prune -o \
             -type d -name \"__pycache__\" -prune -o \
             -type d -name \"node_modules\" -prune -o \
+            -type d -name \"testdata\" -prune -o \
             -regex \".*[.]md\" \
             -exec \
               markdown-link-check \
