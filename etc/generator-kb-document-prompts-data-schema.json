@@ -47,6 +47,17 @@
                 }
               },
               "required": ["processor"]
+            },
+            {
+              "properties": {
+                "processor": {
+                  "const": "template"
+                },
+                "template": {
+                  "type": "string"
+                }
+              },
+              "required": ["processor", "template"]
             }
           ]
         }
