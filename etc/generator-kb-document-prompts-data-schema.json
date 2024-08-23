@@ -54,6 +54,17 @@
             {
               "properties": {
                 "processor": {
+                  "const": "kb-link"
+                },
+                "separator": {
+                  "type": "string"
+                }
+              },
+              "required": ["processor"]
+            },
+            {
+              "properties": {
+                "processor": {
                   "const": "sort"
                 }
               },
