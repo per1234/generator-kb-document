@@ -47,9 +47,11 @@ Project website: https://github.com/per1234/generator-kb-document
     - [`usage`](#usage)
     - [`frontMatterPath`](#frontmatterpath)
     - [`processors`](#processors)
+    - [JSON Schema](#json-schema)
   - [Document File Template](#document-file-template)
     - [Document Title](#document-title)
     - [Prompts from Prompts Data File](#prompts-from-prompts-data-file)
+  - [Answer Arrays](#answer-arrays-1)
 - [Generator Usage](#generator-usage)
 - [Example](#example)
 - [Knowledge Base Structure](#knowledge-base-structure)
@@ -279,11 +281,16 @@ tags:
 ---
 ```
 
+<a name="prompts-data-file-frontmatterpath-answer-arrays"></a>
+
 ##### Answer Arrays
 
-The [`checkbox` **Inquirer** prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/checkbox#inquirercheckbox) allows the user to select multiple answers from the prompt. For this reason, it produces an array of answer values rather than a single value as is done by other prompt types. Arrays of answer values are also produced by the [`csv` processor](#processor-csv).
+A prompt might produce answer values in either of two data formats:
 
-In this case if we used `/tags/-` as in [the above example](#array-as-path) (which is appropriate for prompt types that produce a single answer value), we would end up appending the array of answers as an element in the `tags` array, giving an unintended front matter data structure like this:
+- Single answer
+- [Answer array](#configuration-answer-arrays)
+
+In the case of an answer array, if we used `/tags/-` as in [the above example](#array-as-path) (which is appropriate for prompt types that produce a single answer value), we would end up appending the array as an element in the `tags` array, giving an unintended front matter data structure like this:
 
 ```markdown
 ---
@@ -348,7 +355,9 @@ The processing operations will be applied in sequence, following the order from 
 
 ##### `processor: "csv"`
 
-It may be necessary for a single prompt to accept multiple answer values. When the set of possible answer values is fixed, the [`checkbox` prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/checkbox#inquirercheckbox) can be used to handle this nicely, outputting an array of answers. Unfortunately **Inquirer** doesn't provide any equivalent prompt type for accepting multiple free text answer values. In this case, the best solution will be to use the [`input` prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/input#inquirerinput) and pass the set of values in a string that has a delimiter-separated format (commonly referred to as [CSV](https://en.wikipedia.org/wiki/Comma-separated_values)).
+It may be necessary for a single prompt to accept multiple answer values. When the set of possible answer values is fixed, the [`checkbox` prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/checkbox#inquirercheckbox) can be used to handle this nicely. Unfortunately **Inquirer** doesn't provide any equivalent prompt type for accepting multiple free text answer values. In this case, the best solution will be to use the [`input` prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/input#inquirerinput) and pass the set of values in a string that has a delimiter-separated format (commonly referred to as [CSV](https://en.wikipedia.org/wiki/Comma-separated_values)).
+
+This processor handles the parsing of a delimiter-separated answer value, converting it to an [answer array](#configuration-answer-arrays).
 
 ###### `delimiter`
 
@@ -365,7 +374,7 @@ This processor converts the string answer value to an array by splitting it on d
 
 ##### `processor: "sort"`
 
-The `sort` processor sorts an answer array in lexicographical order.
+The `sort` processor sorts an [answer array](#configuration-answer-arrays) in lexicographical order.
 
 ```text
 {
@@ -448,6 +457,26 @@ This data is used to populate a single generated front matter document. That fro
 ```
 
 For information on front matter, see [the **Informational Structure** section](#informational-structure).
+
+<a name="configuration-answer-arrays"></a>
+
+### Answer Arrays
+
+The [`checkbox` **Inquirer** prompt type](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/checkbox#inquirercheckbox) allows the user to select multiple answers from the prompt. For this reason, it produces an array of answer values rather than a single value as is done by other prompt types.
+
+Arrays of answer values are also produced by the [`csv` processor](#processor-csv).
+
+There are special considerations for handling this distinct answer data type:
+
+- [In answer processing](#processors)
+- [In front matter](#prompts-data-file-frontmatterpath-answer-arrays)
+- [In the document file template](#document-file-template)
+
+---
+
+**ⓘ** **Inquirer** doesn't provide a prompt type for obtaining multiple free text answers. If you need this capability in your project, the generator can be configured to extract multiple values from a single answer in delimiter-separated format. See the information [**here**](#processor-csv) for details.
+
+---
 
 ## Generator Usage
 
