@@ -39,6 +39,14 @@
                 }
               },
               "required": ["processor"]
+            },
+            {
+              "properties": {
+                "processor": {
+                  "const": "sort"
+                }
+              },
+              "required": ["processor"]
             }
           ]
         }
