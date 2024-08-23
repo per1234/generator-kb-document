@@ -332,6 +332,14 @@ describe("running the generator", () => {
         fooPrompt: "fooValue",
       },
     },
+    {
+      description: "template processor, answer array",
+      testdataFolderName: "template-processor-answer-array",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: ["pippoChoice", "plutoChoice"],
+      },
+    },
   ])(
     "with valid configuration ($description)",
     ({
