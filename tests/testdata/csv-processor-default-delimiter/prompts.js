@@ -8,7 +8,7 @@ const prompts = [
     },
     processors: [
       {
-        name: "csv",
+        processor: "csv",
       },
     ],
     usage: ["front matter"],

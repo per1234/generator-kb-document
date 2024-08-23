@@ -179,7 +179,7 @@ export default class extends Generator {
 
           if ("processors" in promptData) {
             promptData.processors.forEach((processor) => {
-              switch (processor.name) {
+              switch (processor.processor) {
                 case "csv": {
                   let delimiter = ",";
                   if ("delimiter" in processor) {
@@ -203,7 +203,7 @@ export default class extends Generator {
                 // the prompts data validation.
                 /* istanbul ignore next */
                 default: {
-                  throw new Error(`Unknown processor ${processor.name}`);
+                  throw new Error(`Unknown processor ${processor.processor}`);
                 }
               }
             });

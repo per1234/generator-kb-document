@@ -30,7 +30,7 @@
           "oneOf": [
             {
               "properties": {
-                "name": {
+                "processor": {
                   "const": "csv"
                 },
                 "delimiter": {
@@ -38,7 +38,7 @@
                   "minLength": 1
                 }
               },
-              "required": ["name"]
+              "required": ["processor"]
             }
           ]
         }
