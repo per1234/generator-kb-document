@@ -1,0 +1,2 @@
+- pippoValue
+- plutoValue

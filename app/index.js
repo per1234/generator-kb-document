@@ -199,6 +199,16 @@ export default class extends Generator {
 
                   break;
                 }
+                case "sort": {
+                  if (Array.isArray(answerValue)) {
+                    answerValue.sort();
+                  } else {
+                    throw new Error(
+                      `"sort" processor used with non-array "${answerKey}" prompt answer`,
+                    );
+                  }
+                  break;
+                }
                 // This case can never be reached under normal operation because valid processor values are enforced by
                 // the prompts data validation.
                 /* istanbul ignore next */

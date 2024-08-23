@@ -130,6 +130,29 @@ describe("running the generator", () => {
       ).rejects.toThrow("missing frontMatterPath"));
   });
 
+  describe("with sort processor applied to non-array answer values", () => {
+    const thisTestDataPath = path.join(
+      testDataPath,
+      "sort-processor-non-array",
+    );
+    const answers = {
+      kbDocumentTitle: documentTitle,
+    };
+    const localConfig = {
+      kbPath: "kb",
+      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
+      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
+    };
+
+    test("rejects", () =>
+      expect(
+        helpers
+          .run(Generator, generatorOptions)
+          .withAnswers(answers)
+          .withLocalConfig(localConfig),
+      ).rejects.toThrow('"sort" processor used with non-array "fooPrompt"'));
+  });
+
   describe.each([
     {
       description: "no user prompts",
@@ -215,6 +238,14 @@ describe("running the generator", () => {
       },
     },
     {
+      description: "processor chain",
+      testdataFolderName: "processor-chain",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "plutoValue,pippoValue",
+      },
+    },
+    {
       description: "csv processor",
       testdataFolderName: "csv-processor",
       answers: {
@@ -237,6 +268,14 @@ describe("running the generator", () => {
         kbDocumentTitle: documentTitle,
         barPrompt: "barValue",
         fooPrompt: "",
+      },
+    },
+    {
+      description: "sort processor",
+      testdataFolderName: "sort-processor",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: ["plutoChoice", "pippoChoice"],
       },
     },
   ])(

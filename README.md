@@ -363,6 +363,16 @@ This processor converts the string answer value to an array by splitting it on d
 }
 ```
 
+##### `processor: "sort"`
+
+The `sort` processor sorts an answer array in lexicographical order.
+
+```text
+{
+  processor: "sort",
+}
+```
+
 ### Document File Template
 
 This file is the template for the knowledge base document files that will be created by the generator.
