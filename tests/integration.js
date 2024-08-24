@@ -19,8 +19,8 @@ afterAll(async () => {
   await result.cleanup();
 });
 
-describe("running the generator", () => {
-  describe("with nonexistent prompts data path", () => {
+describe("invalid configuration", () => {
+  describe("nonexistent prompts data path", () => {
     const thisTestDataPath = path.join(
       testDataPath,
       "nonexistent-prompts-data",
@@ -43,7 +43,7 @@ describe("running the generator", () => {
       ).rejects.toThrow(localConfig.promptsDataPath));
   });
 
-  describe("with nonexistent template path", () => {
+  describe("nonexistent template path", () => {
     const thisTestDataPath = path.join(testDataPath, "nonexistent-template");
     const answers = {
       kbDocumentTitle: documentTitle,
@@ -63,7 +63,7 @@ describe("running the generator", () => {
       ).rejects.toThrow(localConfig.templatePath));
   });
 
-  describe("with data file that doesn't provide a default export", () => {
+  describe("data file that doesn't provide a default export", () => {
     const thisTestDataPath = path.join(
       testDataPath,
       "no-prompts-data-default-export",
@@ -86,7 +86,7 @@ describe("running the generator", () => {
       ).rejects.toThrow("does not provide a default export"));
   });
 
-  describe("with prompts data that is not an array", () => {
+  describe("prompts data that is not an array", () => {
     const thisTestDataPath = path.join(testDataPath, "prompts-data-not-array");
     const answers = {
       kbDocumentTitle: documentTitle,
@@ -106,7 +106,7 @@ describe("running the generator", () => {
       ).rejects.toThrow("must be array"));
   });
 
-  describe("with prompt data missing required frontMatterPath property", () => {
+  describe("prompt data missing required frontMatterPath property", () => {
     const thisTestDataPath = path.join(
       testDataPath,
       "prompt-data-missing-frontMatterPath",
@@ -130,7 +130,7 @@ describe("running the generator", () => {
       ).rejects.toThrow("missing frontMatterPath"));
   });
 
-  describe("with join processor applied to non-array answer values", () => {
+  describe("join processor applied to non-array answer values", () => {
     const thisTestDataPath = path.join(
       testDataPath,
       "join-processor-non-array",
@@ -154,7 +154,7 @@ describe("running the generator", () => {
       ).rejects.toThrow('"join" processor used with non-array "fooPrompt"'));
   });
 
-  describe("with sort processor applied to non-array answer values", () => {
+  describe("sort processor applied to non-array answer values", () => {
     const thisTestDataPath = path.join(
       testDataPath,
       "sort-processor-non-array",
@@ -178,7 +178,7 @@ describe("running the generator", () => {
       ).rejects.toThrow('"sort" processor used with non-array "fooPrompt"'));
   });
 
-  describe("with template processor that has invalid syntax", () => {
+  describe("template processor that has invalid syntax", () => {
     const thisTestDataPath = path.join(
       testDataPath,
       "template-processor-invalid",
@@ -202,7 +202,7 @@ describe("running the generator", () => {
       ).rejects.toThrow('Invalid syntax in template for "fooPrompt"'));
   });
 
-  describe("with template processor that fails", () => {
+  describe("template processor that fails", () => {
     const thisTestDataPath = path.join(
       testDataPath,
       "template-processor-failure",
@@ -225,7 +225,9 @@ describe("running the generator", () => {
           .withLocalConfig(localConfig),
       ).rejects.toThrow('Failed to expand template for "fooPrompt"'));
   });
+});
 
+describe("valid configuration", () => {
   describe.each([
     {
       description: "no user prompts",
@@ -400,7 +402,7 @@ describe("running the generator", () => {
       },
     },
   ])(
-    "with valid configuration ($description)",
+    "with $description",
     ({
       testdataFolderName,
       answers,
