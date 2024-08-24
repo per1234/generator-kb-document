@@ -19,213 +19,165 @@ afterAll(async () => {
   await result.cleanup();
 });
 
-describe("running the generator", () => {
-  describe("with nonexistent prompts data path", () => {
-    const thisTestDataPath = path.join(
-      testDataPath,
-      "nonexistent-prompts-data",
-    );
-    const answers = {
-      kbDocumentTitle: documentTitle,
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
+describe("invalid configuration", () => {
+  describe.each([
+    {
+      description: "nonexistent prompts data path",
+      testdataFolderName: "nonexistent-prompts-data",
+      answers: {
+        kbDocumentTitle: documentTitle,
+      },
+      exceptionMessagePattern: path.join(
+        testDataPath,
+        "nonexistent-prompts-data",
+        "nonexistent.js",
+      ),
+      localConfigData: {
+        promptsDataFilename: "nonexistent.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+    {
+      description: "nonexistent template path",
+      testdataFolderName: "nonexistent-template",
+      answers: {
+        kbDocumentTitle: documentTitle,
+      },
+      exceptionMessagePattern: path.join(
+        testDataPath,
+        "nonexistent-template",
+        "nonexistent.ejs",
+      ),
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "nonexistent.ejs",
+      },
+    },
+    {
+      description: "data file that doesn't provide a default export",
+      testdataFolderName: "no-prompts-data-default-export",
+      answers: {
+        kbDocumentTitle: documentTitle,
+      },
+      exceptionMessagePattern: "does not provide a default export",
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+    {
+      description: "prompts data that is not an array",
+      testdataFolderName: "prompts-data-not-array",
+      answers: {
+        kbDocumentTitle: documentTitle,
+      },
+      exceptionMessagePattern: "must be array",
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+    {
+      description: "prompt data missing required frontMatterPath property",
+      testdataFolderName: "prompt-data-missing-frontMatterPath",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "plutoChoice",
+      },
+      exceptionMessagePattern: "missing frontMatterPath",
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+    {
+      description: "join processor applied to non-array answer values",
+      testdataFolderName: "join-processor-non-array",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      exceptionMessagePattern:
+        '"join" processor used with non-array "fooPrompt"',
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+    {
+      description: "sort processor applied to non-array answer values",
+      testdataFolderName: "sort-processor-non-array",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      exceptionMessagePattern:
+        '"sort" processor used with non-array "fooPrompt"',
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+    {
+      description: "template processor that has invalid syntax",
+      testdataFolderName: "template-processor-invalid",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      exceptionMessagePattern: 'Invalid syntax in template for "fooPrompt"',
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+    {
+      description: "template processor that fails",
+      testdataFolderName: "template-processor-failure",
+      answers: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      exceptionMessagePattern: 'Failed to expand template for "fooPrompt"',
+      localConfigData: {
+        promptsDataFilename: "prompts.js",
+        templateFilename: "primary-document.ejs",
+      },
+    },
+  ])(
+    "$description",
+    ({
+      testdataFolderName,
+      answers,
+      exceptionMessagePattern,
+      localConfigData,
+    }) => {
+      const thisTestDataPath = path.join(testDataPath, testdataFolderName);
+      const localConfig = {
+        kbPath: "kb",
+        promptsDataPath: path.join(
+          thisTestDataPath,
+          localConfigData.promptsDataFilename,
+        ),
+        templatePath: path.join(
+          thisTestDataPath,
+          localConfigData.templateFilename,
+        ),
+      };
 
-    test("rejects, with expected error", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow(localConfig.promptsDataPath));
-  });
+      test("rejects, with expected error", () => {
+        expect(
+          helpers
+            .run(Generator, generatorOptions)
+            .withAnswers(answers)
+            .withLocalConfig(localConfig),
+        ).rejects.toThrow(exceptionMessagePattern);
+      });
+    },
+  );
+});
 
-  describe("with nonexistent template path", () => {
-    const thisTestDataPath = path.join(testDataPath, "nonexistent-template");
-    const answers = {
-      kbDocumentTitle: documentTitle,
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow(localConfig.templatePath));
-  });
-
-  describe("with data file that doesn't provide a default export", () => {
-    const thisTestDataPath = path.join(
-      testDataPath,
-      "no-prompts-data-default-export",
-    );
-    const answers = {
-      kbDocumentTitle: documentTitle,
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow("does not provide a default export"));
-  });
-
-  describe("with prompts data that is not an array", () => {
-    const thisTestDataPath = path.join(testDataPath, "prompts-data-not-array");
-    const answers = {
-      kbDocumentTitle: documentTitle,
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow("must be array"));
-  });
-
-  describe("with prompt data missing required frontMatterPath property", () => {
-    const thisTestDataPath = path.join(
-      testDataPath,
-      "prompt-data-missing-frontMatterPath",
-    );
-    const answers = {
-      kbDocumentTitle: documentTitle,
-      fooPrompt: "plutoChoice",
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow("missing frontMatterPath"));
-  });
-
-  describe("with join processor applied to non-array answer values", () => {
-    const thisTestDataPath = path.join(
-      testDataPath,
-      "join-processor-non-array",
-    );
-    const answers = {
-      kbDocumentTitle: documentTitle,
-      fooPrompt: "fooValue",
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow('"join" processor used with non-array "fooPrompt"'));
-  });
-
-  describe("with sort processor applied to non-array answer values", () => {
-    const thisTestDataPath = path.join(
-      testDataPath,
-      "sort-processor-non-array",
-    );
-    const answers = {
-      kbDocumentTitle: documentTitle,
-      fooPrompt: "fooValue",
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow('"sort" processor used with non-array "fooPrompt"'));
-  });
-
-  describe("with template processor that has invalid syntax", () => {
-    const thisTestDataPath = path.join(
-      testDataPath,
-      "template-processor-invalid",
-    );
-    const answers = {
-      kbDocumentTitle: documentTitle,
-      fooPrompt: "fooValue",
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow('Invalid syntax in template for "fooPrompt"'));
-  });
-
-  describe("with template processor that fails", () => {
-    const thisTestDataPath = path.join(
-      testDataPath,
-      "template-processor-failure",
-    );
-    const answers = {
-      kbDocumentTitle: documentTitle,
-      fooPrompt: "fooValue",
-    };
-    const localConfig = {
-      kbPath: "kb",
-      promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
-      templatePath: path.join(thisTestDataPath, "primary-document.ejs"),
-    };
-
-    test("rejects", () =>
-      expect(
-        helpers
-          .run(Generator, generatorOptions)
-          .withAnswers(answers)
-          .withLocalConfig(localConfig),
-      ).rejects.toThrow('Failed to expand template for "fooPrompt"'));
-  });
-
+describe("valid configuration", () => {
   describe.each([
     {
       description: "no user prompts",
@@ -400,7 +352,7 @@ describe("running the generator", () => {
       },
     },
   ])(
-    "with valid configuration ($description)",
+    "with $description",
     ({
       testdataFolderName,
       answers,
