@@ -30,10 +30,10 @@ describe("invalid configuration", () => {
       exceptionMessagePattern: path.join(
         testDataPath,
         "nonexistent-prompts-data",
-        "prompts.js",
+        "nonexistent.js",
       ),
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsDataFilename: "nonexistent.js",
         templateFilename: "primary-document.ejs",
       },
     },
@@ -46,11 +46,11 @@ describe("invalid configuration", () => {
       exceptionMessagePattern: path.join(
         testDataPath,
         "nonexistent-template",
-        "primary-document.ejs",
+        "nonexistent.ejs",
       ),
       localConfigData: {
         promptsDataFilename: "prompts.js",
-        templateFilename: "primary-document.ejs",
+        templateFilename: "nonexistent.ejs",
       },
     },
     {
