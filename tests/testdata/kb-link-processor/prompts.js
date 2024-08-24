@@ -10,7 +10,7 @@ const prompts = [
         processor: "kb-link",
       },
     ],
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

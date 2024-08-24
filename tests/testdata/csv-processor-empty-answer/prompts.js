@@ -6,7 +6,7 @@ const prompts = [
       name: "barPrompt",
       message: "Bar message:",
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
   {
     frontMatterPath: "/tags",
@@ -21,7 +21,7 @@ const prompts = [
         delimiter: ",",
       },
     ],
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
 ];
 

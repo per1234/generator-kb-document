@@ -270,8 +270,8 @@ describe("running the generator", () => {
       },
     },
     {
-      description: "user prompt with content+front matter usage",
-      testdataFolderName: "content-front-matter-usage-prompt-data",
+      description: "user prompt with content+front matter usages",
+      testdataFolderName: "content-front-matter-usages-prompt-data",
       answers: {
         kbDocumentTitle: documentTitle,
         fooPrompt: "plutoChoice",

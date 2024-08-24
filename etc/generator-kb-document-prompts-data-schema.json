@@ -10,7 +10,7 @@
       "inquirer": {
         "type": "object"
       },
-      "usage": {
+      "usages": {
         "type": "array",
         "items": {
           "type": "string",
@@ -85,7 +85,7 @@
         }
       }
     },
-    "required": ["inquirer", "usage"]
+    "required": ["inquirer", "usages"]
   },
   "uniqueItems": true
 }

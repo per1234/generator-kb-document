@@ -121,7 +121,7 @@ export default class extends Generator {
       let missingFrontMatterPathName = "";
       promptsData.default.forEach((promptData) => {
         if (
-          promptData.usage.includes("front matter") &&
+          promptData.usages.includes("front matter") &&
           !("frontMatterPath" in promptData)
         ) {
           missingFrontMatterPath = true;
@@ -151,7 +151,7 @@ export default class extends Generator {
           name: "kbDocumentTitle",
           message: "Knowledge base document title:",
         },
-        usage: ["content"],
+        usages: ["content"],
       },
     ];
 
@@ -307,11 +307,11 @@ export default class extends Generator {
             });
           }
 
-          if (promptData.usage.includes("content")) {
+          if (promptData.usages.includes("content")) {
             this.#templateContext[answerKey] = answerValue;
           }
 
-          if (promptData.usage.includes("front matter")) {
+          if (promptData.usages.includes("front matter")) {
             // Concatenate answer arrays to existing front matter content instead of overwriting.
             if (Array.isArray(answerValue)) {
               const frontMatterPathContent = JSONPointer.get(

@@ -44,7 +44,7 @@ Project website: https://github.com/per1234/generator-kb-document
     - [`universalFrontMatter`](#universalfrontmatter)
   - [Prompts Data File](#prompts-data-file)
     - [`inquirer`](#inquirer)
-    - [`usage`](#usage)
+    - [`usages`](#usages)
     - [`frontMatterPath`](#frontmatterpath)
     - [`processors`](#processors)
     - [JSON Schema](#json-schema)
@@ -173,18 +173,18 @@ https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
 },
 ```
 
-<a name="prompt-data-usage-property"></a>
+<a name="prompt-data-usages-property"></a>
 
-#### `usage`
+#### `usages`
 
-The `usage` property is an array of strings which specify how the generator should make the prompt answer available for use in the [document file template](#document-file-template):
+The `usages` property is an array of strings which specify how the generator should make the prompt answer available for use in the [document file template](#document-file-template):
 
 ```text
 {
   inquirer: {
     <Inquirer Question object>
   },
-  usage: [
+  usages: [
     "content",
     "front matter",
   ],
@@ -198,13 +198,13 @@ The answer can be referenced by the value from the [`inquirer` object's](#inquir
 
 ##### `front matter`
 
-The answer will be included in the generated front matter document, which can be referenced as `kbDocumentFrontMatter` in the [document file template](#document-file-template). The answers to all prompts with `usage` property that contains `"front matter"` will be merged into the [front matter document](#document-file-template-front-matter).
+The answer will be included in the generated front matter document, which can be referenced as `kbDocumentFrontMatter` in the [document file template](#document-file-template). The answers to all prompts with `usages` property that contains `"front matter"` will be merged into the [front matter document](#document-file-template-front-matter).
 
 For information on front matter, see [the **Informational Structure** section](#informational-structure).
 
 ---
 
-❗ If you include `"front matter"` in the `usage` property, you must also set the [`frontMatterPath` property](#frontmatterpath).
+❗ If you include `"front matter"` in the `usages` property, you must also set the [`frontMatterPath` property](#frontmatterpath).
 
 ---
 
@@ -218,7 +218,7 @@ https://datatracker.ietf.org/doc/html/rfc6901
 
 ---
 
-**ⓘ** The `frontMatterPath` property is only relevant when the [`usage`](#prompt-data-usage-property) property contains `"front matter"`.
+**ⓘ** The `frontMatterPath` property is only relevant when the [`usages`](#prompt-data-usages-property) property contains `"front matter"`.
 
 ---
 
@@ -244,7 +244,7 @@ With the following prompt configuration object:
       },
     ],
   },
-  usage: ["front matter"],
+  usages: ["front matter"],
 }
 ```
 
@@ -333,7 +333,7 @@ The `processors` property is an array of processor configuration objects which s
   inquirer: {
     <Inquirer Question object>
   },
-  usage: [
+  usages: [
     "content"
   ],
   processors: [
@@ -464,7 +464,7 @@ It is recommended to use this as the document's H1 [heading](https://www.markdow
 
 ##### `"content"` Prompts
 
-If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usage`](#prompt-data-usage-property) property, you can use the answer by referencing the value of the `name` property of the prompt data [`inquirer` object](#inquirer) in the template:
+If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usages`](#prompt-data-usages-property) property, you can use the answer by referencing the value of the `name` property of the prompt data [`inquirer` object](#inquirer) in the template:
 
 ```ejs
 <%- <prompt name> %>
@@ -477,7 +477,7 @@ If a prompt defined in the [prompts data file](#prompts-data-file) has `"content
 Front matter data can come from two sources:
 
 - The `universalFrontMatter` key in the [**generator configuration file**](#generator-configuration-file).
-- Prompts defined in the [**prompts data file**](#prompts-data-file) that have `"front matter"` in their [`usage`](#prompt-data-usage-property) property.
+- Prompts defined in the [**prompts data file**](#prompts-data-file) that have `"front matter"` in their [`usages`](#prompt-data-usages-property) property.
 
 This data is used to populate a single generated front matter document. That front matter document is available for use in the template via the `kbDocumentFrontMatter` variable:
 
@@ -572,7 +572,7 @@ const prompts = [
         },
       ],
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
   {
     inquirer: {
@@ -580,7 +580,7 @@ const prompts = [
       name: "homePageUrl",
       message: "Home page URL:",
     },
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

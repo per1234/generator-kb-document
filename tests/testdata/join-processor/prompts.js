@@ -20,7 +20,7 @@ const prompts = [
         processor: "join",
       },
     ],
-    usage: ["content"],
+    usages: ["content"],
   },
 ];
 

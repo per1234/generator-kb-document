@@ -12,7 +12,7 @@ const prompts = [
         delimiter: ",",
       },
     ],
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
 ];
 

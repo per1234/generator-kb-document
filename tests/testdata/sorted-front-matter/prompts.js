@@ -6,7 +6,7 @@ const prompts = [
       name: "fooPrompt",
       message: "Foo message:",
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
   {
     frontMatterPath: "/zzz/bar",
@@ -15,7 +15,7 @@ const prompts = [
       name: "barPrompt",
       message: "Bar message:",
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
   {
     frontMatterPath: "/tags",
@@ -34,7 +34,7 @@ const prompts = [
         },
       ],
     },
-    usage: ["front matter"],
+    usages: ["front matter"],
   },
 ];
 
