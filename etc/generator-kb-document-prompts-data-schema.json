@@ -97,7 +97,7 @@
         }
       }
     },
-    "required": ["inquirer", "usages"]
+    "required": ["inquirer"]
   },
   "uniqueItems": true
 }

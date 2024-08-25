@@ -254,6 +254,16 @@ describe("valid configuration", () => {
       doInDirFunction: () => {},
     },
     {
+      description: "prompt data usages default",
+      testdataFolderName: "prompt-data-usages-default",
+      answers: {
+        kbDocumentOperation: "new",
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      doInDirFunction: () => {},
+    },
+    {
       description: "user prompt with content usage",
       testdataFolderName: "content-usage-prompt-data",
       answers: {
