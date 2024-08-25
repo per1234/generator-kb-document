@@ -65,6 +65,22 @@ export default class extends Generator {
       universalFrontMatter: {},
     };
 
+    const promptDataDefaults = {
+      operations: ["new", "supplement"],
+      processors: [],
+    };
+
+    const promptDataProcessorDefaults = [
+      {
+        processor: "csv",
+        delimiter: ",",
+      },
+      {
+        processor: "join",
+        separator: "\n",
+      },
+    ];
+
     // Use defaults for any configuration property not set by user in generator configuration.
     this.#generatorConfiguration = Object.assign(
       generatorConfigurationDefaults,
@@ -170,6 +186,35 @@ export default class extends Generator {
       }
 
       this.#promptsData = promptsData.default;
+      // Use defaults for prompt data properties not set by user in prompts data file.
+      this.#promptsData = promptsData.default.map((promptData) => {
+        const promptDataWithDefaults = {
+          ...promptDataDefaults,
+          ...promptData,
+        };
+
+        promptDataWithDefaults.processors =
+          promptDataWithDefaults.processors.map((processor) => {
+            let processorWithDefaults = processor;
+            promptDataProcessorDefaults.forEach(
+              (promptDataProcessorDefault) => {
+                if (
+                  processorWithDefaults.processor ===
+                  promptDataProcessorDefault.processor
+                ) {
+                  processorWithDefaults = {
+                    ...promptDataProcessorDefault,
+                    ...processor,
+                  };
+                }
+              },
+            );
+
+            return processorWithDefaults;
+          });
+
+        return promptDataWithDefaults;
+      });
 
       return Promise.resolve();
     });
@@ -194,6 +239,7 @@ export default class extends Generator {
           ],
         },
         operations: ["new", "supplement"],
+        processors: [],
         usages: ["content"],
       },
       {
@@ -203,6 +249,7 @@ export default class extends Generator {
           message: "Knowledge base document title:",
         },
         operations: ["new", "supplement"],
+        processors: [],
         usages: ["content"],
       },
     ];
@@ -215,6 +262,7 @@ export default class extends Generator {
           message: "Supplement title:",
         },
         operations: ["supplement"],
+        processors: [],
         usages: ["content"],
       },
     ];
@@ -249,16 +297,8 @@ export default class extends Generator {
           this.#promptsData,
         );
         const operationFilteredPrompts = operationConditionalPrompts.filter(
-          (prompt) => {
-            if (!("operations" in prompt)) {
-              // Default to presenting the prompt for all operations.
-              return true;
-            }
-
-            return prompt.operations.includes(
-              this.#answers.kbDocumentOperation,
-            );
-          },
+          (prompt) =>
+            prompt.operations.includes(this.#answers.kbDocumentOperation),
         );
         this.#promptsData = universalBuiltInPrompts.concat(
           operationFilteredPrompts,
@@ -296,131 +336,119 @@ export default class extends Generator {
             answerValue = answerValue.trim();
           }
 
-          if ("processors" in promptData) {
-            promptData.processors.forEach((processor) => {
-              switch (processor.processor) {
-                case "csv": {
-                  let delimiter = ",";
-                  if ("delimiter" in processor) {
-                    delimiter = processor.delimiter;
-                  }
+          promptData.processors.forEach((processor) => {
+            switch (processor.processor) {
+              case "csv": {
+                // `String.prototype.split()` returns a single element array if it is an empty string:
+                // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/split#using_split
+                if (answerValue !== undefined && answerValue !== "") {
+                  answerValue = answerValue.split(processor.delimiter);
 
-                  // `String.prototype.split()` returns a single element array if it is an empty string:
-                  // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/split#using_split
-                  if (answerValue !== undefined && answerValue !== "") {
-                    answerValue = answerValue.split(delimiter);
-
-                    // Trim whitespace from elements.
-                    answerValue = answerValue.map((element) => element.trim());
-                  } else {
-                    answerValue = [];
-                  }
-
-                  break;
+                  // Trim whitespace from elements.
+                  answerValue = answerValue.map((element) => element.trim());
+                } else {
+                  answerValue = [];
                 }
-                case "join": {
-                  let separator = "\n";
-                  if ("separator" in processor) {
-                    separator = processor.separator;
-                  }
 
-                  if (Array.isArray(answerValue)) {
-                    answerValue = answerValue.join(separator);
-                  } else {
-                    throw new Error(
-                      `"join" processor used with non-array "${answerKey}" prompt answer`,
-                    );
-                  }
-                  break;
+                break;
+              }
+              case "join": {
+                if (Array.isArray(answerValue)) {
+                  answerValue = answerValue.join(processor.separator);
+                } else {
+                  throw new Error(
+                    `"join" processor used with non-array "${answerKey}" prompt answer`,
+                  );
                 }
-                case "kb-link": {
-                  const getLinkMarkup = function getLinkMarkup(
-                    context,
-                    targetDocumentTitle,
-                  ) {
-                    const targetDocumentFolderName = slug(targetDocumentTitle);
-                    // POSIX compliant paths must be used in the link, regardless of the host architecture.
-                    const targetPathKbRelativePosix = pathPosixJoin(
-                      targetDocumentFolderName,
-                      documentPrimaryFileName,
-                    );
-                    // Just in case Windows systems are uptight about POSIX compliant path separators, normalize it to
-                    // the native path separator for use in the filesystem operation.
-                    const targetPathKbRelativeNative = path.normalize(
-                      targetPathKbRelativePosix,
-                    );
-                    const absoluteTargetPath = context.destinationPath(
-                      context.config.get("kbPath"),
-                      targetPathKbRelativeNative,
-                    );
-                    const linkPath = pathPosixJoin(
-                      "..",
-                      targetPathKbRelativePosix,
-                    );
+                break;
+              }
+              case "kb-link": {
+                const getLinkMarkup = function getLinkMarkup(
+                  context,
+                  targetDocumentTitle,
+                ) {
+                  const targetDocumentFolderName = slug(targetDocumentTitle);
+                  // POSIX compliant paths must be used in the link, regardless of the host architecture.
+                  const targetPathKbRelativePosix = pathPosixJoin(
+                    targetDocumentFolderName,
+                    documentPrimaryFileName,
+                  );
+                  // Just in case Windows systems are uptight about POSIX compliant path separators, normalize it to
+                  // the native path separator for use in the filesystem operation.
+                  const targetPathKbRelativeNative = path.normalize(
+                    targetPathKbRelativePosix,
+                  );
+                  const absoluteTargetPath = context.destinationPath(
+                    context.config.get("kbPath"),
+                    targetPathKbRelativeNative,
+                  );
+                  const linkPath = pathPosixJoin(
+                    "..",
+                    targetPathKbRelativePosix,
+                  );
 
-                    if (!existsSync(absoluteTargetPath)) {
-                      context.log(
-                        `warning: Linked KB document "${targetDocumentTitle}" does not exist.`,
-                      );
-                    }
+                  if (!existsSync(absoluteTargetPath)) {
+                    context.log(
+                      `warning: Linked KB document "${targetDocumentTitle}" does not exist.`,
+                    );
+                  }
 
-                    return `[**${targetDocumentTitle}**](${linkPath})`;
-                  };
+                  return `[**${targetDocumentTitle}**](${linkPath})`;
+                };
 
+                if (Array.isArray(answerValue)) {
+                  answerValue = answerValue.map((answerValueElement) =>
+                    getLinkMarkup(this, answerValueElement),
+                  );
+                } else {
+                  answerValue = getLinkMarkup(this, answerValue);
+                }
+
+                break;
+              }
+              case "sort": {
+                if (Array.isArray(answerValue)) {
+                  answerValue.sort();
+                } else {
+                  throw new Error(
+                    `"sort" processor used with non-array "${answerKey}" prompt answer`,
+                  );
+                }
+                break;
+              }
+              case "template": {
+                let compiledTemplate;
+                try {
+                  compiledTemplate = ejsCompile(processor.template);
+                } catch (error) {
+                  throw new Error(
+                    `Invalid syntax in template for "${answerKey}" prompt answer:\n${error}`,
+                  );
+                }
+
+                try {
                   if (Array.isArray(answerValue)) {
                     answerValue = answerValue.map((answerValueElement) =>
-                      getLinkMarkup(this, answerValueElement),
+                      compiledTemplate({ answer: answerValueElement }),
                     );
                   } else {
-                    answerValue = getLinkMarkup(this, answerValue);
+                    answerValue = compiledTemplate({ answer: answerValue });
                   }
-
-                  break;
+                } catch (error) {
+                  throw new Error(
+                    `Failed to expand template for "${answerKey}" prompt answer:\n${error}`,
+                  );
                 }
-                case "sort": {
-                  if (Array.isArray(answerValue)) {
-                    answerValue.sort();
-                  } else {
-                    throw new Error(
-                      `"sort" processor used with non-array "${answerKey}" prompt answer`,
-                    );
-                  }
-                  break;
-                }
-                case "template": {
-                  let compiledTemplate;
-                  try {
-                    compiledTemplate = ejsCompile(processor.template);
-                  } catch (error) {
-                    throw new Error(
-                      `Invalid syntax in template for "${answerKey}" prompt answer:\n${error}`,
-                    );
-                  }
-
-                  try {
-                    if (Array.isArray(answerValue)) {
-                      answerValue = answerValue.map((answerValueElement) =>
-                        compiledTemplate({ answer: answerValueElement }),
-                      );
-                    } else {
-                      answerValue = compiledTemplate({ answer: answerValue });
-                    }
-                  } catch (error) {
-                    throw new Error(
-                      `Failed to expand template for "${answerKey}" prompt answer:\n${error}`,
-                    );
-                  }
-                  break;
-                }
-                // This case can never be reached under normal operation because valid processor values are enforced by
-                // the prompts data validation.
-                /* istanbul ignore next */
-                default: {
-                  throw new Error(`Unknown processor ${processor.processor}`);
-                }
+                break;
               }
-            });
-          }
+              // This case can never be reached under normal operation because valid processor values are enforced by
+              // the prompts data validation.
+              /* istanbul ignore next */
+              default: {
+                throw new Error(`Unknown processor ${processor.processor}`);
+              }
+            }
+          });
 
           if (promptData.usages.includes("content")) {
             this.#templateContext[answerKey] = answerValue;

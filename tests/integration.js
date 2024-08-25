@@ -17,6 +17,13 @@ const documentPrimaryFileName = "doc.md";
 const documentSupplementTitle = "Foo Supplement";
 const documentSupplementFilename = "foo-supplement.md";
 
+// Function for preparing test folder for running a "supplement" operation.
+function supplementDoInDirFunction(destinationFolderPath) {
+  mkdirSync(path.join(destinationFolderPath, kbPath, documentSlug), {
+    recursive: true,
+  });
+}
+
 // Clean the temporary test folder after each test.
 afterAll(async () => {
   await result.cleanup();
@@ -339,6 +346,16 @@ describe("valid configuration", () => {
       },
     },
     {
+      description: "prompt data processors default",
+      testdataFolderName: "prompt-data-processors-default",
+      answers: {
+        kbDocumentOperation: "new",
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      doInDirFunction: () => {},
+    },
+    {
       description: "processor chain",
       testdataFolderName: "processor-chain",
       answers: {
@@ -381,7 +398,7 @@ describe("valid configuration", () => {
     },
     {
       description: "join processor, default separator",
-      testdataFolderName: "join-processor",
+      testdataFolderName: "join-processor-default-separator",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -450,6 +467,27 @@ describe("valid configuration", () => {
       doInDirFunction: () => {},
     },
     {
+      description: 'prompt data operations default, "new" operation',
+      testdataFolderName: "prompt-data-operations-default",
+      answers: {
+        kbDocumentOperation: "new",
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      doInDirFunction: () => {},
+    },
+    {
+      description: 'prompt data operations default, "supplement" operation',
+      testdataFolderName: "prompt-data-operations-default",
+      answers: {
+        kbDocumentOperation: "supplement",
+        kbDocumentTitle: documentTitle,
+        kbDocumentSupplementTitle: documentSupplementTitle,
+        fooPrompt: "fooValue",
+      },
+      doInDirFunction: supplementDoInDirFunction,
+    },
+    {
       description: "document supplement",
       testdataFolderName: "supplement",
       answers: {
@@ -460,11 +498,7 @@ describe("valid configuration", () => {
         newOperationPrompt: "newOperationPrompt Value",
         allOperationPrompt: "allOperationPrompt Value",
       },
-      doInDirFunction: (destinationFolderPath) => {
-        mkdirSync(path.join(destinationFolderPath, kbPath, documentSlug), {
-          recursive: true,
-        });
-      },
+      doInDirFunction: supplementDoInDirFunction,
     },
   ])(
     "with $description",
