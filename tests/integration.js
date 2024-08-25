@@ -32,19 +32,19 @@ afterAll(async () => {
 describe("invalid configuration", () => {
   describe.each([
     {
-      description: "nonexistent prompts data path",
-      testdataFolderName: "nonexistent-prompts-data",
+      description: "nonexistent prompts configuration path",
+      testdataFolderName: "nonexistent-prompts-configuration",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
       },
       exceptionMessagePattern: path.join(
         testDataPath,
-        "nonexistent-prompts-data",
+        "nonexistent-prompts-configuration",
         "nonexistent.js",
       ),
       localConfigData: {
-        promptsDataFilename: "nonexistent.js",
+        promptsConfigurationFilename: "nonexistent.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
@@ -62,7 +62,7 @@ describe("invalid configuration", () => {
         "nonexistent.ejs",
       )}`,
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "nonexistent.ejs",
         documentSupplementTemplateFilename: "document-supplement.ejs",
       },
@@ -80,42 +80,43 @@ describe("invalid configuration", () => {
         "nonexistent.ejs",
       )}`,
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "document-primary.ejs",
         documentSupplementTemplateFilename: "nonexistent.ejs",
       },
     },
     {
       description: "data file that doesn't provide a default export",
-      testdataFolderName: "no-prompts-data-default-export",
+      testdataFolderName: "no-prompts-configuration-default-export",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
       },
       exceptionMessagePattern: "does not provide a default export",
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
     },
     {
-      description: "prompts data that is not an array",
-      testdataFolderName: "prompts-data-not-array",
+      description: "prompts configuration that is not an array",
+      testdataFolderName: "prompts-configuration-not-array",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
       },
       exceptionMessagePattern: "must be array",
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
     },
     {
-      description: "prompt data missing required frontMatterPath property",
-      testdataFolderName: "prompt-data-missing-frontMatterPath",
+      description:
+        "prompt configuration missing required frontMatterPath property",
+      testdataFolderName: "prompt-configuration-missing-frontMatterPath",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -123,7 +124,7 @@ describe("invalid configuration", () => {
       },
       exceptionMessagePattern: "missing frontMatterPath",
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
@@ -139,7 +140,7 @@ describe("invalid configuration", () => {
       exceptionMessagePattern:
         '"join" processor used with non-array "fooPrompt"',
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
@@ -155,7 +156,7 @@ describe("invalid configuration", () => {
       exceptionMessagePattern:
         '"sort" processor used with non-array "fooPrompt"',
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
@@ -170,7 +171,7 @@ describe("invalid configuration", () => {
       },
       exceptionMessagePattern: 'Invalid syntax in template for "fooPrompt"',
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
@@ -185,7 +186,7 @@ describe("invalid configuration", () => {
       },
       exceptionMessagePattern: 'Failed to expand template for "fooPrompt"',
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
@@ -200,7 +201,7 @@ describe("invalid configuration", () => {
       },
       exceptionMessagePattern: `Target document "${documentTitle}" for the supplement file was not found.`,
       localConfigData: {
-        promptsDataFilename: "prompts.js",
+        promptsConfigurationFilename: "prompts.js",
         documentPrimaryTemplateFilename: "template.ejs",
         documentSupplementTemplateFilename: "template.ejs",
       },
@@ -224,9 +225,9 @@ describe("invalid configuration", () => {
           localConfigData.documentSupplementTemplateFilename,
         ),
         kbPath,
-        promptsDataPath: path.join(
+        promptsConfigurationPath: path.join(
           thisTestDataPath,
-          localConfigData.promptsDataFilename,
+          localConfigData.promptsConfigurationFilename,
         ),
       };
 
@@ -246,7 +247,7 @@ describe("valid configuration", () => {
   describe.each([
     {
       description: "no user prompts",
-      testdataFolderName: "no-prompts-data",
+      testdataFolderName: "no-prompts-configuration",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -254,8 +255,8 @@ describe("valid configuration", () => {
       doInDirFunction: () => {},
     },
     {
-      description: "prompt data usages default",
-      testdataFolderName: "prompt-data-usages-default",
+      description: "prompt configuration usages default",
+      testdataFolderName: "prompt-configuration-usages-default",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -265,7 +266,7 @@ describe("valid configuration", () => {
     },
     {
       description: "user prompt with content usage",
-      testdataFolderName: "content-usage-prompt-data",
+      testdataFolderName: "content-usage-prompt-configuration",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -275,7 +276,7 @@ describe("valid configuration", () => {
     },
     {
       description: "user prompt with front matter usage, array path",
-      testdataFolderName: "array-path-front-matter-usage-prompt-data",
+      testdataFolderName: "array-path-front-matter-usage-prompt-configuration",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -286,7 +287,7 @@ describe("valid configuration", () => {
     },
     {
       description: "object prompt with front matter usage, object path",
-      testdataFolderName: "object-path-front-matter-usage-prompt-data",
+      testdataFolderName: "object-path-front-matter-usage-prompt-configuration",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -297,7 +298,8 @@ describe("valid configuration", () => {
     },
     {
       description: "object prompt with front matter usage, answer array",
-      testdataFolderName: "front-matter-usage-answer-array-prompt-data",
+      testdataFolderName:
+        "front-matter-usage-answer-array-prompt-configuration",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -308,7 +310,7 @@ describe("valid configuration", () => {
     },
     {
       description: "user prompt with content+front matter usages",
-      testdataFolderName: "content-front-matter-usages-prompt-data",
+      testdataFolderName: "content-front-matter-usages-prompt-configuration",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -378,8 +380,8 @@ describe("valid configuration", () => {
       },
     },
     {
-      description: "prompt data processors default",
-      testdataFolderName: "prompt-data-processors-default",
+      description: "prompt configuration processors default",
+      testdataFolderName: "prompt-configuration-processors-default",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -499,8 +501,8 @@ describe("valid configuration", () => {
       doInDirFunction: () => {},
     },
     {
-      description: 'prompt data operations default, "new" operation',
-      testdataFolderName: "prompt-data-operations-default",
+      description: 'prompt configuration operations default, "new" operation',
+      testdataFolderName: "prompt-configuration-operations-default",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
@@ -509,8 +511,9 @@ describe("valid configuration", () => {
       doInDirFunction: () => {},
     },
     {
-      description: 'prompt data operations default, "supplement" operation',
-      testdataFolderName: "prompt-data-operations-default",
+      description:
+        'prompt configuration operations default, "supplement" operation',
+      testdataFolderName: "prompt-configuration-operations-default",
       answers: {
         kbDocumentOperation: "supplement",
         kbDocumentTitle: documentTitle,
@@ -552,7 +555,7 @@ describe("valid configuration", () => {
           "document-supplement.ejs",
         ),
         kbPath,
-        promptsDataPath: path.join(thisTestDataPath, "prompts.js"),
+        promptsConfigurationPath: path.join(thisTestDataPath, "prompts.js"),
         sortFrontMatter,
         universalFrontMatter,
       };
