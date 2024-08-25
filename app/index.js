@@ -68,6 +68,7 @@ export default class extends Generator {
     const promptDataDefaults = {
       operations: ["new", "supplement"],
       processors: [],
+      usages: ["content"],
     };
 
     const promptDataProcessorDefaults = [

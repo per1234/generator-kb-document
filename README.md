@@ -218,6 +218,8 @@ The prompt should be presented when the user selected ["**Add a supplement file 
 
 #### `usages`
 
+**Default value:** `["content"]`
+
 The `usages` property is an array of strings which specify how the generator should make the prompt answer available for use in the [document file template](#document-file-template):
 
 ```text
