@@ -10,6 +10,15 @@
       "inquirer": {
         "type": "object"
       },
+      "operations": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["new", "supplement"]
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
       "usages": {
         "type": "array",
         "items": {

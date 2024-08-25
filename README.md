@@ -22,7 +22,7 @@
 [![Test JavaScript status](https://github.com/per1234/generator-kb-document/actions/workflows/test-javascript-jest-task.yml/badge.svg)](https://github.com/per1234/generator-kb-document/actions/workflows/test-javascript-jest-task.yml)
 [![Code coverage](https://codecov.io/gh/per1234/generator-kb-document/graph/badge.svg?token=I2HAZ6OeMs)](https://codecov.io/gh/per1234/generator-kb-document)
 
-This is a [**Yeoman**](https://yeoman.io/) generator that creates a new document in a [**Markdown**](https://daringfireball.net/projects/markdown/) file-based knowledge base.
+This is a [**Yeoman**](https://yeoman.io/) generator that creates [new documents](#create-new-document) and [supplemental files](#add-a-document-supplement-file) in a [**Markdown**](https://daringfireball.net/projects/markdown/) file-based knowledge base.
 
 The generator can be configured to prompt the user for arbitrary information, which can be referenced in the document template in order to populate the created document with basic content.
 
@@ -40,19 +40,23 @@ Project website: https://github.com/per1234/generator-kb-document
     - [`kbPath`](#kbpath)
     - [`promptsDataPath`](#promptsdatapath)
     - [`sortFrontMatter`](#sortfrontmatter)
-    - [`templatePath`](#templatepath)
+    - [`documentPrimaryTemplatePath`](#documentprimarytemplatepath)
+    - [`documentSupplementTemplatePath`](#documentsupplementtemplatepath)
     - [`universalFrontMatter`](#universalfrontmatter)
   - [Prompts Data File](#prompts-data-file)
     - [`inquirer`](#inquirer)
+    - [`operations`](#operations)
     - [`usages`](#usages)
     - [`frontMatterPath`](#frontmatterpath)
     - [`processors`](#processors)
     - [JSON Schema](#json-schema)
   - [Document File Template](#document-file-template)
-    - [Document Title](#document-title)
+    - [Built-in Prompts](#built-in-prompts)
     - [Prompts from Prompts Data File](#prompts-from-prompts-data-file)
   - [Answer Arrays](#answer-arrays-1)
 - [Generator Usage](#generator-usage)
+  - [Create New Document](#create-new-document)
+  - [Add a Document Supplement File](#add-a-document-supplement-file)
 - [Example](#example)
 - [Knowledge Base Structure](#knowledge-base-structure)
   - [File Structure](#file-structure)
@@ -102,9 +106,13 @@ The path of the generator [prompts data file](#prompts-data-file).
 
 Boolean value to configure whether the items in the [generated front matter document](#front-matter) should be sorted in lexicographical order.
 
-#### `templatePath`
+#### `documentPrimaryTemplatePath`
 
-The path of the knowledge base [document file template](#document-file-template).
+The path of the [template](#document-file-template) for the knowledge base document primary file.
+
+#### `documentSupplementTemplatePath`
+
+The path of the [template](#document-file-template)for knowledge base document supplemental files.
 
 #### `universalFrontMatter`
 
@@ -172,6 +180,35 @@ https://github.com/SBoudrias/Inquirer.js/tree/main/packages/prompts#prompts
   <...>
 },
 ```
+
+#### `operations`
+
+**Default value:** `["new", "supplement"]`
+
+The `operations` property is an array of strings which specify on which operations the generator should present the prompt to the user.
+
+The user
+
+```text
+{
+  inquirer: {
+    <Inquirer Question object>
+  },
+  operations: [
+    "new",
+    "supplement",
+  ],
+  <...>
+}
+```
+
+##### `new`
+
+The prompt should be presented when the user selected ["**Create new document**"](#create-new-document) from the built-in "**Which operation would you like to perform?**" prompt.
+
+##### `supplement`
+
+The prompt should be presented when the user selected ["**Add a supplement file to an existing document**"](#add-a-document-supplement-file) from the built-in "**Which operation would you like to perform?**" prompt.
 
 <a name="prompt-data-usages-property"></a>
 
@@ -444,9 +481,24 @@ https://ejs.co/
 
 For a better understanding of the document file template format and functionality, see the [**Example** section](#example).
 
-#### Document Title
+#### Built-in Prompts
 
-In addition to the custom prompts the user defines in their [prompts data file](#prompts-data-file), the generator always displays a "**Knowledge base document title**" prompt. The reason for this "built-in" prompt is that the generator bases the [folder name](#file-structure) of the new document on the title.
+In addition to the custom prompts the user defines in their [prompts data file](#prompts-data-file), the generator always displays a series of prompts for information that is used by the generator.
+
+The answers to these "built-in" prompts are available for use in the template just the same as the user-defined prompts.
+
+##### Operation
+
+The answer to the "**Which operation would you like to perform?**" prompt is available for use in the template via the `kbDocumentOperation` variable:
+
+```ejs
+<%- kbDocumentOperation %>
+```
+
+- If the user chose the "[**Create new document**](#create-new-document)" option, the value will be `new`.
+- If the user chose the "[**Add a supplement file to an existing document**](#add-a-document-supplement-file)" option, the value will be `supplement`.
+
+##### Document Title
 
 The answer to the "**Knowledge base document title**" prompt is available for use in the template via the `kbDocumentTitle` variable:
 
@@ -458,6 +510,20 @@ It is recommended to use this as the document's H1 [heading](https://www.markdow
 
 ```ejs
 # <%- kbDocumentTitle %>
+```
+
+##### Supplement Title
+
+If the user selects the "**Add a supplement file to an existing document**" option from the "**Which operation would you like to perform?**" prompt, they will also be presented with a "**Supplement title**" prompt. The answer to this prompt is available for use in the template via the `kbDocumentSupplementTitle` variable:
+
+```ejs
+<%- kbDocumentSupplementTitle %>
+```
+
+It is recommended to use this as the document supplement file's H1 [heading](https://www.markdownguide.org/basic-syntax/#headings):
+
+```ejs
+# <%- kbDocumentSupplementTitle %>
 ```
 
 #### Prompts from Prompts Data File
@@ -509,13 +575,33 @@ There are special considerations for handling this distinct answer data type:
 
 ## Generator Usage
 
+### Create New Document
+
+This procedure is used to add a new document to the knowledge base.
+
 1. Run the following command from a terminal in a path under the knowledge base project:
    ```text
    npx yo @per1234/kb-document
    ```
+1. The "**Which operation would you like to perform?**" prompt will be displayed in the terminal. Select the "**Create new document**" option and press the <kbd>**Enter**</kbd> key.
 1. The "**Knowledge base document title**" prompt will be displayed in the terminal. Type the title you want to use for the new knowledge base document and press the <kbd>**Enter**</kbd> key.
 1. If you defined additional prompts in the [prompts data file](#prompts-data-file), they will be presented in turn. Answer these prompts.
 1. At the end of the process you will see an "**A new document has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
+   You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
+1. Manually fill in the document content.
+
+### Add a Document Supplement File
+
+This procedure is used to add a supplement file to an existing knowledge base document. Knowledge base document supplements are used to split lengthy document content into multiple files (as opposed to having it all in the document primary file).
+
+1. Run the following command from a terminal in a path under the knowledge base project:
+   ```text
+   npx yo @per1234/kb-document
+   ```
+1. The "**Which operation would you like to perform?**" prompt will be displayed in the terminal. Select the "**Add a supplement file to an existing document**" option and press the <kbd>**Enter**</kbd> key.
+1. The "**Knowledge base document title**" prompt will be displayed in the terminal. Type the title of the existing knowledge base document to which you want to add a supplement file and press the <kbd>**Enter**</kbd> key.
+1. If you defined additional prompts in the [prompts data file](#prompts-data-file), they will be presented in turn. Answer these prompts.
+1. At the end of the process you will see an "**A knowledge base document supplement file has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
    You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
 1. Manually fill in the document content.
 
@@ -647,13 +733,15 @@ The knowledge base is composed of a collection of files, which have the followin
 <knowledge base folder>/
 ├── <document title slug>/
 │   ├── doc.md
+│   ├── <supplement title slug>.md
 │   ...
 ...
 ```
 
 - **\<knowledge base folder\>/**: This folder is the container for all the knowledge base content files.
 - **\<document title slug\>/**: This folder is the container for all the document content files. The folder name is a [normalized](https://github.com/Trott/slug#example) version of the document title.
-- **doc.md**: The primary document file, written in the [**Markdown** markup language](https://www.markdownguide.org/).
+- **doc.md**: The knowledge base document primary file, written in the [**Markdown** markup language](https://www.markdownguide.org/).
+- **\<supplement title slug\>.md**: A knowledge base document supplement file, the name of which is a normalized version of the supplement title. Document supplements are used to split lengthy document content into multiple files.
 
 ### Informational Structure
 
