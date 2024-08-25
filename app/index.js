@@ -47,6 +47,8 @@ export default class extends Generator {
 
   #documentFolderPath;
 
+  #generatorConfiguration;
+
   #templateContext;
 
   #templatePath;
@@ -58,13 +60,19 @@ export default class extends Generator {
   #promptsData;
 
   initializing() {
-    this.config.defaults({
+    const generatorConfigurationDefaults = {
       sortFrontMatter: true,
       universalFrontMatter: {},
-    });
+    };
+
+    // Use defaults for any configuration property not set by user in generator configuration.
+    this.#generatorConfiguration = Object.assign(
+      generatorConfigurationDefaults,
+      this.config.getAll(),
+    );
 
     // Validate configuration.
-    const promptsDataPath = this.config.get("promptsDataPath");
+    const { promptsDataPath } = this.#generatorConfiguration;
     const absolutePromptsDataPath = this.destinationPath(promptsDataPath);
     if (!existsSync(absolutePromptsDataPath)) {
       return Promise.reject(
@@ -74,9 +82,7 @@ export default class extends Generator {
       );
     }
 
-    const documentPrimaryTemplatePath = this.config.get(
-      "documentPrimaryTemplatePath",
-    );
+    const { documentPrimaryTemplatePath } = this.#generatorConfiguration;
     const absoluteDocumentPrimaryTemplatePath = this.destinationPath(
       documentPrimaryTemplatePath,
     );
@@ -90,9 +96,7 @@ export default class extends Generator {
       );
     }
 
-    const documentSupplementTemplatePath = this.config.get(
-      "documentSupplementTemplatePath",
-    );
+    const { documentSupplementTemplatePath } = this.#generatorConfiguration;
     const absoluteDocumentSupplementTemplatePath = this.destinationPath(
       documentSupplementTemplatePath,
     );
@@ -227,7 +231,7 @@ export default class extends Generator {
         // Validate the document title answer immediately so the user doesn't waste time answering all the additional prompts.
         const documentFolderName = slug(this.#answers.kbDocumentTitle);
         this.#documentFolderPath = this.destinationPath(
-          this.config.get("kbPath"),
+          this.#generatorConfiguration.kbPath,
           documentFolderName,
         );
         if (
@@ -280,7 +284,7 @@ export default class extends Generator {
   configuring() {
     // Process answers
     this.#templateContext = [];
-    let frontMatterObject = this.config.get("universalFrontMatter");
+    let frontMatterObject = this.#generatorConfiguration.universalFrontMatter;
     Object.keys(this.#answers).forEach((answerKey) => {
       this.#promptsData.forEach((promptData) => {
         // Determine whether this is the prompt data for the answer.
@@ -444,7 +448,7 @@ export default class extends Generator {
       });
     });
 
-    const sortFrontMatter = this.config.get("sortFrontMatter");
+    const { sortFrontMatter } = this.#generatorConfiguration;
     if (sortFrontMatter) {
       frontMatterObject = sortThing(frontMatterObject);
     }
@@ -464,7 +468,8 @@ export default class extends Generator {
       case "new": {
         this.#filename = documentPrimaryFileName;
 
-        this.#templatePath = this.config.get("documentPrimaryTemplatePath");
+        this.#templatePath =
+          this.#generatorConfiguration.documentPrimaryTemplatePath;
 
         break;
       }
@@ -472,7 +477,8 @@ export default class extends Generator {
         const fileSlug = slug(this.#answers.kbDocumentSupplementTitle);
         this.#filename = `${fileSlug}.md`;
 
-        this.#templatePath = this.config.get("documentSupplementTemplatePath");
+        this.#templatePath =
+          this.#generatorConfiguration.documentSupplementTemplatePath;
 
         break;
       }
