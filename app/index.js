@@ -135,6 +135,8 @@ export default class extends Generator {
         );
       }
 
+      this.#promptsData = promptsData.default;
+
       // Validate prompts data format.
       // Validation using JSON schema.
       const moduleFilePath = fileURLToPath(import.meta.url);
@@ -150,7 +152,7 @@ export default class extends Generator {
       const ajv = new Ajv();
       const schemaValidator = ajv.compile(schema);
 
-      const valid = schemaValidator(promptsData.default);
+      const valid = schemaValidator(this.#promptsData);
       if (!valid) {
         const validationErrors = JSON.stringify(
           schemaValidator.errors,
@@ -167,7 +169,7 @@ export default class extends Generator {
       // Perform additional validations that are not possible via the JSON schema.
       let missingFrontMatterPath = false;
       let missingFrontMatterPathName = "";
-      promptsData.default.forEach((promptData) => {
+      this.#promptsData.forEach((promptData) => {
         if (
           promptData.usages.includes("front matter") &&
           !("frontMatterPath" in promptData)
@@ -186,7 +188,7 @@ export default class extends Generator {
       }
 
       // Use defaults for prompt data properties not set by user in prompts data file.
-      this.#promptsData = promptsData.default.map((promptData) => {
+      this.#promptsData = this.#promptsData.map((promptData) => {
         const promptDataWithDefaults = {
           ...promptDataDefaults,
           ...promptData,
