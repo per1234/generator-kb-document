@@ -185,7 +185,6 @@ export default class extends Generator {
         );
       }
 
-      this.#promptsData = promptsData.default;
       // Use defaults for prompt data properties not set by user in prompts data file.
       this.#promptsData = promptsData.default.map((promptData) => {
         const promptDataWithDefaults = {
