@@ -6,6 +6,7 @@
   "type": "array",
   "items": {
     "type": "object",
+    "additionalProperties": false,
     "properties": {
       "inquirer": {
         "type": "object"
@@ -38,6 +39,7 @@
           "type": "object",
           "oneOf": [
             {
+              "additionalProperties": false,
               "properties": {
                 "processor": {
                   "const": "csv"
@@ -50,6 +52,7 @@
               "required": ["processor"]
             },
             {
+              "additionalProperties": false,
               "properties": {
                 "processor": {
                   "const": "join"
@@ -61,6 +64,7 @@
               "required": ["processor"]
             },
             {
+              "additionalProperties": false,
               "properties": {
                 "processor": {
                   "const": "kb-link"
@@ -72,6 +76,7 @@
               "required": ["processor"]
             },
             {
+              "additionalProperties": false,
               "properties": {
                 "processor": {
                   "const": "sort"
@@ -80,6 +85,7 @@
               "required": ["processor"]
             },
             {
+              "additionalProperties": false,
               "properties": {
                 "processor": {
                   "const": "template"
