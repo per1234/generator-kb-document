@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 import { stringify as yamlStringify } from "yaml";
 import Generator from "yeoman-generator";
 
-const primaryDocumentFilename = "doc.md";
+const documentPrimaryFileName = "doc.md";
 
 /* eslint-disable no-use-before-define */
 function sortThing(thing) {
@@ -45,7 +45,13 @@ function sortObjectRecursively(object) {
 export default class extends Generator {
   #answers;
 
+  #documentFolderPath;
+
   #templateContext;
+
+  #templatePath;
+
+  #filename;
 
   #filePath;
 
@@ -68,12 +74,34 @@ export default class extends Generator {
       );
     }
 
-    const templatePath = this.config.get("templatePath");
-    const absoluteTemplatePath = this.destinationPath(templatePath);
-    if (!existsSync(this.destinationPath(absoluteTemplatePath))) {
+    const documentPrimaryTemplatePath = this.config.get(
+      "documentPrimaryTemplatePath",
+    );
+    const absoluteDocumentPrimaryTemplatePath = this.destinationPath(
+      documentPrimaryTemplatePath,
+    );
+    if (
+      !existsSync(this.destinationPath(absoluteDocumentPrimaryTemplatePath))
+    ) {
       return Promise.reject(
         new Error(
-          `Template file was not found at the location specified in .yo-rc.json:\n${absoluteTemplatePath}`,
+          `Document primary template file was not found at the location specified in .yo-rc.json:\n${absoluteDocumentPrimaryTemplatePath}`,
+        ),
+      );
+    }
+
+    const documentSupplementTemplatePath = this.config.get(
+      "documentSupplementTemplatePath",
+    );
+    const absoluteDocumentSupplementTemplatePath = this.destinationPath(
+      documentSupplementTemplatePath,
+    );
+    if (
+      !existsSync(this.destinationPath(absoluteDocumentSupplementTemplatePath))
+    ) {
+      return Promise.reject(
+        new Error(
+          `Document supplement template file was not found at the location specified in .yo-rc.json:\n${absoluteDocumentSupplementTemplatePath}`,
         ),
       );
     }
@@ -144,26 +172,109 @@ export default class extends Generator {
   }
 
   prompting() {
-    const builtInPrompts = [
+    const universalBuiltInPrompts = [
+      {
+        inquirer: {
+          type: "rawlist",
+          name: "kbDocumentOperation",
+          message: "Which operation would you like to perform?",
+          choices: [
+            {
+              name: "Create new document",
+              value: "new",
+            },
+            {
+              name: "Add a supplement file to an existing document",
+              value: "supplement",
+            },
+          ],
+        },
+        operations: ["new", "supplement"],
+        usages: ["content"],
+      },
       {
         inquirer: {
           type: "input",
           name: "kbDocumentTitle",
           message: "Knowledge base document title:",
         },
+        operations: ["new", "supplement"],
         usages: ["content"],
       },
     ];
 
-    this.#promptsData = builtInPrompts.concat(this.#promptsData);
+    const supplementBuiltInPrompts = [
+      {
+        inquirer: {
+          type: "input",
+          name: "kbDocumentSupplementTitle",
+          message: "Supplement title:",
+        },
+        operations: ["supplement"],
+        usages: ["content"],
+      },
+    ];
 
-    const inquirerPrompts = this.#promptsData.map(
+    const universalBuiltInInquirerPrompts = universalBuiltInPrompts.map(
       (promptData) => promptData.inquirer,
     );
 
-    return this.prompt(inquirerPrompts).then((answers) => {
-      this.#answers = answers;
-    });
+    // Present the universal prompts.
+    const promptsPromise = this.prompt(universalBuiltInInquirerPrompts).then(
+      (universalBuiltInAnswers) => {
+        this.#answers = universalBuiltInAnswers;
+
+        // Validate the document title answer immediately so the user doesn't waste time answering all the additional prompts.
+        const documentFolderName = slug(this.#answers.kbDocumentTitle);
+        this.#documentFolderPath = this.destinationPath(
+          this.config.get("kbPath"),
+          documentFolderName,
+        );
+        if (
+          this.#answers.kbDocumentOperation === "supplement" &&
+          !existsSync(this.#documentFolderPath)
+        ) {
+          return Promise.reject(
+            new Error(
+              `Target document "${this.#answers.kbDocumentTitle}" for the supplement file was not found.`,
+            ),
+          );
+        }
+
+        const operationConditionalPrompts = supplementBuiltInPrompts.concat(
+          this.#promptsData,
+        );
+        const operationFilteredPrompts = operationConditionalPrompts.filter(
+          (prompt) => {
+            if (!("operations" in prompt)) {
+              // Default to presenting the prompt for all operations.
+              return true;
+            }
+
+            return prompt.operations.includes(
+              this.#answers.kbDocumentOperation,
+            );
+          },
+        );
+        this.#promptsData = universalBuiltInPrompts.concat(
+          operationFilteredPrompts,
+        );
+
+        const operationFilteredInquirerPrompts = operationFilteredPrompts.map(
+          (promptData) => promptData.inquirer,
+        );
+
+        // Present the additional prompts.
+        return this.prompt(operationFilteredInquirerPrompts).then(
+          (operationFilteredAnswers) => {
+            // Merge the answers to the additional prompts into the the universal prompt answers.
+            Object.assign(this.#answers, operationFilteredAnswers);
+          },
+        );
+      },
+    );
+
+    return promptsPromise;
   }
 
   configuring() {
@@ -227,7 +338,7 @@ export default class extends Generator {
                     // POSIX compliant paths must be used in the link, regardless of the host architecture.
                     const targetPathKbRelativePosix = pathPosixJoin(
                       targetDocumentFolderName,
-                      primaryDocumentFilename,
+                      documentPrimaryFileName,
                     );
                     // Just in case Windows systems are uptight about POSIX compliant path separators, normalize it to
                     // the native path separator for use in the filesystem operation.
@@ -349,27 +460,69 @@ export default class extends Generator {
     this.#templateContext.kbDocumentFrontMatter = frontMatterDocument;
 
     // Determine path for generated file.
-    const documentFolderName = slug(this.#answers.kbDocumentTitle);
-    const documentFolderPath = this.destinationPath(
-      this.config.get("kbPath"),
-      documentFolderName,
-    );
+    switch (this.#answers.kbDocumentOperation) {
+      case "new": {
+        this.#filename = documentPrimaryFileName;
 
-    const filename = "doc.md";
-    this.#filePath = this.destinationPath(documentFolderPath, filename);
+        this.#templatePath = this.config.get("documentPrimaryTemplatePath");
+
+        break;
+      }
+      case "supplement": {
+        const fileSlug = slug(this.#answers.kbDocumentSupplementTitle);
+        this.#filename = `${fileSlug}.md`;
+
+        this.#templatePath = this.config.get("documentSupplementTemplatePath");
+
+        break;
+      }
+      // This case can never be reached under normal operation because the operation is set by a built-in prompt that
+      // only offers valid values.
+      /* istanbul ignore next */
+      default: {
+        throw new Error(
+          `Unknown operation: ${this.#answers.kbDocumentOperation}.`,
+        );
+      }
+    }
+    this.#filePath = this.destinationPath(
+      this.#documentFolderPath,
+      this.#filename,
+    );
   }
 
   writing() {
-    this.fs.copyTpl(
-      this.config.get("templatePath"),
-      this.#filePath,
-      this.#templateContext,
-    );
+    this.fs.copyTpl(this.#templatePath, this.#filePath, this.#templateContext);
   }
 
   ending() {
-    this.log(
-      `\n\nA new knowledge base document has been created at ${this.#filePath}\n\n`,
-    );
+    switch (this.#answers.kbDocumentOperation) {
+      case "new": {
+        this.log(
+          `\n\nA new knowledge base document has been created at ${this.#filePath}\n\n`,
+        );
+
+        break;
+      }
+      case "supplement": {
+        this.log(
+          `\n\nA knowledge base document supplement file has been created at ${this.#filePath}`,
+        );
+        this.log("\nMarkup for adding link in document primary file:");
+        this.log(
+          `[**${this.#answers.kbDocumentSupplementTitle}**](${this.#filename})\n\n`,
+        );
+
+        break;
+      }
+      // This case can never be reached under normal operation because the operation is set by a built-in prompt that
+      // only offers valid values.
+      /* istanbul ignore next */
+      default: {
+        throw new Error(
+          `Unknown operation: ${this.#answers.kbDocumentOperation}.`,
+        );
+      }
+    }
   }
 }
