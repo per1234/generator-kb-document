@@ -307,6 +307,18 @@ describe("valid configuration", () => {
       doInDirFunction: () => {},
     },
     {
+      description: "front matter sorting default",
+      testdataFolderName: "generator-configuration-sortfrontmatter-default",
+      answers: {
+        kbDocumentOperation: "new",
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+        barPrompt: "barValue",
+        bazPrompt: ["qwerChoice", "asdfChoice"],
+      },
+      doInDirFunction: () => {},
+    },
+    {
       description: "front matter sorting disabled",
       testdataFolderName: "unsorted-front-matter",
       answers: {
@@ -331,6 +343,16 @@ describe("valid configuration", () => {
       },
       doInDirFunction: () => {},
       sortFrontMatter: true,
+    },
+    {
+      description: "universal front matter default",
+      testdataFolderName:
+        "generator-configuration-universalfrontmatter-default",
+      answers: {
+        kbDocumentOperation: "new",
+        kbDocumentTitle: documentTitle,
+      },
+      doInDirFunction: () => {},
     },
     {
       description: "universal front matter",
