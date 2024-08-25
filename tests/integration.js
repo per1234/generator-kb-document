@@ -398,7 +398,7 @@ describe("valid configuration", () => {
     },
     {
       description: "join processor, default separator",
-      testdataFolderName: "join-processor",
+      testdataFolderName: "join-processor-default-separator",
       answers: {
         kbDocumentOperation: "new",
         kbDocumentTitle: documentTitle,
