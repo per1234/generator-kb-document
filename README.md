@@ -104,6 +104,8 @@ The path of the generator [prompts data file](#prompts-data-file).
 
 #### `sortFrontMatter`
 
+**Default value:** `true`
+
 Boolean value to configure whether the items in the [generated front matter document](#front-matter) should be sorted in lexicographical order.
 
 #### `documentPrimaryTemplatePath`
@@ -115,6 +117,8 @@ The path of the [template](#document-file-template) for the knowledge base docum
 The path of the [template](#document-file-template)for knowledge base document supplemental files.
 
 #### `universalFrontMatter`
+
+**Default value:** `{}`
 
 Object defining data that should be added to the front matter of every document the generator creates.
 
