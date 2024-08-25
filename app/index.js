@@ -57,7 +57,7 @@ export default class extends Generator {
 
   #filePath;
 
-  #promptsData;
+  #promptsConfiguration;
 
   initializing() {
     const generatorConfigurationDefaults = {
@@ -65,13 +65,13 @@ export default class extends Generator {
       universalFrontMatter: {},
     };
 
-    const promptDataDefaults = {
+    const promptConfigurationDefaults = {
       operations: ["new", "supplement"],
       processors: [],
       usages: ["content"],
     };
 
-    const promptDataProcessorDefaults = [
+    const promptConfigurationProcessorDefaults = [
       {
         processor: "csv",
         delimiter: ",",
@@ -89,12 +89,14 @@ export default class extends Generator {
     );
 
     // Validate configuration.
-    const { promptsDataPath } = this.#generatorConfiguration;
-    const absolutePromptsDataPath = this.destinationPath(promptsDataPath);
-    if (!existsSync(absolutePromptsDataPath)) {
+    const { promptsConfigurationPath } = this.#generatorConfiguration;
+    const absolutePromptsConfigurationPath = this.destinationPath(
+      promptsConfigurationPath,
+    );
+    if (!existsSync(absolutePromptsConfigurationPath)) {
       return Promise.reject(
         new Error(
-          `Prompts data file was not found at the location specified in .yo-rc.json:\n${absolutePromptsDataPath}`,
+          `Prompts configuration file was not found at the location specified in .yo-rc.json:\n${absolutePromptsConfigurationPath}`,
         ),
       );
     }
@@ -127,24 +129,28 @@ export default class extends Generator {
       );
     }
 
-    const promptsDataPathUrl = pathToFileURL(absolutePromptsDataPath);
+    const promptsConfigurationPathUrl = pathToFileURL(
+      absolutePromptsConfigurationPath,
+    );
 
-    return import(promptsDataPathUrl).then((promptsData) => {
-      if (!("default" in promptsData)) {
+    return import(promptsConfigurationPathUrl).then((promptsConfiguration) => {
+      if (!("default" in promptsConfiguration)) {
         return Promise.reject(
-          new Error("Prompts data file does not provide a default export"),
+          new Error(
+            "Prompts configuration file does not provide a default export",
+          ),
         );
       }
 
-      this.#promptsData = promptsData.default;
+      this.#promptsConfiguration = promptsConfiguration.default;
 
-      // Validate prompts data format.
+      // Validate prompts configuration data format.
       // Validation using JSON schema.
       const moduleFilePath = fileURLToPath(import.meta.url);
       const moduleFolderPath = path.dirname(moduleFilePath);
       const schemaPath = path.join(
         moduleFolderPath,
-        "../etc/generator-kb-document-prompts-data-schema.json",
+        "../etc/generator-kb-document-prompts-configuration-schema.json",
       );
       const rawSchema = readFileSync(schemaPath, {
         encoding: "utf8",
@@ -153,7 +159,7 @@ export default class extends Generator {
       const ajv = new Ajv();
       const schemaValidator = ajv.compile(schema);
 
-      const valid = schemaValidator(this.#promptsData);
+      const valid = schemaValidator(this.#promptsConfiguration);
       if (!valid) {
         const validationErrors = JSON.stringify(
           schemaValidator.errors,
@@ -162,51 +168,53 @@ export default class extends Generator {
         );
         return Promise.reject(
           new Error(
-            `Prompts data has an invalid data format:\n${validationErrors}`,
+            `Prompts configuration has an invalid data format:\n${validationErrors}`,
           ),
         );
       }
 
-      // Use defaults for prompt data properties not set by user in prompts data file.
-      this.#promptsData = this.#promptsData.map((promptData) => {
-        const promptDataWithDefaults = {
-          ...promptDataDefaults,
-          ...promptData,
-        };
+      // Use defaults for prompt configuration properties not set by user in prompts configuration file.
+      this.#promptsConfiguration = this.#promptsConfiguration.map(
+        (promptConfiguration) => {
+          const promptConfigurationWithDefaults = {
+            ...promptConfigurationDefaults,
+            ...promptConfiguration,
+          };
 
-        promptDataWithDefaults.processors =
-          promptDataWithDefaults.processors.map((processor) => {
-            let processorWithDefaults = processor;
-            promptDataProcessorDefaults.forEach(
-              (promptDataProcessorDefault) => {
-                if (
-                  processorWithDefaults.processor ===
-                  promptDataProcessorDefault.processor
-                ) {
-                  processorWithDefaults = {
-                    ...promptDataProcessorDefault,
-                    ...processor,
-                  };
-                }
-              },
-            );
+          promptConfigurationWithDefaults.processors =
+            promptConfigurationWithDefaults.processors.map((processor) => {
+              let processorWithDefaults = processor;
+              promptConfigurationProcessorDefaults.forEach(
+                (promptConfigurationProcessorDefault) => {
+                  if (
+                    processorWithDefaults.processor ===
+                    promptConfigurationProcessorDefault.processor
+                  ) {
+                    processorWithDefaults = {
+                      ...promptConfigurationProcessorDefault,
+                      ...processor,
+                    };
+                  }
+                },
+              );
 
-            return processorWithDefaults;
-          });
+              return processorWithDefaults;
+            });
 
-        return promptDataWithDefaults;
-      });
+          return promptConfigurationWithDefaults;
+        },
+      );
 
       // Perform additional validations that are not possible via the JSON schema.
       let missingFrontMatterPath = false;
       let missingFrontMatterPathName = "";
-      this.#promptsData.forEach((promptData) => {
+      this.#promptsConfiguration.forEach((promptConfiguration) => {
         if (
-          promptData.usages.includes("front matter") &&
-          !("frontMatterPath" in promptData)
+          promptConfiguration.usages.includes("front matter") &&
+          !("frontMatterPath" in promptConfiguration)
         ) {
           missingFrontMatterPath = true;
-          missingFrontMatterPathName = promptData.inquirer.name;
+          missingFrontMatterPathName = promptConfiguration.inquirer.name;
         }
       });
 
@@ -270,7 +278,7 @@ export default class extends Generator {
     ];
 
     const universalBuiltInInquirerPrompts = universalBuiltInPrompts.map(
-      (promptData) => promptData.inquirer,
+      (promptConfiguration) => promptConfiguration.inquirer,
     );
 
     // Present the universal prompts.
@@ -296,18 +304,18 @@ export default class extends Generator {
         }
 
         const operationConditionalPrompts = supplementBuiltInPrompts.concat(
-          this.#promptsData,
+          this.#promptsConfiguration,
         );
         const operationFilteredPrompts = operationConditionalPrompts.filter(
           (prompt) =>
             prompt.operations.includes(this.#answers.kbDocumentOperation),
         );
-        this.#promptsData = universalBuiltInPrompts.concat(
+        this.#promptsConfiguration = universalBuiltInPrompts.concat(
           operationFilteredPrompts,
         );
 
         const operationFilteredInquirerPrompts = operationFilteredPrompts.map(
-          (promptData) => promptData.inquirer,
+          (promptConfiguration) => promptConfiguration.inquirer,
         );
 
         // Present the additional prompts.
@@ -328,9 +336,9 @@ export default class extends Generator {
     this.#templateContext = [];
     let frontMatterObject = this.#generatorConfiguration.universalFrontMatter;
     Object.keys(this.#answers).forEach((answerKey) => {
-      this.#promptsData.forEach((promptData) => {
-        // Determine whether this is the prompt data for the answer.
-        if (answerKey === promptData.inquirer.name) {
+      this.#promptsConfiguration.forEach((promptConfiguration) => {
+        // Determine whether this is the prompt configuration for the answer.
+        if (answerKey === promptConfiguration.inquirer.name) {
           let answerValue = this.#answers[answerKey];
 
           // Trim whitespace from string values.
@@ -338,7 +346,7 @@ export default class extends Generator {
             answerValue = answerValue.trim();
           }
 
-          promptData.processors.forEach((processor) => {
+          promptConfiguration.processors.forEach((processor) => {
             switch (processor.processor) {
               case "csv": {
                 // `String.prototype.split()` returns a single element array if it is an empty string:
@@ -444,7 +452,7 @@ export default class extends Generator {
                 break;
               }
               // This case can never be reached under normal operation because valid processor values are enforced by
-              // the prompts data validation.
+              // the prompts configuration validation.
               /* istanbul ignore next */
               default: {
                 throw new Error(`Unknown processor ${processor.processor}`);
@@ -452,16 +460,16 @@ export default class extends Generator {
             }
           });
 
-          if (promptData.usages.includes("content")) {
+          if (promptConfiguration.usages.includes("content")) {
             this.#templateContext[answerKey] = answerValue;
           }
 
-          if (promptData.usages.includes("front matter")) {
+          if (promptConfiguration.usages.includes("front matter")) {
             // Concatenate answer arrays to existing front matter content instead of overwriting.
             if (Array.isArray(answerValue)) {
               const frontMatterPathContent = JSONPointer.get(
                 frontMatterObject,
-                promptData.frontMatterPath,
+                promptConfiguration.frontMatterPath,
               );
               if (Array.isArray(frontMatterPathContent)) {
                 answerValue = frontMatterPathContent.concat(answerValue);
@@ -470,7 +478,7 @@ export default class extends Generator {
 
             JSONPointer.set(
               frontMatterObject,
-              promptData.frontMatterPath,
+              promptConfiguration.frontMatterPath,
               answerValue,
             );
           }

@@ -38,12 +38,12 @@ Project website: https://github.com/per1234/generator-kb-document
 - [Configuration](#configuration)
   - [Generator Configuration File](#generator-configuration-file)
     - [`kbPath`](#kbpath)
-    - [`promptsDataPath`](#promptsdatapath)
+    - [`promptsConfigurationPath`](#promptsconfigurationpath)
     - [`sortFrontMatter`](#sortfrontmatter)
     - [`documentPrimaryTemplatePath`](#documentprimarytemplatepath)
     - [`documentSupplementTemplatePath`](#documentsupplementtemplatepath)
     - [`universalFrontMatter`](#universalfrontmatter)
-  - [Prompts Data File](#prompts-data-file)
+  - [Prompts Configuration File](#prompts-configuration-file)
     - [`inquirer`](#inquirer)
     - [`operations`](#operations)
     - [`usages`](#usages)
@@ -52,7 +52,7 @@ Project website: https://github.com/per1234/generator-kb-document
     - [JSON Schema](#json-schema)
   - [Document File Template](#document-file-template)
     - [Built-in Prompts](#built-in-prompts)
-    - [Prompts from Prompts Data File](#prompts-from-prompts-data-file)
+    - [Prompts from Prompts Configuration File](#prompts-from-prompts-configuration-file)
   - [Answer Arrays](#answer-arrays-1)
 - [Generator Usage](#generator-usage)
   - [Create New Document](#create-new-document)
@@ -98,9 +98,9 @@ For a better understanding of the configuration file format and functionality, s
 
 The path of the [knowledge base folder](#knowledge-base-structure).
 
-#### `promptsDataPath`
+#### `promptsConfigurationPath`
 
-The path of the generator [prompts data file](#prompts-data-file).
+The path of the [prompts configuration file](#prompts-configuration-file).
 
 #### `sortFrontMatter`
 
@@ -140,15 +140,15 @@ foo: bar
 
 This is static data. An example usage would be configuring tools that consume Markdown files and recognize special front matter keys.
 
-You can also use the [**prompts data file**](#prompts-data-file) to configure prompts so that front matter data will be set according to the answers provided during the document creation process.
+You can also use the [**prompts configuration file**](#prompts-configuration-file) to configure prompts so that front matter data will be set according to the answers provided during the document creation process.
 
 For information on front matter, see [the **Informational Structure** section](#informational-structure).
 
-### Prompts Data File
+### Prompts Configuration File
 
-The prompts data file defines the additional prompts that will be presented when the generator is run. The prompt names can be referenced in the [document file template](#document-file-template), which will cause the generator user's answer to the prompt to be filled in the generated knowledge base document. This allows the basic content of the knowledge base document to be efficiently populated in a standardized format at the time of document creation.
+The prompts configuration file defines the additional prompts that will be presented when the generator is run. The prompt names can be referenced in the [document file template](#document-file-template), which will cause the generator user's answer to the prompt to be filled in the generated knowledge base document. This allows the basic content of the knowledge base document to be efficiently populated in a standardized format at the time of document creation.
 
-The prompts data file is written in the [**JavaScript** programming language](https://wikipedia.org/wiki/JavaScript) programming language.
+The prompts configuration file is written in the [**JavaScript** programming language](https://wikipedia.org/wiki/JavaScript) programming language.
 
 The code must [export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export) an [array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) of prompt configuration objects as the [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export):
 
@@ -214,7 +214,7 @@ The prompt should be presented when the user selected ["**Create new document**"
 
 The prompt should be presented when the user selected ["**Add a supplement file to an existing document**"](#add-a-document-supplement-file) from the built-in "**Which operation would you like to perform?**" prompt.
 
-<a name="prompt-data-usages-property"></a>
+<a name="prompt-configuration-usages-property"></a>
 
 #### `usages`
 
@@ -261,7 +261,7 @@ https://datatracker.ietf.org/doc/html/rfc6901
 
 ---
 
-**ⓘ** The `frontMatterPath` property is only relevant when the [`usages`](#prompt-data-usages-property) property contains `"front matter"`.
+**ⓘ** The `frontMatterPath` property is only relevant when the [`usages`](#prompt-configuration-usages-property) property contains `"front matter"`.
 
 ---
 
@@ -324,7 +324,7 @@ tags:
 ---
 ```
 
-<a name="prompts-data-file-frontmatterpath-answer-arrays"></a>
+<a name="prompts-configuration-file-frontmatterpath-answer-arrays"></a>
 
 ##### Answer Arrays
 
@@ -363,7 +363,7 @@ Just as with the single answer prompts, the answers from prompts that produce an
 
 ---
 
-For a better understanding of the prompts data file format and functionality, see the [**Example** section](#generator-example).
+For a better understanding of the prompts configuration file format and functionality, see the [**Example** section](#generator-example).
 
 #### `processors`
 
@@ -469,7 +469,7 @@ When the input is an [answer array](#configuration-answer-arrays), the processor
 
 #### JSON Schema
 
-A [JSON schema](https://json-schema.org/) for validation of the prompts data is provided [**here**](etc/generator-kb-document-prompts-data-schema.json).
+A [JSON schema](https://json-schema.org/) for validation of the prompts configuration is provided [**here**](etc/generator-kb-document-prompts-configuration-schema.json).
 
 ### Document File Template
 
@@ -489,7 +489,7 @@ For a better understanding of the document file template format and functionalit
 
 #### Built-in Prompts
 
-In addition to the custom prompts the user defines in their [prompts data file](#prompts-data-file), the generator always displays a series of prompts for information that is used by the generator.
+In addition to the custom prompts the user defines in their [prompts configuration file](#prompts-configuration-file), the generator always displays a series of prompts for information that is used by the generator.
 
 The answers to these "built-in" prompts are available for use in the template just the same as the user-defined prompts.
 
@@ -532,11 +532,11 @@ It is recommended to use this as the document supplement file's H1 [heading](htt
 # <%- kbDocumentSupplementTitle %>
 ```
 
-#### Prompts from Prompts Data File
+#### Prompts from Prompts Configuration File
 
 ##### `"content"` Prompts
 
-If a prompt defined in the [prompts data file](#prompts-data-file) has `"content"` in its [`usages`](#prompt-data-usages-property) property, you can use the answer by referencing the value of the `name` property of the prompt data [`inquirer` object](#inquirer) in the template:
+If a prompt defined in the [prompts configuration file](#prompts-configuration-file) has `"content"` in its [`usages`](#prompt-configuration-usages-property) property, you can use the answer by referencing the value of the `name` property of the prompt configuration [`inquirer` object](#inquirer) in the template:
 
 ```ejs
 <%- <prompt name> %>
@@ -549,7 +549,7 @@ If a prompt defined in the [prompts data file](#prompts-data-file) has `"content
 Front matter data can come from two sources:
 
 - The `universalFrontMatter` key in the [**generator configuration file**](#generator-configuration-file).
-- Prompts defined in the [**prompts data file**](#prompts-data-file) that have `"front matter"` in their [`usages`](#prompt-data-usages-property) property.
+- Prompts defined in the [**prompts configuration file**](#prompts-configuration-file) that have `"front matter"` in their [`usages`](#prompt-configuration-usages-property) property.
 
 This data is used to populate a single generated front matter document. That front matter document is available for use in the template via the `kbDocumentFrontMatter` variable:
 
@@ -570,7 +570,7 @@ Arrays of answer values are also produced by the [`csv` processor](#processor-cs
 There are special considerations for handling this distinct answer data type:
 
 - [In answer processing](#processors)
-- [In front matter](#prompts-data-file-frontmatterpath-answer-arrays)
+- [In front matter](#prompts-configuration-file-frontmatterpath-answer-arrays)
 - [In the document file template](#document-file-template)
 
 ---
@@ -591,7 +591,7 @@ This procedure is used to add a new document to the knowledge base.
    ```
 1. The "**Which operation would you like to perform?**" prompt will be displayed in the terminal. Select the "**Create new document**" option and press the <kbd>**Enter**</kbd> key.
 1. The "**Knowledge base document title**" prompt will be displayed in the terminal. Type the title you want to use for the new knowledge base document and press the <kbd>**Enter**</kbd> key.
-1. If you defined additional prompts in the [prompts data file](#prompts-data-file), they will be presented in turn. Answer these prompts.
+1. If you defined additional prompts in the [prompts configuration file](#prompts-configuration-file), they will be presented in turn. Answer these prompts.
 1. At the end of the process you will see an "**A new document has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
    You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
 1. Manually fill in the document content.
@@ -606,7 +606,7 @@ This procedure is used to add a supplement file to an existing knowledge base do
    ```
 1. The "**Which operation would you like to perform?**" prompt will be displayed in the terminal. Select the "**Add a supplement file to an existing document**" option and press the <kbd>**Enter**</kbd> key.
 1. The "**Knowledge base document title**" prompt will be displayed in the terminal. Type the title of the existing knowledge base document to which you want to add a supplement file and press the <kbd>**Enter**</kbd> key.
-1. If you defined additional prompts in the [prompts data file](#prompts-data-file), they will be presented in turn. Answer these prompts.
+1. If you defined additional prompts in the [prompts configuration file](#prompts-configuration-file), they will be presented in turn. Answer these prompts.
 1. At the end of the process you will see an "**A knowledge base document supplement file has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
    You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
 1. Manually fill in the document content.
@@ -637,7 +637,7 @@ Let's say you have a knowledge base project with this file structure:
 {
   "@per1234/generator-kb-document": {
     "kbPath": "my-kb",
-    "promptsDataPath": "generator-kb-document/prompts.js",
+    "promptsConfigurationPath": "generator-kb-document/prompts.js",
     "templatePath": "generator-kb-document/template.ejs"
   }
 }
@@ -764,7 +764,7 @@ The [file structure](#file-structure) produced by the generator is flat at the d
 
 The information structure of the knowledge base should instead be defined by tags. It is through these tags that the user navigates and searches the knowledge base.
 
-The generator can be configured to populate the front matter of the new document according to the user's answers to prompts. See the documentation for the [prompts data file](#prompts-data-file) and [document file template](#document-file-template) for details.
+The generator can be configured to populate the front matter of the new document according to the user's answers to prompts. See the documentation for the [prompts configuration file](#prompts-configuration-file) and [document file template](#document-file-template) for details.
 
 ## Contributing
 
