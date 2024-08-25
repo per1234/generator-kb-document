@@ -479,7 +479,7 @@ describe("valid configuration", () => {
       const localConfig = {
         documentPrimaryTemplatePath: path.join(
           thisTestDataPath,
-          "primary-document.ejs",
+          "document-primary.ejs",
         ),
         documentSupplementTemplatePath: path.join(
           thisTestDataPath,
