@@ -166,27 +166,6 @@ export default class extends Generator {
         );
       }
 
-      // Perform additional validations that are not possible via the JSON schema.
-      let missingFrontMatterPath = false;
-      let missingFrontMatterPathName = "";
-      this.#promptsData.forEach((promptData) => {
-        if (
-          promptData.usages.includes("front matter") &&
-          !("frontMatterPath" in promptData)
-        ) {
-          missingFrontMatterPath = true;
-          missingFrontMatterPathName = promptData.inquirer.name;
-        }
-      });
-
-      if (missingFrontMatterPath) {
-        return Promise.reject(
-          new Error(
-            `Data for ${missingFrontMatterPathName} prompt has "front matter" usage configuration, but missing frontMatterPath property.`,
-          ),
-        );
-      }
-
       // Use defaults for prompt data properties not set by user in prompts data file.
       this.#promptsData = this.#promptsData.map((promptData) => {
         const promptDataWithDefaults = {
@@ -216,6 +195,27 @@ export default class extends Generator {
 
         return promptDataWithDefaults;
       });
+
+      // Perform additional validations that are not possible via the JSON schema.
+      let missingFrontMatterPath = false;
+      let missingFrontMatterPathName = "";
+      this.#promptsData.forEach((promptData) => {
+        if (
+          promptData.usages.includes("front matter") &&
+          !("frontMatterPath" in promptData)
+        ) {
+          missingFrontMatterPath = true;
+          missingFrontMatterPathName = promptData.inquirer.name;
+        }
+      });
+
+      if (missingFrontMatterPath) {
+        return Promise.reject(
+          new Error(
+            `Data for ${missingFrontMatterPathName} prompt has "front matter" usage configuration, but missing frontMatterPath property.`,
+          ),
+        );
+      }
 
       return Promise.resolve();
     });
