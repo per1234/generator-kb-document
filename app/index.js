@@ -82,13 +82,51 @@ export default class extends Generator {
       },
     ];
 
+    this.#generatorConfiguration = this.config.getAll();
+    // Validate generator configuration data format against JSON schema.
+    const moduleFilePath = fileURLToPath(import.meta.url);
+    const moduleFolderPath = path.dirname(moduleFilePath);
+    const generatorConfigurationSchemaPath = path.join(
+      moduleFolderPath,
+      "../etc/generator-kb-document-configuration-schema.json",
+    );
+    const rawGeneratorConfigurationSchema = readFileSync(
+      generatorConfigurationSchemaPath,
+      {
+        encoding: "utf8",
+      },
+    );
+    const generatorConfigurationSchema = JSON.parse(
+      rawGeneratorConfigurationSchema,
+    );
+    const ajv = new Ajv();
+    const generatorConfigurationSchemaValidator = ajv.compile(
+      generatorConfigurationSchema,
+    );
+
+    const generatorConfigurationValid = generatorConfigurationSchemaValidator(
+      this.#generatorConfiguration,
+    );
+    if (!generatorConfigurationValid) {
+      const validationErrors = JSON.stringify(
+        generatorConfigurationSchemaValidator.errors,
+        null,
+        2,
+      );
+      return Promise.reject(
+        new Error(
+          `Generator configuration has an invalid data format:\n${validationErrors}`,
+        ),
+      );
+    }
+
     // Use defaults for any configuration property not set by user in generator configuration.
     this.#generatorConfiguration = Object.assign(
       generatorConfigurationDefaults,
-      this.config.getAll(),
+      this.#generatorConfiguration,
     );
 
-    // Validate configuration.
+    // Perform additional generator configuration validations that are not possible via the JSON schema.
     const { promptsConfigurationPath } = this.#generatorConfiguration;
     const absolutePromptsConfigurationPath = this.destinationPath(
       promptsConfigurationPath,
@@ -146,23 +184,29 @@ export default class extends Generator {
 
       // Validate prompts configuration data format.
       // Validation using JSON schema.
-      const moduleFilePath = fileURLToPath(import.meta.url);
-      const moduleFolderPath = path.dirname(moduleFilePath);
-      const schemaPath = path.join(
+      const promptsConfigurationSchemaPath = path.join(
         moduleFolderPath,
         "../etc/generator-kb-document-prompts-configuration-schema.json",
       );
-      const rawSchema = readFileSync(schemaPath, {
-        encoding: "utf8",
-      });
-      const schema = JSON.parse(rawSchema);
-      const ajv = new Ajv();
-      const schemaValidator = ajv.compile(schema);
+      const promptsConfigurationRawSchema = readFileSync(
+        promptsConfigurationSchemaPath,
+        {
+          encoding: "utf8",
+        },
+      );
+      const promptsConfigurationSchema = JSON.parse(
+        promptsConfigurationRawSchema,
+      );
+      const promptsConfigurationSchemaValidator = ajv.compile(
+        promptsConfigurationSchema,
+      );
 
-      const valid = schemaValidator(this.#promptsConfiguration);
+      const valid = promptsConfigurationSchemaValidator(
+        this.#promptsConfiguration,
+      );
       if (!valid) {
         const validationErrors = JSON.stringify(
-          schemaValidator.errors,
+          promptsConfigurationSchemaValidator.errors,
           null,
           2,
         );

@@ -32,6 +32,24 @@ afterAll(async () => {
 describe("invalid configuration", () => {
   describe.each([
     {
+      description: "generator configuration has invalid data format",
+      testdataFolderName: "generator-configuration-invalid-data-format",
+      additionalLocalConfig: {
+        foo: "bar",
+      },
+      answers: {
+        kbDocumentOperation: "new",
+        kbDocumentTitle: documentTitle,
+      },
+      exceptionMessagePattern:
+        "Generator configuration has an invalid data format",
+      localConfigData: {
+        promptsConfigurationFilename: "prompts.js",
+        documentPrimaryTemplateFilename: "template.ejs",
+        documentSupplementTemplateFilename: "template.ejs",
+      },
+    },
+    {
       description: "nonexistent prompts configuration path",
       testdataFolderName: "nonexistent-prompts-configuration",
       answers: {
@@ -210,12 +228,13 @@ describe("invalid configuration", () => {
     "$description",
     ({
       testdataFolderName,
+      additionalLocalConfig,
       answers,
       exceptionMessagePattern,
       localConfigData,
     }) => {
       const thisTestDataPath = path.join(testDataPath, testdataFolderName);
-      const localConfig = {
+      const localConfigBase = {
         documentPrimaryTemplatePath: path.join(
           thisTestDataPath,
           localConfigData.documentPrimaryTemplateFilename,
@@ -230,6 +249,7 @@ describe("invalid configuration", () => {
           localConfigData.promptsConfigurationFilename,
         ),
       };
+      const localConfig = Object.assign(localConfigBase, additionalLocalConfig);
 
       test("rejects, with expected error", () => {
         expect(

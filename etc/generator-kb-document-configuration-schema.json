@@ -1,0 +1,38 @@
+{
+  "title": "JSON schema for the @per1234/generator-kb-document generator configuration file",
+  "description": "See: https://github.com/per1234/generator-kb-document#generator-configuration-file",
+  "$id": "https://raw.githubusercontent.com/per1234/generator-kb-document/main/etc/generator-kb-document-configuration-schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "documentPrimaryTemplatePath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "documentSupplementTemplatePath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kbPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "promptsConfigurationPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sortFrontMatter": {
+      "type": "boolean"
+    },
+    "universalFrontMatter": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "documentPrimaryTemplatePath",
+    "documentSupplementTemplatePath",
+    "kbPath",
+    "promptsConfigurationPath"
+  ]
+}

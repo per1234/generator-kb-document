@@ -43,13 +43,14 @@ Project website: https://github.com/per1234/generator-kb-document
     - [`documentPrimaryTemplatePath`](#documentprimarytemplatepath)
     - [`documentSupplementTemplatePath`](#documentsupplementtemplatepath)
     - [`universalFrontMatter`](#universalfrontmatter)
+    - [Generator Configuration JSON Schema](#generator-configuration-json-schema)
   - [Prompts Configuration File](#prompts-configuration-file)
     - [`inquirer`](#inquirer)
     - [`operations`](#operations)
     - [`usages`](#usages)
     - [`frontMatterPath`](#frontmatterpath)
     - [`processors`](#processors)
-    - [JSON Schema](#json-schema)
+    - [Prompts Configuration JSON Schema](#prompts-configuration-json-schema)
   - [Document File Template](#document-file-template)
     - [Built-in Prompts](#built-in-prompts)
     - [Prompts from Prompts Configuration File](#prompts-from-prompts-configuration-file)
@@ -143,6 +144,10 @@ This is static data. An example usage would be configuring tools that consume Ma
 You can also use the [**prompts configuration file**](#prompts-configuration-file) to configure prompts so that front matter data will be set according to the answers provided during the document creation process.
 
 For information on front matter, see [the **Informational Structure** section](#informational-structure).
+
+#### Generator Configuration JSON Schema
+
+A [JSON schema](https://json-schema.org/) for validation of the generator configuration is provided [**here**](etc/generator-kb-document-configuration-schema.json).
 
 ### Prompts Configuration File
 
@@ -467,7 +472,7 @@ The answer value is available for referencing in the template as `answer`.
 
 When the input is an [answer array](#configuration-answer-arrays), the processor transforms each of the elements in the array.
 
-#### JSON Schema
+#### Prompts Configuration JSON Schema
 
 A [JSON schema](https://json-schema.org/) for validation of the prompts configuration is provided [**here**](etc/generator-kb-document-prompts-configuration-schema.json).
 
