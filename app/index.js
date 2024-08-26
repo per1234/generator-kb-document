@@ -83,6 +83,17 @@ export default class extends Generator {
     ];
 
     this.#generatorConfiguration = this.config.getAll();
+
+    // Provide a user friendly message if the generator configuration is missing.
+    // this.config.getAll() always returns an object so empty object is used as indicator of missing generator config.
+    if (Object.keys(this.#generatorConfiguration).length === 0) {
+      return Promise.reject(
+        new Error(
+          "Missing generator configuration.\nSee: https://github.com/per1234/generator-kb-document#generator-configuration-file",
+        ),
+      );
+    }
+
     // Validate generator configuration data format against JSON schema.
     const moduleFilePath = fileURLToPath(import.meta.url);
     const moduleFolderPath = path.dirname(moduleFilePath);

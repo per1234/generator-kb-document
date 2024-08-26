@@ -30,6 +30,14 @@ afterAll(async () => {
 });
 
 describe("invalid configuration", () => {
+  // The test table does not accommodate this test so it is implemented independently.
+  describe("missing generator configuration", () => {
+    test("rejects, with expected error", () =>
+      expect(
+        helpers.run(Generator, generatorOptions).withLocalConfig({}),
+      ).rejects.toThrow("Missing generator configuration"));
+  });
+
   describe.each([
     {
       description: "generator configuration has invalid data format",
