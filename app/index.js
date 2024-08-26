@@ -376,7 +376,7 @@ export default class extends Generator {
         // Present the additional prompts.
         return this.prompt(operationFilteredInquirerPrompts).then(
           (operationFilteredAnswers) => {
-            // Merge the answers to the additional prompts into the the universal prompt answers.
+            // Merge the answers to the additional prompts into the universal prompt answers.
             Object.assign(this.#answers, operationFilteredAnswers);
           },
         );
