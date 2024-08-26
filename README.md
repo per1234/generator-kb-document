@@ -625,7 +625,17 @@ As an alternative to providing answers via the human-friendly prompts interface,
 npx yo @per1234/kb-document --<prompt name>=<answer>
 ```
 
-This can be useful for automated use cases for which the generator's interactive prompt interface is not appropriate.
+---
+
+**ⓘ** You can provide multiple answers to a single prompt (for prompt types that produce an [answer array](#configuration-answer-arrays)) by passing the flag multiple times:
+
+```text
+npx yo @per1234/kb-document --foo="Pippo" --foo="Pluto"
+```
+
+---
+
+Providing answers via command line flags can be useful for automated use cases for which the generator's interactive prompt interface is not appropriate.
 
 The built-in prompts have the following names:
 
