@@ -58,6 +58,7 @@ Project website: https://github.com/per1234/generator-kb-document
 - [Generator Usage](#generator-usage)
   - [Create New Document](#create-new-document)
   - [Add a Document Supplement File](#add-a-document-supplement-file)
+  - [Answer via Command Line Flag](#answer-via-command-line-flag)
 - [Example](#example)
 - [Knowledge Base Structure](#knowledge-base-structure)
   - [File Structure](#file-structure)
@@ -615,6 +616,24 @@ This procedure is used to add a supplement file to an existing knowledge base do
 1. At the end of the process you will see an "**A knowledge base document supplement file has been created at ...**" message printed in the terminal. Open the file at the path shown in the message.<br />
    You will see the file has been populated according to the [document file template](#document-file-template) and your answers to the prompts.
 1. Manually fill in the document content.
+
+### Answer via Command Line Flag
+
+As an alternative to providing answers via the human-friendly prompts interface, the generator supports providing answers via command line flags passed to the generator invocation:
+
+```text
+npx yo @per1234/kb-document --<prompt name>=<answer>
+```
+
+This can be useful for automated use cases for which the generator's interactive prompt interface is not appropriate.
+
+The built-in prompts have the following names:
+
+- **Which operation would you like to perform?**: `kbDocumentOperation`
+- **Knowledge base document title**: `kbDocumentTitle`
+- **Supplement title**: `kbDocumentSupplementTitle`
+
+As for additional [user-configured prompts](#prompts-configuration-file), the prompt name is defined by the `name` property of the [**Inquirer** `Question` object](#inquirer).
 
 <a name="generator-example"></a>
 

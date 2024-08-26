@@ -274,6 +274,18 @@ describe("invalid configuration", () => {
 describe("valid configuration", () => {
   describe.each([
     {
+      description: "answer from option",
+      testdataFolderName: "answer-from-option",
+      options: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "fooValue",
+      },
+      answers: {
+        kbDocumentOperation: "new",
+      },
+      doInDirFunction: () => {},
+    },
+    {
       description: "no user prompts",
       testdataFolderName: "no-prompts-configuration",
       answers: {
@@ -569,6 +581,7 @@ describe("valid configuration", () => {
       testdataFolderName,
       answers,
       doInDirFunction,
+      options,
       sortFrontMatter,
       universalFrontMatter,
     }) => {
@@ -605,6 +618,7 @@ describe("valid configuration", () => {
           .run(Generator, generatorOptions)
           .withAnswers(answers)
           .withLocalConfig(localConfig)
+          .withOptions(options)
           .doInDir(doInDirFunction);
       });
 

@@ -336,52 +336,79 @@ export default class extends Generator {
       (promptConfiguration) => promptConfiguration.inquirer,
     );
 
-    // Present the universal prompts.
-    const promptsPromise = this.prompt(universalBuiltInInquirerPrompts).then(
-      (universalBuiltInAnswers) => {
-        this.#answers = universalBuiltInAnswers;
+    this.#answers = {};
 
-        // Validate the document title answer immediately so the user doesn't waste time answering all the additional prompts.
-        const documentFolderName = slug(this.#answers.kbDocumentTitle);
-        this.#documentFolderPath = this.destinationPath(
-          this.#generatorConfiguration.kbPath,
-          documentFolderName,
-        );
-        if (
-          this.#answers.kbDocumentOperation === "supplement" &&
-          !existsSync(this.#documentFolderPath)
-        ) {
-          return Promise.reject(
-            new Error(
-              `Target document "${this.#answers.kbDocumentTitle}" for the supplement file was not found.`,
-            ),
-          );
+    // Get answers from command line flags.
+    const setFlagAnswers = (inquirerPrompts) =>
+      inquirerPrompts.map((inquirerPrompt) => {
+        const updatedInquirerPrompt = inquirerPrompt;
+        if (inquirerPrompt.name in this.options) {
+          this.#answers[inquirerPrompt.name] =
+            this.options[inquirerPrompt.name];
+          // Don't present the prompt if answer provided via flag.
+          updatedInquirerPrompt.when = false;
+        } else {
+          updatedInquirerPrompt.when = true;
         }
 
-        const operationConditionalPrompts = supplementBuiltInPrompts.concat(
-          this.#promptsConfiguration,
-        );
-        const operationFilteredPrompts = operationConditionalPrompts.filter(
-          (prompt) =>
-            prompt.operations.includes(this.#answers.kbDocumentOperation),
-        );
-        this.#promptsConfiguration = universalBuiltInPrompts.concat(
-          operationFilteredPrompts,
-        );
+        return updatedInquirerPrompt;
+      });
 
-        const operationFilteredInquirerPrompts = operationFilteredPrompts.map(
-          (promptConfiguration) => promptConfiguration.inquirer,
-        );
-
-        // Present the additional prompts.
-        return this.prompt(operationFilteredInquirerPrompts).then(
-          (operationFilteredAnswers) => {
-            // Merge the answers to the additional prompts into the the universal prompt answers.
-            Object.assign(this.#answers, operationFilteredAnswers);
-          },
-        );
-      },
+    const universalBuiltInInquirerPromptsPerFlagAnswers = setFlagAnswers(
+      universalBuiltInInquirerPrompts,
     );
+
+    // Present the universal prompts.
+    const promptsPromise = this.prompt(
+      universalBuiltInInquirerPromptsPerFlagAnswers,
+    ).then((universalBuiltInAnswers) => {
+      // Merge answers from the prompts into the answers from command line flags.
+      Object.assign(this.#answers, universalBuiltInAnswers);
+
+      // Validate the document title answer immediately so the user doesn't waste time answering all the additional prompts.
+      const documentFolderName = slug(this.#answers.kbDocumentTitle);
+      this.#documentFolderPath = this.destinationPath(
+        this.#generatorConfiguration.kbPath,
+        documentFolderName,
+      );
+      if (
+        this.#answers.kbDocumentOperation === "supplement" &&
+        !existsSync(this.#documentFolderPath)
+      ) {
+        return Promise.reject(
+          new Error(
+            `Target document "${this.#answers.kbDocumentTitle}" for the supplement file was not found.`,
+          ),
+        );
+      }
+
+      const operationConditionalPrompts = supplementBuiltInPrompts.concat(
+        this.#promptsConfiguration,
+      );
+      const operationFilteredPrompts = operationConditionalPrompts.filter(
+        (prompt) =>
+          prompt.operations.includes(this.#answers.kbDocumentOperation),
+      );
+      this.#promptsConfiguration = universalBuiltInPrompts.concat(
+        operationFilteredPrompts,
+      );
+
+      const operationFilteredInquirerPrompts = operationFilteredPrompts.map(
+        (promptConfiguration) => promptConfiguration.inquirer,
+      );
+
+      const operationFilteredInquirerPromptsPerFlagAnswers = setFlagAnswers(
+        operationFilteredInquirerPrompts,
+      );
+
+      // Present the additional prompts.
+      return this.prompt(operationFilteredInquirerPromptsPerFlagAnswers).then(
+        (operationFilteredAnswers) => {
+          // Merge the answers to the additional prompts into the universal prompt answers.
+          Object.assign(this.#answers, operationFilteredAnswers);
+        },
+      );
+    });
 
     return promptsPromise;
   }
