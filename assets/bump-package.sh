@@ -36,4 +36,5 @@ git \
   -m "Update package version to $1"
 
 git \
-  push
+  push \
+  --set-upstream origin bump-package
