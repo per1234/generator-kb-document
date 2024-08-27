@@ -343,8 +343,19 @@ export default class extends Generator {
       inquirerPrompts.map((inquirerPrompt) => {
         const updatedInquirerPrompt = inquirerPrompt;
         if (inquirerPrompt.name in this.options) {
-          this.#answers[inquirerPrompt.name] =
-            this.options[inquirerPrompt.name];
+          let answerValue = this.options[inquirerPrompt.name];
+
+          // The flag system doesn't have any way to know the correct type for the option and the user doesn't have any
+          // control over the type it uses. So string values must be converted to arrays for prompt types that generate
+          // answer arrays.
+          if (
+            typeof answerValue === "string" &&
+            inquirerPrompt.type === "checkbox"
+          ) {
+            answerValue = [answerValue];
+          }
+
+          this.#answers[inquirerPrompt.name] = answerValue;
           // Don't present the prompt if answer provided via flag.
           updatedInquirerPrompt.when = false;
         } else {

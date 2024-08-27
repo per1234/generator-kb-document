@@ -286,6 +286,18 @@ describe("valid configuration", () => {
       doInDirFunction: () => {},
     },
     {
+      description: "answer array from single option",
+      testdataFolderName: "answer-array-from-single-option",
+      options: {
+        kbDocumentTitle: documentTitle,
+        fooPrompt: "pippoChoice",
+      },
+      answers: {
+        kbDocumentOperation: "new",
+      },
+      doInDirFunction: () => {},
+    },
+    {
       description: "no user prompts",
       testdataFolderName: "no-prompts-configuration",
       answers: {
