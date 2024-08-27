@@ -29,9 +29,9 @@ body:
   - type: input
     id: project-version
     attributes:
-      label: generator-kb-document version
+      label: "@per1234/generator-kb-document version"
       description: |
-        Which version of generator-kb-document are you using?
+        Which version of @per1234/generator-kb-document are you using?
         _This should be the most recent version available._
     validations:
       required: true
