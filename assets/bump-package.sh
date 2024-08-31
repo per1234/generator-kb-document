@@ -24,6 +24,7 @@ git \
 npm \
   version \
   --no-git-tag-version \
+  --preid "beta" \
   "$1"
 
 git \
