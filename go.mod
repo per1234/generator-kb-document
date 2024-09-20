@@ -4,7 +4,7 @@ go 1.22.6
 
 require (
 	github.com/editorconfig-checker/editorconfig-checker/v3 v3.0.3
-	github.com/go-task/task/v3 v3.39.0
+	github.com/go-task/task/v3 v3.39.2
 	mvdan.cc/sh/v3 v3.9.0
 )
 
