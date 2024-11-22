@@ -7,7 +7,7 @@
     "ejs": "3.1.10",
     "jsonpointer": "5.0.1",
     "slug": "10.0.0",
-    "yaml": "2.6.0",
+    "yaml": "2.6.1",
     "yeoman-generator": "7.3.3"
   },
   "devDependencies": {
