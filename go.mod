@@ -1,9 +1,10 @@
 module github.com/per1234/generator-kb-document
 
 go 1.22.6
+toolchain go1.23.5
 
 require (
-	github.com/editorconfig-checker/editorconfig-checker/v3 v3.0.3
+	github.com/editorconfig-checker/editorconfig-checker/v3 v3.2.0
 	github.com/go-task/task/v3 v3.41.0
 	mvdan.cc/sh/v3 v3.10.0
 )
@@ -26,7 +27,7 @@ require (
 	github.com/elliotchance/orderedmap/v2 v2.7.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.4 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.6.1 // indirect
 	github.com/go-git/go-git/v5 v5.13.1 // indirect
