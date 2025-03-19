@@ -8,7 +8,7 @@
     "jsonpointer": "5.0.1",
     "slug": "10.0.0",
     "yaml": "2.7.0",
-    "yeoman-generator": "7.4.0"
+    "yeoman-generator": "7.5.1"
   },
   "devDependencies": {
     "@jest/globals": "29.7.0",
