@@ -28,7 +28,7 @@
     "prettier": "3.5.0",
     "prettier-plugin-toml": "2.0.1",
     "yeoman-environment": "4.4.3",
-    "yeoman-test": "10.0.1"
+    "yeoman-test": "10.1.1"
   },
   "engines": {
     "node": "20.x"
